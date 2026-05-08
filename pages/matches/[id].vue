@@ -8,6 +8,7 @@ import MatchAdminBottomBar from "~/components/match/MatchAdminBottomBar.vue";
 import MatchInfo from "~/components/match/MatchInfo.vue";
 import MatchHighlightsReel from "~/components/match/MatchHighlightsReel.vue";
 import MatchActions from "~/components/match/MatchActions.vue";
+import MatchHudPicker from "~/components/match/MatchHudPicker.vue";
 import MatchRegionVeto from "~/components/match/MatchRegionVeto.vue";
 import { e_match_status_enum } from "~/generated/zeus";
 import MatchMapVeto from "~/components/match/MatchMapVeto.vue";
@@ -113,6 +114,16 @@ const vsBaseClasses =
             </span>
             <MatchActions :match="match" />
           </div>
+        </div>
+
+        <div
+          v-if="match.is_organizer"
+          class="flex items-center gap-3 mb-4 -mt-1"
+        >
+          <MatchHudPicker
+            :match-id="match.id"
+            :can-edit="!!match.is_organizer"
+          />
         </div>
 
         <div

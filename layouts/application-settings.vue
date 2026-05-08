@@ -65,6 +65,10 @@ const navItems = computed(() => {
       path: "/settings/application/branding",
       label: $t("layouts.application_settings.branding_nav"),
     },
+    {
+      path: "/settings/application/huds",
+      label: "Spectator HUDs",
+    },
   ];
   if (isDev.value) {
     items.push({
