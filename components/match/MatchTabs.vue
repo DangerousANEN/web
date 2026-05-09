@@ -33,6 +33,7 @@ import ServiceLogs from "~/components/ServiceLogs.vue";
 import { e_match_types_enum } from "~/generated/zeus";
 import MatchForm from "~/components/match/MatchForm.vue";
 import MatchLiveStreams from "~/components/match/MatchLiveStreams.vue";
+import OverlayBrowserSources from "~/components/match/OverlayBrowserSources.vue";
 import PlayerInvites from "~/components/match/PlayerInvites.vue";
 import cleanMapName from "~/utilities/cleanMapName";
 
@@ -509,8 +510,13 @@ provide("commander", commander);
         </CardContent>
       </Card>
     </TabsContent>
-    <TabsContent value="streams" class="max-w-[1500px]">
+    <TabsContent value="streams" class="max-w-[1500px] space-y-4">
       <MatchLiveStreams :match="match" />
+      <!-- OBS Browser Source URLs for the no-HUD raw video flow.
+           Operators copy these into OBS so the panel HUD renders
+           as a separate transparent layer over the game video.
+           See pages/overlay/hud/[matchId].vue. -->
+      <OverlayBrowserSources :match-id="match.id" />
     </TabsContent>
   </Tabs>
 </template>
