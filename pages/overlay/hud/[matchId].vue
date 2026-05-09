@@ -61,13 +61,18 @@ interface OverlayState {
   match: {
     id: string;
     status: string;
+    current_match_map_id?: string | null;
     options?: { type?: string | null } | null;
     lineup_1?: { name?: string | null } | null;
     lineup_2?: { name?: string | null } | null;
-    current_match_map?: {
+    match_maps?: Array<{
       id: string;
+      order: number | null;
+      status: string;
       map?: { name?: string | null } | null;
-    } | null;
+      lineup_1_score?: number | null;
+      lineup_2_score?: number | null;
+    }>;
   } | null;
   gsi: {
     map_name?: string | null;
@@ -149,10 +154,21 @@ const tTeamName = computed(
 const ctScore = computed(() => state.value?.gsi?.team_ct_score ?? 0);
 const tScore = computed(() => state.value?.gsi?.team_t_score ?? 0);
 
+const currentMatchMap = computed(() => {
+  const m = state.value?.match;
+  if (!m) return null;
+  if (m.current_match_map_id && m.match_maps) {
+    return (
+      m.match_maps.find((mm) => mm.id === m.current_match_map_id) ?? null
+    );
+  }
+  return null;
+});
+
 const mapName = computed(
   () =>
     state.value?.gsi?.map_name ??
-    state.value?.match?.current_match_map?.map?.name ??
+    currentMatchMap.value?.map?.name ??
     null,
 );
 
