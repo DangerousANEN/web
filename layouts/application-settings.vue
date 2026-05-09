@@ -69,6 +69,10 @@ const navItems = computed(() => {
       path: "/settings/application/huds",
       label: "Spectator HUDs",
     },
+    {
+      path: "/settings/application/flythroughs",
+      label: "Map Flythroughs",
+    },
   ];
   if (isDev.value) {
     items.push({
