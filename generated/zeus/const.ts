@@ -6533,6 +6533,9 @@ export const AllTypesProps: Record<string,any> = {
 		denyInvite:{
 			invite_id:"uuid"
 		},
+		fillMatchBots:{
+			match_id:"uuid"
+		},
 		forfeitMatch:{
 			match_id:"uuid",
 			winning_lineup_id:"uuid"
@@ -22343,6 +22346,7 @@ export const ReturnTypes: Record<string,any> = {
 		delete_v_match_captains:"v_match_captains_mutation_response",
 		delete_v_pool_maps:"v_pool_maps_mutation_response",
 		denyInvite:"SuccessOutput",
+		fillMatchBots:"SuccessOutput",
 		forfeitMatch:"SuccessOutput",
 		getLiveStreamSpecState:"LiveStreamSpecState",
 		getTestUploadLink:"GetTestUploadResponse",

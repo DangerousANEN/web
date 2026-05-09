@@ -13326,6 +13326,7 @@ delete_v_match_captains?: [{	/** filter the rows which have to be deleted */
 delete_v_pool_maps?: [{	/** filter the rows which have to be deleted */
 	where: ValueTypes["v_pool_maps_bool_exp"] | Variable<any, string>},ValueTypes["v_pool_maps_mutation_response"]],
 denyInvite?: [{	invite_id: ValueTypes["uuid"] | Variable<any, string>,	type: string | Variable<any, string>},ValueTypes["SuccessOutput"]],
+fillMatchBots?: [{	match_id: ValueTypes["uuid"] | Variable<any, string>},ValueTypes["SuccessOutput"]],
 forfeitMatch?: [{	match_id: ValueTypes["uuid"] | Variable<any, string>,	winning_lineup_id: ValueTypes["uuid"] | Variable<any, string>},ValueTypes["SuccessOutput"]],
 getLiveStreamSpecState?: [{	match_id: ValueTypes["uuid"] | Variable<any, string>},ValueTypes["LiveStreamSpecState"]],
 	getTestUploadLink?:ValueTypes["GetTestUploadResponse"],
@@ -44671,6 +44672,7 @@ delete_v_match_captains?: [{	/** filter the rows which have to be deleted */
 delete_v_pool_maps?: [{	/** filter the rows which have to be deleted */
 	where: ResolverInputTypes["v_pool_maps_bool_exp"]},ResolverInputTypes["v_pool_maps_mutation_response"]],
 denyInvite?: [{	invite_id: ResolverInputTypes["uuid"],	type: string},ResolverInputTypes["SuccessOutput"]],
+fillMatchBots?: [{	match_id: ResolverInputTypes["uuid"]},ResolverInputTypes["SuccessOutput"]],
 forfeitMatch?: [{	match_id: ResolverInputTypes["uuid"],	winning_lineup_id: ResolverInputTypes["uuid"]},ResolverInputTypes["SuccessOutput"]],
 getLiveStreamSpecState?: [{	match_id: ResolverInputTypes["uuid"]},ResolverInputTypes["LiveStreamSpecState"]],
 	getTestUploadLink?:ResolverInputTypes["GetTestUploadResponse"],
@@ -75007,6 +75009,7 @@ export type ModelTypes = {
 	/** delete data from the table: "v_pool_maps" */
 	delete_v_pool_maps?: ModelTypes["v_pool_maps_mutation_response"] | undefined | null,
 	denyInvite?: ModelTypes["SuccessOutput"] | undefined | null,
+	fillMatchBots?: ModelTypes["SuccessOutput"] | undefined | null,
 	forfeitMatch?: ModelTypes["SuccessOutput"] | undefined | null,
 	/** Live pod GSI snapshot — slots, sides, alive/dead. Drives the stream-deck. */
 	getLiveStreamSpecState?: ModelTypes["LiveStreamSpecState"] | undefined | null,
@@ -102891,6 +102894,7 @@ export type GraphQLTypes = {
 	/** delete data from the table: "v_pool_maps" */
 	delete_v_pool_maps?: GraphQLTypes["v_pool_maps_mutation_response"] | undefined | null,
 	denyInvite?: GraphQLTypes["SuccessOutput"] | undefined | null,
+	fillMatchBots?: GraphQLTypes["SuccessOutput"] | undefined | null,
 	forfeitMatch?: GraphQLTypes["SuccessOutput"] | undefined | null,
 	/** Live pod GSI snapshot — slots, sides, alive/dead. Drives the stream-deck. */
 	getLiveStreamSpecState?: GraphQLTypes["LiveStreamSpecState"] | undefined | null,

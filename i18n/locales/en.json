@@ -1952,7 +1952,10 @@
             "create_clips": "Create Player Highlights",
             "live_started": "Live stream starting",
             "live_stopped": "Live stream stopped",
-            "clips_started": "Player highlight renders queued"
+            "clips_started": "Player highlight renders queued",
+            "fill_bots": "Fill Empty Slots with Bots",
+            "fill_bots_offline": "Match server is offline",
+            "bots_filled": "Bots added to fill empty slots"
         },
         "delete_confirm": {
             "title": "Delete Match",

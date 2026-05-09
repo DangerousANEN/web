@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { MoreVertical, Radio } from "lucide-vue-next";
+import { Bot, MoreVertical, Radio } from "lucide-vue-next";
 import MatchSelectServer from "~/components/match/MatchSelectServer.vue";
 import MatchSelectWinner from "~/components/match/MatchSelectWinner.vue";
 import DropdownMenuItem from "~/components/ui/dropdown-menu/DropdownMenuItem.vue";
@@ -66,6 +66,21 @@ import {
         <DropdownMenuItem v-if="match.is_organizer">
           <MatchSelectWinner :match="match"></MatchSelectWinner>
         </DropdownMenuItem>
+
+        <Tooltip v-if="canFillBots">
+          <TooltipTrigger as-child>
+            <DropdownMenuItem
+              :disabled="!fillBotsEnabled"
+              @click="fillMatchBots"
+            >
+              <Bot class="h-3.5 w-3.5 mr-2 text-muted-foreground" />
+              <span>{{ $t("match.actions.fill_bots") }}</span>
+            </DropdownMenuItem>
+          </TooltipTrigger>
+          <TooltipContent v-if="fillBotsDisabledReason" side="left">
+            {{ fillBotsDisabledReason }}
+          </TooltipContent>
+        </Tooltip>
 
         <template v-if="match.is_organizer && hasOrganizerLiveActions">
           <DropdownMenuSeparator />
@@ -416,6 +431,25 @@ export default {
         title: this.$t("match.actions.requested_organizer"),
       });
     },
+    async fillMatchBots() {
+      try {
+        await this.$apollo.mutate({
+          mutation: generateMutation({
+            fillMatchBots: [
+              { match_id: this.match.id },
+              { success: true },
+            ],
+          }),
+        });
+        toast({ title: this.$t("match.actions.bots_filled") });
+      } catch (error: any) {
+        toast({
+          variant: "destructive",
+          title: this.$t("common.error"),
+          description: error?.message,
+        });
+      }
+    },
   },
   computed: {
     canAct() {
@@ -541,6 +575,28 @@ export default {
         this.match.lineup_2?.lineup_players.length >=
           this.match.min_players_per_lineup
       );
+    },
+    // Show the "Fill with Bots" item to organizers on any match that
+    // has a server attached and isn't already in a terminal state. The
+    // server has to be online for rcon to land — gated by
+    // `fillBotsEnabled`, with a tooltip explaining why it's disabled.
+    canFillBots() {
+      if (!this.match.is_organizer) return false;
+      const status = this.match.status;
+      return (
+        status !== e_match_status_enum.Finished &&
+        status !== e_match_status_enum.Canceled &&
+        status !== e_match_status_enum.Forfeit &&
+        status !== e_match_status_enum.Tie &&
+        status !== e_match_status_enum.Surrendered
+      );
+    },
+    fillBotsEnabled() {
+      return !!this.match.is_server_online;
+    },
+    fillBotsDisabledReason() {
+      if (this.fillBotsEnabled) return null;
+      return this.$t("match.actions.fill_bots_offline");
     },
   },
 };
