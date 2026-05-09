@@ -37,9 +37,15 @@ interface Hud {
   updated_at: string;
 }
 
-const apiBase = computed(() =>
-  String(useRuntimeConfig().public.apiDomain ?? "").replace(/\/$/, ""),
-);
+const apiBase = computed(() => {
+  const raw = String(useRuntimeConfig().public.apiDomain ?? "").replace(
+    /\/$/,
+    "",
+  );
+  if (!raw) return "";
+  if (raw.startsWith("http://") || raw.startsWith("https://")) return raw;
+  return `https://${raw}`;
+});
 
 const huds = ref<Hud[]>([]);
 const loading = ref(false);

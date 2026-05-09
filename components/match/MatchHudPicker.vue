@@ -23,9 +23,15 @@ interface Hud {
   is_public: boolean;
 }
 
-const apiBase = computed(() =>
-  String(useRuntimeConfig().public.apiDomain ?? "").replace(/\/$/, ""),
-);
+const apiBase = computed(() => {
+  const raw = String(useRuntimeConfig().public.apiDomain ?? "").replace(
+    /\/$/,
+    "",
+  );
+  if (!raw) return "";
+  if (raw.startsWith("http://") || raw.startsWith("https://")) return raw;
+  return `https://${raw}`;
+});
 const SENTINEL_DEFAULT = "__default__";
 
 const loading = ref(false);
