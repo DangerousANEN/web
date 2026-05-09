@@ -11,6 +11,10 @@ concurrency:
   group: build
   cancel-in-progress: true
 
+permissions:
+  contents: read
+  packages: write
+
 jobs:
   build-amd64:
     runs-on: ubuntu-24.04
