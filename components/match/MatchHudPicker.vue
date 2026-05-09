@@ -43,8 +43,15 @@ const activeName = ref<string | null>(null);
 async function load() {
   loading.value = true;
   try {
-    const [hudsRes, activeRes] = await Promise.all([
+    // /huds/match/:id returns ONLY the per-match override (or null) so the
+    // dropdown reflects the user's actual pick. /huds/active/:id is the
+    // effective resolution (override → default → null) and is what we use
+    // to render the inherited fallback name on the Default sentinel item.
+    const [hudsRes, overrideRes, activeRes] = await Promise.all([
       fetch(`${apiBase.value}/huds`, { credentials: "include" }),
+      fetch(`${apiBase.value}/huds/match/${props.matchId}`, {
+        credentials: "include",
+      }),
       fetch(`${apiBase.value}/huds/active/${props.matchId}`, {
         credentials: "include",
       }),
@@ -59,12 +66,12 @@ async function load() {
       activeName.value = null;
     }
 
-    // Resolve the actual current value of matches.hud_id via the panel'\''s
-    // GraphQL — but we don'\''t need full reactivity here; the API returns
-    // the *effective* HUD which mixes in the global default. We instead
-    // expose a "Default" sentinel and let the user pick a specific HUD to
-    // override.
-    selected.value = SENTINEL_DEFAULT;
+    if (overrideRes.ok) {
+      const body = (await overrideRes.json()) as { hud: Hud | null };
+      selected.value = body.hud?.id ?? SENTINEL_DEFAULT;
+    } else {
+      selected.value = SENTINEL_DEFAULT;
+    }
   } catch (e) {
     toast({
       title: "Failed to load HUDs",
