@@ -39,6 +39,14 @@ function isPublicRoute(path: string): boolean {
     return true;
   }
 
+  // OBS Browser Source HUD overlays — must be reachable without a
+  // login bounce since OBS can't carry session cookies. The api side
+  // (overlay.controller.ts) likewise serves /overlay/state/:matchId
+  // without auth.
+  if (path.startsWith("/overlay/")) {
+    return true;
+  }
+
   return false;
 }
 

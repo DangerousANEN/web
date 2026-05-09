@@ -28,6 +28,11 @@ const MAX_WHEP_FAILURES = 3;
 let hasEverPlayed = false;
 const errorMessage = ref<string | null>(null);
 const isRetrying = ref(false);
+// Visible retry counter shown next to "Acquiring signal" so the operator
+// can tell a slow startup (legitimate, mediamtx still bringing up the
+// SRT publisher) from a true outage. Resets on every successful peer
+// connect.
+const retryAttempt = ref(0);
 const isMuted = ref(true);
 const volume = ref(1);
 const isFullscreen = ref(false);
@@ -89,6 +94,13 @@ let cancelled = false;
 const MAX_RETRY_DELAY_MS = 5_000;
 const INITIAL_RETRY_DELAY_MS = 500;
 let retryDelay = INITIAL_RETRY_DELAY_MS;
+// Guards against a concurrent reconnect storm. Without this, a peer
+// state oscillating between connected/failed/disconnected fires
+// scheduleRetry() multiple times in tight succession (one from
+// onconnectionstatechange, another from the WHEP fetch error path on
+// the same trip), and each connect() tears down the in-progress one
+// — producing the "reconnects 20 times" symptom on page reload.
+let connectInFlight = false;
 
 function unmute() {
   const el = videoRef.value;
@@ -119,8 +131,14 @@ async function connect() {
     console.debug("[whep] connect skipped: clip render in progress");
     return;
   }
+  if (connectInFlight) {
+    console.debug("[whep] connect skipped: already in flight");
+    return;
+  }
+  connectInFlight = true;
 
   await teardown();
+  retryAttempt.value += 1;
   status.value = "connecting";
   errorMessage.value = null;
   console.debug("[whep] connecting to", props.whepUrl);
@@ -166,6 +184,9 @@ async function connect() {
       console.debug("[whep] connectionState=", state);
       if (state === "connected") {
         status.value = "playing";
+        // Reset retry budget after a real successful peer.
+        retryDelay = INITIAL_RETRY_DELAY_MS;
+        retryAttempt.value = 0;
       } else if (state === "failed" || state === "disconnected") {
         // Peer dropped mid-stream. During a render, keep the last
         // frame and show "rendering" — clipRenderActive watcher reconnects.
@@ -177,7 +198,12 @@ async function connect() {
         }
         status.value = "error";
         errorMessage.value = `peer connection ${state}`;
-        retryDelay = INITIAL_RETRY_DELAY_MS;
+        // NB: we deliberately do NOT reset retryDelay here. An
+        // oscillating peer (mediamtx briefly drops the WHEP session
+        // after publisher re-register) used to reset to 500ms on
+        // every blip, producing the "~20 reconnects in seconds"
+        // storm on page reload. Letting backoff continue gives
+        // mediamtx a chance to settle before we hammer it again.
         scheduleRetry();
       }
     };
@@ -207,6 +233,7 @@ async function connect() {
     failureCount = 0;
     hasEverPlayed = true;
     isRetrying.value = false;
+    retryAttempt.value = 0;
   } catch (err) {
     const message = (err as Error)?.message ?? String(err);
     // Connect raced with a render starting. clipRenderActive watcher
@@ -233,6 +260,8 @@ async function connect() {
     // mediamtx 404s until the SRT publisher registers; always retry —
     // the parent page unmounts us when the session ends.
     scheduleRetry();
+  } finally {
+    connectInFlight = false;
   }
 }
 
@@ -361,6 +390,7 @@ watch(
   () => {
     retryDelay = INITIAL_RETRY_DELAY_MS;
     failureCount = 0;
+    retryAttempt.value = 0;
     hasEverPlayed = false;
     useFallback.value = false;
     if (retryHandle) {
@@ -599,13 +629,21 @@ defineExpose({ connect, teardown });
           v-if="status === 'connecting'"
           class="font-mono text-[0.7rem] font-semibold uppercase tracking-[0.22em] text-[hsl(var(--tac-amber))]"
         >
-          Acquiring signal<span class="whep-dots" />
+          Acquiring signal<span class="whep-dots" /><span
+            v-if="retryAttempt > 1"
+            class="ml-2 text-[0.6rem] text-[hsl(var(--tac-amber)/0.7)]"
+            >attempt {{ retryAttempt }}</span
+          >
         </p>
         <p
           v-else-if="status === 'error' && isRetrying"
           class="font-mono text-[0.7rem] font-semibold uppercase tracking-[0.22em] text-[hsl(var(--tac-amber))]"
         >
-          Acquiring signal<span class="whep-dots" />
+          Acquiring signal<span class="whep-dots" /><span
+            v-if="retryAttempt > 1"
+            class="ml-2 text-[0.6rem] text-[hsl(var(--tac-amber)/0.7)]"
+            >attempt {{ retryAttempt }}</span
+          >
         </p>
         <p
           v-else-if="status === 'error'"
