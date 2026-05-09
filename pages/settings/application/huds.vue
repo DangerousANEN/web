@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
+import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Dialog,
@@ -28,6 +29,9 @@ interface Hud {
   slug: string;
   description: string | null;
   version: string | null;
+  // Older uploads predate the format column and may come back without
+  // it; default to "openhud" client-side.
+  format?: "openhud" | "lexogrine" | string;
   uploader_steam_id: string | null;
   is_default: boolean;
   is_public: boolean;
@@ -334,6 +338,12 @@ onMounted(refresh);
             <Lock v-else class="size-3.5" />
             <span>{{ fmtBytes(hud.size_bytes) }}</span>
             <span v-if="hud.version">v{{ hud.version }}</span>
+            <Badge
+              v-if="hud.format && hud.format !== 'openhud'"
+              variant="secondary"
+              class="capitalize"
+              >{{ hud.format }}</Badge
+            >
           </span>
         </CardHeader>
         <CardContent class="flex flex-wrap items-center gap-2 pt-0">
