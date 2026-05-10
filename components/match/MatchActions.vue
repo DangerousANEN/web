@@ -67,20 +67,23 @@ import {
           <MatchSelectWinner :match="match"></MatchSelectWinner>
         </DropdownMenuItem>
 
-        <Tooltip v-if="canFillBots">
-          <TooltipTrigger as-child>
-            <DropdownMenuItem
-              :disabled="!fillBotsEnabled"
-              @click="fillMatchBots"
-            >
-              <Bot class="h-3.5 w-3.5 mr-2 text-muted-foreground" />
-              <span>{{ $t("match.actions.fill_bots") }}</span>
-            </DropdownMenuItem>
-          </TooltipTrigger>
-          <TooltipContent v-if="fillBotsDisabledReason" side="left">
+        <DropdownMenuItem
+          v-if="canFillBots"
+          :disabled="!fillBotsEnabled"
+          class="flex flex-col items-start gap-0.5"
+          @select="fillMatchBots"
+        >
+          <span class="flex items-center">
+            <Bot class="h-3.5 w-3.5 mr-2 text-muted-foreground" />
+            <span>{{ $t("match.actions.fill_bots") }}</span>
+          </span>
+          <span
+            v-if="fillBotsDisabledReason"
+            class="text-xs text-muted-foreground pl-5"
+          >
             {{ fillBotsDisabledReason }}
-          </TooltipContent>
-        </Tooltip>
+          </span>
+        </DropdownMenuItem>
 
         <template v-if="match.is_organizer && hasOrganizerLiveActions">
           <DropdownMenuSeparator />
