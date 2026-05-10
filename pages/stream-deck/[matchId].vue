@@ -111,6 +111,79 @@ function whepUrlFor(s: any): string | null {
   return s.link.replace(/\/?$/, "/whep");
 }
 
+// ---- LAN mode ----
+const lanMode = ref(false);
+const lanHost = ref("");
+
+function detectLanHost(): string | null {
+  if (typeof window === "undefined") return null;
+  const host = window.location.hostname;
+  if (/^(192\.168\.|10\.|172\.(1[6-9]|2\d|3[01])\.)/.test(host)) {
+    return host;
+  }
+  return null;
+}
+
+function lanWhepUrlFor(s: any): string | null {
+  if (!s?.link || !lanHost.value) return null;
+  const base = s.link.replace(/^https?:\/\/[^/]+/, `http://${lanHost.value}:8889`);
+  return base.replace(/\/?$/, "/whep");
+}
+
+const effectiveWhepUrl = computed(() => {
+  if (!stream.value) return null;
+  return lanMode.value ? lanWhepUrlFor(stream.value) : whepUrlFor(stream.value);
+});
+
+onMounted(() => {
+  if (typeof window !== "undefined") {
+    lanMode.value = localStorage.getItem("stream-deck-lan-mode") === "true";
+    lanHost.value = localStorage.getItem("stream-deck-lan-host") || detectLanHost() || "";
+  }
+});
+
+watch(lanMode, (v) => {
+  if (typeof window !== "undefined") {
+    localStorage.setItem("stream-deck-lan-mode", String(v));
+  }
+});
+
+watch(lanHost, (v) => {
+  if (typeof window !== "undefined") {
+    localStorage.setItem("stream-deck-lan-host", v);
+  }
+});
+
+const obsLanUrl = computed(() => {
+  const url = lanWhepUrlFor(stream.value);
+  if (!url) return null;
+  return `${webDomain.value}/overlay/video/${matchId.value}?whep=${encodeURIComponent(url)}`;
+});
+
+const copiedObsLan = ref(false);
+async function copyObsLanUrl() {
+  const url = obsLanUrl.value;
+  if (!url) return;
+  try {
+    if (navigator.clipboard?.writeText) {
+      await navigator.clipboard.writeText(url);
+    } else {
+      const ta = document.createElement("textarea");
+      ta.value = url;
+      ta.style.position = "fixed";
+      ta.style.opacity = "0";
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand("copy");
+      document.body.removeChild(ta);
+    }
+    copiedObsLan.value = true;
+    setTimeout(() => (copiedObsLan.value = false), 1500);
+  } catch (err) {
+    console.error("[stream-deck] copy obs lan url failed", err);
+  }
+}
+
 const webDomain = computed(() => {
   const raw = String(useRuntimeConfig().public.webDomain ?? "").replace(
     /\/$/,
@@ -504,6 +577,27 @@ watch(spectatedSteamId, (sid) => {
             />
           </div>
 
+          <div class="flex items-center gap-2">
+            <Label
+              for="lan-mode"
+              class="text-[0.7rem] uppercase tracking-[0.16em] text-muted-foreground"
+            >
+              LAN
+            </Label>
+            <Switch
+              id="lan-mode"
+              :model-value="lanMode"
+              @update:model-value="(v: boolean) => (lanMode = v)"
+            />
+          </div>
+          <input
+            v-if="lanMode"
+            v-model="lanHost"
+            type="text"
+            placeholder="192.168.1.109"
+            class="h-8 w-36 px-2 text-xs rounded border border-border/60 bg-background"
+          />
+
           <button
             v-if="obsUrl"
             type="button"
@@ -513,6 +607,17 @@ watch(spectatedSteamId, (sid) => {
           >
             <component :is="copiedObs ? Check : Copy" class="size-3.5" />
             {{ copiedObs ? "Copied" : "Copy OBS URL" }}
+          </button>
+
+          <button
+            v-if="lanMode && obsLanUrl"
+            type="button"
+            :disabled="copiedObsLan"
+            class="inline-flex items-center gap-1.5 px-3 py-1.5 font-mono text-[0.7rem] font-semibold uppercase tracking-[0.16em] rounded-md border border-border/70 bg-card/40 backdrop-blur-sm text-foreground/90 hover:bg-emerald-500/15 hover:text-emerald-400 transition-colors disabled:opacity-100"
+            @click="copyObsLanUrl"
+          >
+            <component :is="copiedObsLan ? Check : Copy" class="size-3.5" />
+            {{ copiedObsLan ? "Copied" : "Copy LAN URL" }}
           </button>
 
           <!-- Same segmented tactical bar treatment as the deck card —
@@ -549,8 +654,8 @@ watch(spectatedSteamId, (sid) => {
           class="relative overflow-hidden rounded-lg border border-border/70 bg-black shadow-[0_0_0_1px_hsl(var(--tac-amber)/0.05),0_30px_60px_-30px_rgba(0,0,0,0.7)]"
         >
           <WhepPlayer
-            v-if="stream?.is_live && whepUrlFor(stream)"
-            :whep-url="whepUrlFor(stream)!"
+            v-if="stream?.is_live && effectiveWhepUrl"
+            :whep-url="effectiveWhepUrl"
           />
           <!-- Mirrors the deck-card overlay: full step-by-step boot
                pipeline so the caster sees how far the pod has gotten

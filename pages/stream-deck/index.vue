@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { reactive } from "vue";
+import { reactive, ref, watch, onMounted } from "vue";
 import { storeToRefs } from "pinia";
 import { useApolloClient } from "@vue/apollo-composable";
 import { useStreamerStore } from "~/stores/StreamerStore";
@@ -48,6 +48,48 @@ function whepUrlFor(stream: any): string | null {
   if (!stream?.link) return null;
   return stream.link.replace(/\/?$/, "/whep");
 }
+
+// ---- LAN mode (shared with focus page via localStorage) ----
+const lanMode = ref(false);
+const lanHost = ref("");
+
+function detectLanHost(): string | null {
+  if (typeof window === "undefined") return null;
+  const host = window.location.hostname;
+  if (/^(192\.168\.|10\.|172\.(1[6-9]|2\d|3[01])\.)/.test(host)) {
+    return host;
+  }
+  return null;
+}
+
+function lanWhepUrlFor(stream: any): string | null {
+  if (!stream?.link || !lanHost.value) return null;
+  const base = stream.link.replace(/^https?:\/\/[^/]+/, `http://${lanHost.value}:8889`);
+  return base.replace(/\/?$/, "/whep");
+}
+
+function effectiveWhepUrl(stream: any): string | null {
+  return lanMode.value ? lanWhepUrlFor(stream) : whepUrlFor(stream);
+}
+
+onMounted(() => {
+  if (typeof window !== "undefined") {
+    lanMode.value = localStorage.getItem("stream-deck-lan-mode") === "true";
+    lanHost.value = localStorage.getItem("stream-deck-lan-host") || detectLanHost() || "";
+  }
+});
+
+watch(lanMode, (v) => {
+  if (typeof window !== "undefined") {
+    localStorage.setItem("stream-deck-lan-mode", String(v));
+  }
+});
+
+watch(lanHost, (v) => {
+  if (typeof window !== "undefined") {
+    localStorage.setItem("stream-deck-lan-host", v);
+  }
+});
 
 definePageMeta({
   middleware: "streamer",
@@ -334,6 +376,19 @@ function statusBadgeLabel(stream: any) {
                 />
               </div>
 
+              <div class="flex items-center gap-2">
+                <Label
+                  :for="`lan-mode-${stream.id}`"
+                  class="text-[0.7rem] uppercase tracking-[0.16em] text-muted-foreground"
+                >
+                  LAN
+                </Label>
+                <Switch
+                  :id="`lan-mode-${stream.id}`"
+                  :model-value="lanMode"
+                  @update:model-value="(v: boolean) => (lanMode = v)"
+                />
+              </div>
               <!-- Tactical control bar — segmented action group with
                  consistent mono-uppercase labels and a single shared
                  chrome. Replaces three mismatched shadcn buttons that
@@ -423,10 +478,10 @@ function statusBadgeLabel(stream: any) {
               <WhepPlayer
                 v-if="
                   stream.is_live &&
-                  whepUrlFor(stream) &&
+                  effectiveWhepUrl(stream) &&
                   !isPopoutOpen(stream.match_id)
                 "
-                :whep-url="whepUrlFor(stream)!"
+                :whep-url="effectiveWhepUrl(stream)!"
                 :fallback-url="stream.link"
               />
 
