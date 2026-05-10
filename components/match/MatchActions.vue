@@ -69,7 +69,6 @@ import {
 
         <DropdownMenuItem
           v-if="canFillBots"
-          :disabled="!fillBotsEnabled"
           class="flex flex-col items-start gap-0.5"
           @select="fillMatchBots"
         >
@@ -77,11 +76,8 @@ import {
             <Bot class="h-3.5 w-3.5 mr-2 text-muted-foreground" />
             <span>{{ $t("match.actions.fill_bots") }}</span>
           </span>
-          <span
-            v-if="fillBotsDisabledReason"
-            class="text-xs text-muted-foreground pl-5"
-          >
-            {{ fillBotsDisabledReason }}
+          <span class="text-xs text-muted-foreground pl-5">
+            {{ $t("match.actions.fill_bots_hint") }}
           </span>
         </DropdownMenuItem>
 
@@ -579,10 +575,15 @@ export default {
           this.match.min_players_per_lineup
       );
     },
-    // Show the "Fill with Bots" item to organizers on any match that
-    // has a server attached and isn't already in a terminal state. The
-    // server has to be online for rcon to land — gated by
-    // `fillBotsEnabled`, with a tooltip explaining why it's disabled.
+    // Show the "Fill with Bots" item to organizers on any non-terminal
+    // match. The action does two things: (1) inserts placeholder bot
+    // rows into match_lineup_players so the panel lobby shows 5v5 and
+    // `check_match_has_min_players` is satisfied → organizer can hit
+    // Start Match for solo HUD testing without waiting for real
+    // players; (2) best-effort rcon `bot_quota_mode fill` if the
+    // server is already up so bots actually spawn ingame. The button
+    // doesn't gate on `is_server_online` anymore — phase 1 works
+    // before the server is even reserved.
     canFillBots() {
       if (!this.match.is_organizer) return false;
       const status = this.match.status;
@@ -593,13 +594,6 @@ export default {
         status !== e_match_status_enum.Tie &&
         status !== e_match_status_enum.Surrendered
       );
-    },
-    fillBotsEnabled() {
-      return !!this.match.is_server_online;
-    },
-    fillBotsDisabledReason() {
-      if (this.fillBotsEnabled) return null;
-      return this.$t("match.actions.fill_bots_offline");
     },
   },
 };

@@ -1970,6 +1970,7 @@
             "live_stopped": "Live stream stopped",
             "clips_started": "Player highlight renders queued",
             "fill_bots": "Fill Empty Slots with Bots",
+            "fill_bots_hint": "Adds BOT placeholders so you can start the match solo",
             "fill_bots_offline": "Match server is offline",
             "bots_filled": "Bots added to fill empty slots"
         },
