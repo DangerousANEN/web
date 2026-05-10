@@ -20,6 +20,7 @@ import {
   Database,
   Trophy,
   Film,
+  LayoutTemplate,
 } from "lucide-vue-next";
 import TournamentBracket from "~/components/icons/tournament-bracket.vue";
 import InstallPWA from "~/components/InstallPWA.vue";
@@ -376,6 +377,19 @@ function onLeftNavTouchEnd(e: TouchEvent) {
                   <Badge size="sm" v-if="activeStreamingMatchesCount > 0">
                     {{ activeStreamingMatchesCount }}
                   </Badge>
+                </NuxtLink>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+            <SidebarMenuItem tooltip="HUD Editor">
+              <SidebarMenuButton as-child tooltip="HUD Editor">
+                <NuxtLink
+                  :to="{ name: 'hud-editor' }"
+                  :class="{
+                    'router-link-active': isRouteActive('hud-editor'),
+                  }"
+                >
+                  <LayoutTemplate />
+                  HUD Editor
                 </NuxtLink>
               </SidebarMenuButton>
             </SidebarMenuItem>
