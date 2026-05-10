@@ -40,6 +40,7 @@ export default function matchOptionsValidator(
     auto_cancel_duration: z.number().min(1).nullable().optional(),
     live_match_timeout: z.number().min(1).nullable().optional(),
     match_mode: z.nativeEnum(e_match_mode_enum).default(e_match_mode_enum.auto),
+    raw_hud_overlay: z.boolean().default(false),
     map_pool_id: z.string().nullable(),
     map_pool: z
       .string()

@@ -1332,6 +1332,14 @@ export type ValueTypes = {
 	success?:boolean | `@${string}`,
 		__typename?: boolean | `@${string}`
 }>;
+	["MatchOverlayHud"]: AliasType<{
+	id?:boolean | `@${string}`,
+	slot_key?:boolean | `@${string}`,
+	label?:boolean | `@${string}`,
+	hud_id?:boolean | `@${string}`,
+	display_order?:boolean | `@${string}`,
+		__typename?: boolean | `@${string}`
+}>;
 	["TableIOStat"]: AliasType<{
 	cache_hit_ratio?:boolean | `@${string}`,
 	heap_blks_hit?:boolean | `@${string}`,
@@ -11074,6 +11082,7 @@ matches_aggregate?: [{	/** distinct select on columns */
 	number_of_substitutes?:boolean | `@${string}`,
 	overtime?:boolean | `@${string}`,
 	prefer_dedicated_server?:boolean | `@${string}`,
+	raw_hud_overlay?:boolean | `@${string}`,
 	ready_setting?:boolean | `@${string}`,
 	region_veto?:boolean | `@${string}`,
 	regions?:boolean | `@${string}`,
@@ -11147,6 +11156,7 @@ count?: [{	columns?: Array<ValueTypes["match_options_select_column"]> | undefine
 	number_of_substitutes?: ValueTypes["Int_comparison_exp"] | undefined | null | Variable<any, string>,
 	overtime?: ValueTypes["Boolean_comparison_exp"] | undefined | null | Variable<any, string>,
 	prefer_dedicated_server?: ValueTypes["Boolean_comparison_exp"] | undefined | null | Variable<any, string>,
+	raw_hud_overlay?: ValueTypes["Boolean_comparison_exp"] | undefined | null | Variable<any, string>,
 	ready_setting?: ValueTypes["e_ready_settings_enum_comparison_exp"] | undefined | null | Variable<any, string>,
 	region_veto?: ValueTypes["Boolean_comparison_exp"] | undefined | null | Variable<any, string>,
 	regions?: ValueTypes["String_array_comparison_exp"] | undefined | null | Variable<any, string>,
@@ -11191,6 +11201,7 @@ count?: [{	columns?: Array<ValueTypes["match_options_select_column"]> | undefine
 	number_of_substitutes?: number | undefined | null | Variable<any, string>,
 	overtime?: boolean | undefined | null | Variable<any, string>,
 	prefer_dedicated_server?: boolean | undefined | null | Variable<any, string>,
+	raw_hud_overlay?: boolean | undefined | null | Variable<any, string>,
 	ready_setting?: ValueTypes["e_ready_settings_enum"] | undefined | null | Variable<any, string>,
 	region_veto?: boolean | undefined | null | Variable<any, string>,
 	regions?: Array<string> | undefined | null | Variable<any, string>,
@@ -11273,6 +11284,7 @@ count?: [{	columns?: Array<ValueTypes["match_options_select_column"]> | undefine
 	number_of_substitutes?: ValueTypes["order_by"] | undefined | null | Variable<any, string>,
 	overtime?: ValueTypes["order_by"] | undefined | null | Variable<any, string>,
 	prefer_dedicated_server?: ValueTypes["order_by"] | undefined | null | Variable<any, string>,
+	raw_hud_overlay?: ValueTypes["order_by"] | undefined | null | Variable<any, string>,
 	ready_setting?: ValueTypes["order_by"] | undefined | null | Variable<any, string>,
 	region_veto?: ValueTypes["order_by"] | undefined | null | Variable<any, string>,
 	regions?: ValueTypes["order_by"] | undefined | null | Variable<any, string>,
@@ -11310,6 +11322,7 @@ count?: [{	columns?: Array<ValueTypes["match_options_select_column"]> | undefine
 	number_of_substitutes?: number | undefined | null | Variable<any, string>,
 	overtime?: boolean | undefined | null | Variable<any, string>,
 	prefer_dedicated_server?: boolean | undefined | null | Variable<any, string>,
+	raw_hud_overlay?: boolean | undefined | null | Variable<any, string>,
 	ready_setting?: ValueTypes["e_ready_settings_enum"] | undefined | null | Variable<any, string>,
 	region_veto?: boolean | undefined | null | Variable<any, string>,
 	regions?: Array<string> | undefined | null | Variable<any, string>,
@@ -13327,6 +13340,8 @@ delete_v_pool_maps?: [{	/** filter the rows which have to be deleted */
 	where: ValueTypes["v_pool_maps_bool_exp"] | Variable<any, string>},ValueTypes["v_pool_maps_mutation_response"]],
 denyInvite?: [{	invite_id: ValueTypes["uuid"] | Variable<any, string>,	type: string | Variable<any, string>},ValueTypes["SuccessOutput"]],
 fillMatchBots?: [{	match_id: ValueTypes["uuid"] | Variable<any, string>},ValueTypes["SuccessOutput"]],
+upsertMatchOverlayHud?: [{	match_id: ValueTypes["uuid"] | Variable<any, string>,	slot_key: string | Variable<any, string>,	label?: string | undefined | null | Variable<any, string>,	hud_id?: ValueTypes["uuid"] | undefined | null | Variable<any, string>,	display_order?: number | undefined | null | Variable<any, string>},ValueTypes["MatchOverlayHud"]],
+deleteMatchOverlayHud?: [{	match_id: ValueTypes["uuid"] | Variable<any, string>,	slot_key: string | Variable<any, string>},ValueTypes["SuccessOutput"]],
 forfeitMatch?: [{	match_id: ValueTypes["uuid"] | Variable<any, string>,	winning_lineup_id: ValueTypes["uuid"] | Variable<any, string>},ValueTypes["SuccessOutput"]],
 getLiveStreamSpecState?: [{	match_id: ValueTypes["uuid"] | Variable<any, string>},ValueTypes["LiveStreamSpecState"]],
 	getTestUploadLink?:ValueTypes["GetTestUploadResponse"],
@@ -32678,6 +32693,14 @@ export type ResolverInputTypes = {
 	success?:boolean | `@${string}`,
 		__typename?: boolean | `@${string}`
 }>;
+	["MatchOverlayHud"]: AliasType<{
+	id?:boolean | `@${string}`,
+	slot_key?:boolean | `@${string}`,
+	label?:boolean | `@${string}`,
+	hud_id?:boolean | `@${string}`,
+	display_order?:boolean | `@${string}`,
+		__typename?: boolean | `@${string}`
+}>;
 	["TableIOStat"]: AliasType<{
 	cache_hit_ratio?:boolean | `@${string}`,
 	heap_blks_hit?:boolean | `@${string}`,
@@ -42420,6 +42443,7 @@ matches_aggregate?: [{	/** distinct select on columns */
 	number_of_substitutes?:boolean | `@${string}`,
 	overtime?:boolean | `@${string}`,
 	prefer_dedicated_server?:boolean | `@${string}`,
+	raw_hud_overlay?:boolean | `@${string}`,
 	ready_setting?:boolean | `@${string}`,
 	region_veto?:boolean | `@${string}`,
 	regions?:boolean | `@${string}`,
@@ -72868,6 +72892,7 @@ export type ModelTypes = {
 	number_of_substitutes: number,
 	overtime: boolean,
 	prefer_dedicated_server: boolean,
+	raw_hud_overlay: boolean,
 	ready_setting: ModelTypes["e_ready_settings_enum"],
 	region_veto: boolean,
 	regions?: Array<string> | undefined | null,
@@ -100673,6 +100698,7 @@ export type GraphQLTypes = {
 	number_of_substitutes: number,
 	overtime: boolean,
 	prefer_dedicated_server: boolean,
+	raw_hud_overlay: boolean,
 	ready_setting: GraphQLTypes["e_ready_settings_enum"],
 	region_veto: boolean,
 	regions?: Array<string> | undefined | null,
@@ -120610,6 +120636,7 @@ export enum match_options_select_column {
 	number_of_substitutes = "number_of_substitutes",
 	overtime = "overtime",
 	prefer_dedicated_server = "prefer_dedicated_server",
+	raw_hud_overlay = "raw_hud_overlay",
 	ready_setting = "ready_setting",
 	region_veto = "region_veto",
 	regions = "regions",
@@ -120638,6 +120665,7 @@ export enum match_options_update_column {
 	number_of_substitutes = "number_of_substitutes",
 	overtime = "overtime",
 	prefer_dedicated_server = "prefer_dedicated_server",
+	raw_hud_overlay = "raw_hud_overlay",
 	ready_setting = "ready_setting",
 	region_veto = "region_veto",
 	regions = "regions",

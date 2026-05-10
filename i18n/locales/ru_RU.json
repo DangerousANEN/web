@@ -727,6 +727,18 @@
             "remove_description": "Вы уверены, что хотите удалить этого участника?"
         }
     },
+    "overlay": {
+        "browser_sources_title": "OBS Browser Source",
+        "browser_sources_description": "Добавь по одному слоту на каждую сцену в OBS, у каждой свой HUD. У каждого слота уникальный URL — добавь его в OBS как Browser Source (1920×1080). Чтобы у CS2-стрима не было встроенного HUD-а, в настройках матча включи «Чистая картинка».",
+        "no_slots_hint": "Слоты ещё не созданы. Добавь свой ниже или используй готовый стартовый шаблон:",
+        "add_scene": "Добавить сцену",
+        "slot_key_placeholder": "ключ_слота (напр. game)",
+        "slot_label_placeholder": "Название (необязательно)",
+        "hud_placeholder": "HUD",
+        "hud_default": "По умолчанию (встроенный)",
+        "layout_game": "Игровой вид (поверх матча)",
+        "layout_operator": "Операторский вид (между раундов)"
+    },
     "match": {
         "scheduled": "Запланирован",
         "simple": {
@@ -848,6 +860,10 @@
                     "auto": "Авто",
                     "admin": "Админ"
                   }
+                },
+                "raw_hud_overlay": {
+                  "label": "Чистая картинка (без HUD-а в видео)",
+                  "description": "Отключает встроенный HUD у CS2-стрима, чтобы HUD-ы рисовались отдельным слоем в OBS через Browser Source. Сами слоты настраиваются во вкладке «Streams» → «OBS Browser Sources»."
                 }
             },
             "max_rounds": "Максимальное количество раундов",

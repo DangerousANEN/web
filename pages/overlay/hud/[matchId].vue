@@ -2,9 +2,19 @@
 import { ref, computed, onMounted, onBeforeUnmount } from "vue";
 import { useRoute } from "vue-router";
 
-// OBS Browser Source HUD overlay. Two layouts on the same route:
-//   ?layout=game     — drawn over the cs2 game footage during play
-//   ?layout=operator — drawn over the operator-cam scene between rounds
+// OBS Browser Source HUD overlay. Two built-in layouts:
+//   game      — drawn over the cs2 game footage during play
+//   operator  — drawn over the operator-cam scene between rounds
+//
+// New flexible API (preferred): /overlay/hud/<id>?slot=<slot_key>
+//   The slot_key is matched against `match_overlay_huds.slot_key` on
+//   the server. If the slot has a `hud_id` referencing a custom HUD
+//   pack with a browser-renderable format we'd render that pack here
+//   in an iframe (TODO — see below); for now, slot_key is mapped to
+//   one of the two built-in layouts.
+//
+// Backwards-compat: /overlay/hud/<id>?layout=game|operator still
+// works exactly the same way it did before slots existed.
 //
 // Auth: none. The api's /overlay/state/:matchId is also no-auth, so
 // pasting the URL into OBS "just works". See middleware/auth.global.ts
@@ -22,10 +32,31 @@ definePageMeta({
 
 const route = useRoute();
 const matchId = computed(() => String(route.params.matchId));
-const layout = computed(() => {
-  const v = String(route.query.layout ?? "game").toLowerCase();
-  return v === "operator" ? "operator" : "game";
+
+// Direct ?layout= takes precedence so URLs that operators already
+// pasted into OBS keep working unchanged.
+const explicitLayout = computed(() => {
+  const v = route.query.layout
+    ? String(route.query.layout).toLowerCase()
+    : null;
+  if (v === "operator") return "operator";
+  if (v === "game") return "game";
+  return null;
 });
+
+const slotKey = computed(() => {
+  const v = route.query.slot ? String(route.query.slot).toLowerCase() : null;
+  return v && /^[a-z0-9][a-z0-9_-]{0,63}$/.test(v) ? v : null;
+});
+
+// Defer initialisation of `state` so it's already in the file when
+// `layout` reads from it. The layout resolution prefers an explicit
+// ?layout=… , then the slot's known mapping, then default to game.
+function layoutForSlot(key: string | null): "game" | "operator" {
+  if (!key) return "game";
+  if (key === "operator") return "operator";
+  return "game";
+}
 // `?debug=1` paints a faint border around the canvas + dumps the raw
 // state so operators can verify the data is flowing without having to
 // open devtools inside OBS.
@@ -57,12 +88,29 @@ interface SpecPlayerExt extends SpecSlot {
   defusekit: boolean;
 }
 
+interface OverlayHud {
+  id: string;
+  slot_key: string;
+  label: string | null;
+  hud_id: string | null;
+  display_order: number;
+  hud?: {
+    id: string;
+    slug: string | null;
+    name: string | null;
+    format?: string | null;
+  } | null;
+}
+
 interface OverlayState {
   match: {
     id: string;
     status: string;
     current_match_map_id?: string | null;
-    options?: { type?: string | null } | null;
+    options?: {
+      type?: string | null;
+      raw_hud_overlay?: boolean | null;
+    } | null;
     lineup_1?: { name?: string | null } | null;
     lineup_2?: { name?: string | null } | null;
     match_maps?: Array<{
@@ -74,6 +122,7 @@ interface OverlayState {
       lineup_2_score?: number | null;
     }>;
   } | null;
+  overlay_huds?: OverlayHud[];
   gsi: {
     map_name?: string | null;
     round_phase?: string | null;
@@ -95,6 +144,17 @@ interface OverlayState {
 const state = ref<OverlayState | null>(null);
 const lastErrorAt = ref(0);
 let pollTimer: ReturnType<typeof setInterval> | null = null;
+
+// Effective layout: if the operator passed ?layout= explicitly we
+// honour it; otherwise we look up the matching slot in overlay state
+// and use that slot_key's mapping (operator → operator, anything else
+// → game). If the slot exists but resolves to a custom HUD pack,
+// we'll surface that here in a future iteration; for now the slot's
+// HUD pack is metadata only.
+const layout = computed<"game" | "operator">(() => {
+  if (explicitLayout.value) return explicitLayout.value;
+  return layoutForSlot(slotKey.value);
+});
 
 const apiBase = computed(() => {
   const raw = String(useRuntimeConfig().public.apiDomain ?? "").replace(

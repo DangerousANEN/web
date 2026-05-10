@@ -516,7 +516,10 @@ provide("commander", commander);
            Operators copy these into OBS so the panel HUD renders
            as a separate transparent layer over the game video.
            See pages/overlay/hud/[matchId].vue. -->
-      <OverlayBrowserSources :match-id="match.id" />
+      <OverlayBrowserSources
+        :match-id="match.id"
+        :can-edit="match.is_organizer"
+      />
     </TabsContent>
   </Tabs>
 </template>

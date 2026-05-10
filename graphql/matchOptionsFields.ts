@@ -23,6 +23,7 @@ export const matchOptionsFields = Selector("match_options")({
   timeout_setting: true,
   tech_timeout_setting: true,
   ready_setting: true,
+  raw_hud_overlay: true,
   map_pool_id: true,
   map_pool: {
     id: true,

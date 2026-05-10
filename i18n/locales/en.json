@@ -1666,6 +1666,18 @@
             "roster_image_description": "Upload a roster image for {name} on this team. Overrides the player's default."
         }
     },
+    "overlay": {
+        "browser_sources_title": "OBS Browser Sources",
+        "browser_sources_description": "Add one slot per OBS scene that needs its own HUD. Each slot has a unique URL — paste it into OBS as a Browser Source (1920×1080). For the no-HUD raw video the match must have 'Raw HUD' enabled in match settings.",
+        "no_slots_hint": "No overlay scenes yet. Add one below, or use a suggested starter:",
+        "add_scene": "Add scene",
+        "slot_key_placeholder": "slot_key (e.g. game)",
+        "slot_label_placeholder": "Label (optional)",
+        "hud_placeholder": "HUD",
+        "hud_default": "Default (built-in)",
+        "layout_game": "Game view (over the match)",
+        "layout_operator": "Operator view (between rounds)"
+    },
     "match": {
         "team_stats_heading": "{name} Stats",
         "all_maps": "All Maps",
@@ -1786,6 +1798,10 @@
                 "default_models": {
                     "label": "Default Player Models",
                     "description": "Enable default player models for all players in the match."
+                },
+                "raw_hud_overlay": {
+                    "label": "Raw HUD (no in-game overlay)",
+                    "description": "Disable the in-game HUD overlay so OBS can compose HUDs from Browser Sources. Configure the per-scene HUDs from the Streams tab → 'OBS Browser Sources'."
                 },
                 "check_in_settings": {
                     "label": "Check In Settings",

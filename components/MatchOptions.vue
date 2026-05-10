@@ -1038,6 +1038,40 @@ import { Card } from "~/components/ui/card";
                 </Card>
               </FormItem>
             </FormField>
+
+            <!-- Raw HUD overlay toggle: when ON the streamer pod is
+                 launched with OPENHUD_DISABLED=1 so cs2 renders without
+                 a baked-in HUD. The operator's OBS then composes the
+                 HUD from web Browser Sources (one per slot, configured
+                 in the Streams tab → "OBS Browser Sources" card).
+                 Default OFF preserves the legacy behaviour. -->
+            <FormField v-slot="{ value, handleChange }" name="raw_hud_overlay">
+              <FormItem>
+                <Card class="cursor-pointer" @click="handleChange(!value)">
+                  <div class="flex flex-col space-y-3 p-4">
+                    <div class="flex justify-between items-center">
+                      <FormLabel class="text-lg font-semibold">{{
+                        $t("match.options.advanced.raw_hud_overlay.label")
+                      }}</FormLabel>
+                      <FormControl>
+                        <Switch
+                          class="pointer-events-none"
+                          :model-value="value"
+                          @update:model-value="handleChange"
+                        />
+                      </FormControl>
+                    </div>
+                    <FormDescription>
+                      {{
+                        $t(
+                          "match.options.advanced.raw_hud_overlay.description",
+                        )
+                      }}
+                    </FormDescription>
+                  </div>
+                </Card>
+              </FormItem>
+            </FormField>
             <slot name="after-advanced"></slot>
           </div>
         </CollapsibleContent>

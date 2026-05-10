@@ -43,6 +43,7 @@ export const setupOptions = (
     live_match_timeout: options.live_match_timeout ?? null,
     match_mode: options.match_mode,
     lobby_access: options.lobby_access ?? e_lobby_access_enum.Private,
+    raw_hud_overlay: options.raw_hud_overlay ?? false,
     ...overrides,
   });
 };
@@ -72,6 +73,7 @@ export function setupOptionsVariables(
     map_pool_id?: string;
     tv_delay: number;
     lobby_access?: e_lobby_access_enum;
+    raw_hud_overlay?: boolean;
     map_pool?: {
       id: string;
     };
@@ -184,6 +186,7 @@ export function setupOptionsVariables(
     tech_timeout_setting: values.tech_timeout_setting,
     tv_delay: values.tv_delay,
     lobby_access: values.lobby_access ?? e_lobby_access_enum.Private,
+    raw_hud_overlay: values.raw_hud_overlay ?? false,
     ...(useAuthStore().isRoleAbove(e_player_roles_enum.tournament_organizer)
       ? {
           check_in_setting: values.check_in_setting,
@@ -237,6 +240,7 @@ export function setupOptionsSetMutation(hasMapPoolId: boolean = true) {
     tech_timeout_setting: $("tech_timeout_setting", "e_timeout_settings_enum!"),
     tv_delay: $("tv_delay", "Int!"),
     lobby_access: $("lobby_access", "e_lobby_access_enum!"),
+    raw_hud_overlay: $("raw_hud_overlay", "Boolean!"),
     ...(useAuthStore().isRoleAbove(e_player_roles_enum.tournament_organizer)
       ? {
           check_in_setting: $("check_in_setting", "e_check_in_settings_enum!"),
