@@ -154,6 +154,9 @@ provide("commander", commander);
           <SelectItem value="streams" :disabled="!canConfigureStreams">
             {{ $t("match.tabs.streams") }}
           </SelectItem>
+          <SelectItem value="overlay" :disabled="!canConfigureOverlay">
+            {{ $t("match.tabs.overlay") || "Overlay" }}
+          </SelectItem>
           <SelectItem v-if="canViewAdmin" value="server">
             {{ $t("match.tabs.admin") }}
           </SelectItem>
@@ -192,6 +195,9 @@ provide("commander", commander);
         </TabsTrigger>
         <TabsTrigger value="streams" :disabled="!canConfigureStreams">
           {{ $t("match.tabs.streams") }}
+        </TabsTrigger>
+        <TabsTrigger value="overlay" :disabled="!canConfigureOverlay">
+          {{ $t("match.tabs.overlay") || "Overlay" }}
         </TabsTrigger>
         <TabsTrigger value="server" v-if="canViewAdmin">
           {{ $t("match.tabs.admin") }}
@@ -512,10 +518,8 @@ provide("commander", commander);
     </TabsContent>
     <TabsContent value="streams" class="max-w-[1500px] space-y-4">
       <MatchLiveStreams :match="match" />
-      <!-- OBS Browser Source URLs for the no-HUD raw video flow.
-           Operators copy these into OBS so the panel HUD renders
-           as a separate transparent layer over the game video.
-           See pages/overlay/hud/[matchId].vue. -->
+    </TabsContent>
+    <TabsContent value="overlay" class="max-w-[1500px] space-y-4">
       <OverlayBrowserSources
         :match-id="match.id"
         :can-edit="match.is_organizer"
@@ -776,6 +780,9 @@ export default {
         this.match.is_organizer ||
         useAuthStore().isRoleAbove(e_player_roles_enum.streamer)
       );
+    },
+    canConfigureOverlay() {
+      return this.canConfigureStreams;
     },
     disableStats() {
       return [

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, onMounted, onBeforeUnmount, ref, watch } from "vue";
-import { Copy, Check, Plus, Trash2, Loader2 } from "lucide-vue-next";
+import { Copy, Check, Plus, Trash2, Loader2, ExternalLink } from "lucide-vue-next";
 import { useApolloClient } from "@vue/apollo-composable";
 import {
   Select,
@@ -91,6 +91,48 @@ function urlFor(slotKey: string) {
   return `${webDomain.value}/overlay/hud/${props.matchId}?slot=${encodeURIComponent(
     slotKey,
   )}`;
+}
+
+const BUILT_IN = computed(() => [
+  {
+    key: "game",
+    label: "Game HUD",
+    url: `${webDomain.value}/overlay/hud/${props.matchId}?layout=game`,
+  },
+  {
+    key: "operator",
+    label: "Operator HUD",
+    url: `${webDomain.value}/overlay/hud/${props.matchId}?layout=operator`,
+  },
+  {
+    key: "stream-deck",
+    label: "Stream Deck (control)",
+    url: `${webDomain.value}/stream-deck/${props.matchId}`,
+  },
+]);
+
+const copiedBuiltIn = ref<string | null>(null);
+async function copyBuiltIn(key: string, url: string) {
+  try {
+    if (navigator.clipboard?.writeText) {
+      await navigator.clipboard.writeText(url);
+    } else {
+      const ta = document.createElement("textarea");
+      ta.value = url;
+      ta.style.position = "fixed";
+      ta.style.opacity = "0";
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand("copy");
+      document.body.removeChild(ta);
+    }
+    copiedBuiltIn.value = key;
+    setTimeout(() => {
+      if (copiedBuiltIn.value === key) copiedBuiltIn.value = null;
+    }, 1500);
+  } catch (err) {
+    console.error("[overlay] copy built-in failed", err);
+  }
 }
 
 async function copy(key: string, url: string) {
@@ -370,6 +412,58 @@ const hasSlots = computed(() => slots.value.length > 0);
     </div>
 
     <div v-else class="space-y-3">
+      <!-- Built-in overlays — always available, no slot setup required -->
+      <div class="space-y-2">
+        <h4 class="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+          Built-in overlays
+        </h4>
+        <div class="grid gap-2">
+          <div
+            v-for="item in BUILT_IN"
+            :key="item.key"
+            class="flex items-stretch gap-2"
+          >
+            <div class="flex-1 min-w-0 rounded bg-muted px-2 py-1.5 text-xs font-mono truncate flex items-center gap-2">
+              <span class="shrink-0 inline-flex items-center rounded bg-background px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider">
+                {{ item.label }}
+              </span>
+              <span class="truncate text-muted-foreground">{{ item.url }}</span>
+            </div>
+            <button
+              v-if="item.key !== 'stream-deck'"
+              type="button"
+              class="self-stretch inline-flex items-center justify-center rounded-md text-xs font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-9 px-3"
+              @click="copyBuiltIn(item.key, item.url)"
+            >
+              <component
+                :is="copiedBuiltIn === item.key ? Check : Copy"
+                class="h-3.5 w-3.5 mr-1.5"
+              />
+              {{
+                copiedBuiltIn === item.key
+                  ? $t("common.copied") || "Copied"
+                  : $t("common.copy") || "Copy"
+              }}
+            </button>
+            <a
+              v-else
+              :href="item.url"
+              target="_blank"
+              class="self-stretch inline-flex items-center justify-center rounded-md text-xs font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-9 px-3"
+            >
+              <ExternalLink class="h-3.5 w-3.5 mr-1.5" />
+              Open
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="border-t pt-3">
+        <h4 class="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-2">
+          Custom slots
+        </h4>
+      </div>
+
       <div
         v-if="!hasSlots"
         class="rounded-md border border-dashed p-3 text-xs text-muted-foreground"
