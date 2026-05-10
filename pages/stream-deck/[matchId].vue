@@ -12,6 +12,7 @@ import {
   AlertTriangle,
   Copy,
   Check,
+  ExternalLink,
 } from "lucide-vue-next";
 import { generateMutation, generateSubscription } from "~/graphql/graphqlGen";
 import WhepPlayer from "~/components/match/WhepPlayer.vue";
@@ -185,6 +186,12 @@ async function copyObsLanUrl() {
   } catch (err) {
     console.error("[stream-deck] copy obs lan url failed", err);
   }
+}
+
+function openLanPreview() {
+  const url = obsLanUrl.value;
+  if (!url) return;
+  window.open(url, "_blank", "noopener,noreferrer");
 }
 
 const webDomain = computed(() => {
@@ -621,6 +628,16 @@ watch(spectatedSteamId, (sid) => {
           >
             <component :is="copiedObsLan ? Check : Copy" class="size-3.5" />
             {{ copiedObsLan ? "Copied" : "Copy LAN URL" }}
+          </button>
+
+          <button
+            v-if="lanMode && obsLanUrl"
+            type="button"
+            class="inline-flex items-center gap-1.5 px-3 py-1.5 font-mono text-[0.7rem] font-semibold uppercase tracking-[0.16em] rounded-md border border-border/70 bg-card/40 backdrop-blur-sm text-foreground/90 hover:bg-emerald-500/15 hover:text-emerald-400 transition-colors"
+            @click="openLanPreview"
+          >
+            <ExternalLink class="size-3.5" />
+            Open LAN
           </button>
 
           <!-- Same segmented tactical bar treatment as the deck card —
