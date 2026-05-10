@@ -13854,6 +13854,7 @@ insert_v_pool_maps?: [{	/** the rows to be inserted */
 insert_v_pool_maps_one?: [{	/** the row to be inserted */
 	object: ValueTypes["v_pool_maps_insert_input"] | Variable<any, string>},ValueTypes["v_pool_maps"]],
 joinLineup?: [{	code?: string | undefined | null | Variable<any, string>,	lineup_id: string | Variable<any, string>,	match_id: string | Variable<any, string>},ValueTypes["SuccessOutput"]],
+kickMatchPlayer?: [{	match_id: string | Variable<any, string>,	steam_id: string | Variable<any, string>},ValueTypes["SuccessOutput"]],
 leaveLineup?: [{	match_id: string | Variable<any, string>},ValueTypes["SuccessOutput"]],
 	/** Load dev fixture data (dev only) */
 	loadFixtures?:ValueTypes["SuccessOutput"],
@@ -45209,6 +45210,7 @@ insert_v_pool_maps?: [{	/** the rows to be inserted */
 insert_v_pool_maps_one?: [{	/** the row to be inserted */
 	object: ResolverInputTypes["v_pool_maps_insert_input"]},ResolverInputTypes["v_pool_maps"]],
 joinLineup?: [{	code?: string | undefined | null,	lineup_id: string,	match_id: string},ResolverInputTypes["SuccessOutput"]],
+kickMatchPlayer?: [{	match_id: string,	steam_id: string},ResolverInputTypes["SuccessOutput"]],
 leaveLineup?: [{	match_id: string},ResolverInputTypes["SuccessOutput"]],
 	/** Load dev fixture data (dev only) */
 	loadFixtures?:ResolverInputTypes["SuccessOutput"],

@@ -103,8 +103,8 @@ import PlayerMatchClipsButton from "~/components/match/PlayerMatchClipsButton.vu
 
             <DropdownMenuItem
               class="text-destructive"
-              @click="removeFromLineup"
-              v-if="lineup.can_update_lineup"
+              @click="kickFromLineup"
+              v-if="canKickFromLineup"
             >
               <span>{{ $t("match.overview.remove_from_lineup") }}</span>
             </DropdownMenuItem>
@@ -119,7 +119,7 @@ import PlayerMatchClipsButton from "~/components/match/PlayerMatchClipsButton.vu
 
           <DropdownMenuItem
             class="text-destructive"
-            @click="removeFromLineup"
+            @click="leaveLineup"
             v-if="canLeaveLineup"
           >
             <span>{{ $t("match.overview.leave_lineup") }}</span>
@@ -239,46 +239,42 @@ export default {
         },
       });
     },
-    async removeFromLineup() {
-      if (!this.lineup.can_update_lineup) {
-        return await this.$apollo.mutate({
-          mutation: generateMutation({
-            leaveLineup: [
-              {
-                match_id: $("match_id", "String!"),
-              },
-              {
-                success: true,
-              },
-            ],
-          }),
-          variables: {
-            match_id: this.match.id,
-          },
-        });
-      }
-
+    async leaveLineup() {
       await this.$apollo.mutate({
         mutation: generateMutation({
-          delete_match_lineup_players: [
+          leaveLineup: [
             {
-              where: {
-                steam_id: {
-                  _eq: $("steam_id", "bigint"),
-                },
-                match_lineup_id: {
-                  _eq: $("match_lineup_id", "uuid"),
-                },
-              },
+              match_id: $("match_id", "String!"),
             },
             {
-              __typename: true,
+              success: true,
             },
           ],
         }),
         variables: {
-          steam_id: this.member.steam_id,
-          match_lineup_id: this.lineup.id,
+          match_id: this.match.id,
+        },
+      });
+    },
+    async kickFromLineup() {
+      if (!this.member.steam_id) {
+        return;
+      }
+      await this.$apollo.mutate({
+        mutation: generateMutation({
+          kickMatchPlayer: [
+            {
+              match_id: $("match_id", "String!"),
+              steam_id: $("steam_id", "String!"),
+            },
+            {
+              success: true,
+            },
+          ],
+        }),
+        variables: {
+          match_id: this.match.id,
+          steam_id: String(this.member.steam_id),
         },
       });
     },
@@ -288,14 +284,45 @@ export default {
       return (
         this.lineup.can_update_lineup ||
         this.canLeaveLineup ||
-        this.canSwitchTeams
+        this.canSwitchTeams ||
+        this.canKickFromLineup
       );
     },
+    isPreLiveStatus() {
+      return [
+        e_match_status_enum.PickingPlayers,
+        e_match_status_enum.Veto,
+        e_match_status_enum.WaitingForServer,
+        e_match_status_enum.Scheduled,
+        e_match_status_enum.WaitingForCheckIn,
+      ].includes(this.match.status);
+    },
     canLeaveLineup() {
-      return (
-        this.match.status === e_match_status_enum.PickingPlayers &&
-        this.member.steam_id === this.me.steam_id
-      );
+      if (this.member.steam_id !== this.me?.steam_id) {
+        return false;
+      }
+      if (this.match.is_tournament_match) {
+        return false;
+      }
+      if (!this.isPreLiveStatus) {
+        return false;
+      }
+      if (this.member.checked_in) {
+        return false;
+      }
+      return true;
+    },
+    canKickFromLineup() {
+      if (!this.lineup.can_update_lineup) {
+        return false;
+      }
+      if (!this.member.steam_id && !this.member.placeholder_name) {
+        return false;
+      }
+      if (this.member.steam_id === this.me?.steam_id) {
+        return false;
+      }
+      return this.isPreLiveStatus;
     },
     canSwitchTeams() {
       const currentPlayerCount =

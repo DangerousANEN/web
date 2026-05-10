@@ -7226,6 +7226,9 @@ export const AllTypesProps: Record<string,any> = {
 		joinLineup:{
 
 		},
+		kickMatchPlayer:{
+
+		},
 		leaveLineup:{
 
 		},
@@ -22523,6 +22526,7 @@ export const ReturnTypes: Record<string,any> = {
 		insert_v_pool_maps:"v_pool_maps_mutation_response",
 		insert_v_pool_maps_one:"v_pool_maps",
 		joinLineup:"SuccessOutput",
+		kickMatchPlayer:"SuccessOutput",
 		leaveLineup:"SuccessOutput",
 		loadFixtures:"SuccessOutput",
 		logout:"SuccessOutput",

@@ -206,15 +206,7 @@ import {
                   :match-id="match.id"
                 ></AssignPlayerToLineup>
               </template>
-              <template
-                v-if="
-                  (match.options.lobby_access === e_lobby_access_enum.Open ||
-                    match.options.lobby_access ===
-                      e_lobby_access_enum.Invite) &&
-                  !match.is_in_lineup &&
-                  match.status === e_match_status_enum.PickingPlayers
-                "
-              >
+              <template v-if="canShowJoinForm">
                 <JoinLineupForm
                   :match="match"
                   :lineup="lineup"
@@ -271,6 +263,27 @@ export default {
         this.lineup.can_update_lineup &&
         this.lineup.lineup_players.length < this.maxPlayers
       );
+    },
+    canShowJoinForm() {
+      if (this.match.is_in_lineup) {
+        return false;
+      }
+      if (
+        ![
+          e_match_status_enum.PickingPlayers,
+          e_match_status_enum.Veto,
+          e_match_status_enum.Scheduled,
+          e_match_status_enum.WaitingForCheckIn,
+          e_match_status_enum.WaitingForServer,
+        ].includes(this.match.status)
+      ) {
+        return false;
+      }
+      const isOpenLobby =
+        this.match.options.lobby_access === e_lobby_access_enum.Open ||
+        this.match.options.lobby_access === e_lobby_access_enum.Invite;
+      const isOrganizer = !!this.lineup.can_update_lineup;
+      return isOpenLobby || isOrganizer;
     },
     canViewEmptySlots() {
       return ![
