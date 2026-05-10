@@ -30,7 +30,6 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import Empty from "@/components/ui/empty/Empty.vue";
 import { e_player_roles_enum } from "~/generated/zeus";
 import StreamEmbed from "~/components/StreamEmbed.vue";
-import LiveStreamPlayer from "~/components/match/LiveStreamPlayer.vue";
 </script>
 
 <template>
@@ -55,19 +54,6 @@ import LiveStreamPlayer from "~/components/match/LiveStreamPlayer.vue";
           <PlusCircle class="mr-2 h-3 w-3" />
           {{ $t("streams.add_new") }}
         </Button>
-      </div>
-
-      <!-- Game-streamer pod surface — same broadcast layout as the
-           dedicated /stream-deck/[matchId] popout (corner crosshairs,
-           StreamSessionProgress while booting, WhepPlayer when live,
-           autodirector toggle + segmented Stop in the header). Lives
-           inline so organizers can drive the pod without leaving the
-           match page. -->
-      <div v-if="hasGameStreamer" class="mb-4">
-        <LiveStreamPlayer
-          :match-id="match.id"
-          :is-organizer="!!match.is_organizer"
-        />
       </div>
 
       <!-- Inline embed of the active stream so viewers don't have to
@@ -422,11 +408,6 @@ export default {
     // drop them from the inline preview list.
     embeddableStreams() {
       return (this.match.streams || []).filter((s) => !s.is_game_streamer);
-    },
-    // Whether this match has a game-streamer pod row at all (regardless
-    // of live state) — drives whether to mount the LiveStreamPlayer.
-    hasGameStreamer() {
-      return (this.match.streams || []).some((s) => s.is_game_streamer);
     },
   },
   methods: {
