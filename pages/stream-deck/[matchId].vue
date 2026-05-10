@@ -132,7 +132,10 @@ function lanWhepUrlFor(s: any): string | null {
 
 const effectiveWhepUrl = computed(() => {
   if (!stream.value) return null;
-  return lanMode.value ? lanWhepUrlFor(stream.value) : whepUrlFor(stream.value);
+  // Browser page is HTTPS; LAN HTTP would be blocked by mixed-content.
+  // Always use the HTTPS WHEP URL for in-page playback; LAN URL is
+  // only for external tools (OBS) that open it directly.
+  return whepUrlFor(stream.value);
 });
 
 onMounted(() => {

@@ -69,7 +69,9 @@ function lanWhepUrlFor(stream: any): string | null {
 }
 
 function effectiveWhepUrl(stream: any): string | null {
-  return lanMode.value ? lanWhepUrlFor(stream) : whepUrlFor(stream);
+  // Browser page is HTTPS; LAN HTTP would be blocked by mixed-content.
+  // Always use the HTTPS WHEP URL for in-page playback.
+  return whepUrlFor(stream);
 }
 
 onMounted(() => {
@@ -373,20 +375,6 @@ function statusBadgeLabel(stream: any) {
                   @update:model-value="
                     (v: boolean) => setAutodirector(stream.match_id, v)
                   "
-                />
-              </div>
-
-              <div class="flex items-center gap-2">
-                <Label
-                  :for="`lan-mode-${stream.id}`"
-                  class="text-[0.7rem] uppercase tracking-[0.16em] text-muted-foreground"
-                >
-                  LAN
-                </Label>
-                <Switch
-                  :id="`lan-mode-${stream.id}`"
-                  :model-value="lanMode"
-                  @update:model-value="(v: boolean) => (lanMode = v)"
                 />
               </div>
               <!-- Tactical control bar — segmented action group with
