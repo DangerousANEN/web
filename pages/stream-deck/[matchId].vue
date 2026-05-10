@@ -6,7 +6,13 @@ import { useToast } from "~/components/ui/toast/use-toast";
 import { Switch } from "~/components/ui/switch";
 import { Label } from "~/components/ui/label";
 import PageTransition from "~/components/ui/transitions/PageTransition.vue";
-import { Square, ArrowLeft, AlertTriangle } from "lucide-vue-next";
+import {
+  Square,
+  ArrowLeft,
+  AlertTriangle,
+  Copy,
+  Check,
+} from "lucide-vue-next";
 import { generateMutation, generateSubscription } from "~/graphql/graphqlGen";
 import WhepPlayer from "~/components/match/WhepPlayer.vue";
 import StreamSessionProgress from "~/components/match/StreamSessionProgress.vue";
@@ -103,6 +109,47 @@ onBeforeUnmount(() => {
 function whepUrlFor(s: any): string | null {
   if (!s?.link) return null;
   return s.link.replace(/\/?$/, "/whep");
+}
+
+const webDomain = computed(() => {
+  const raw = String(useRuntimeConfig().public.webDomain ?? "").replace(
+    /\/$/,
+    "",
+  );
+  if (raw.startsWith("http://") || raw.startsWith("https://")) return raw;
+  if (raw) return `https://${raw}`;
+  if (typeof window !== "undefined") return window.location.origin;
+  return "";
+});
+
+const obsUrl = computed(() => {
+  const url = whepUrlFor(stream.value);
+  if (!url) return null;
+  return `${webDomain.value}/overlay/video/${matchId.value}?whep=${encodeURIComponent(url)}`;
+});
+
+const copiedObs = ref(false);
+async function copyObsUrl() {
+  const url = obsUrl.value;
+  if (!url) return;
+  try {
+    if (navigator.clipboard?.writeText) {
+      await navigator.clipboard.writeText(url);
+    } else {
+      const ta = document.createElement("textarea");
+      ta.value = url;
+      ta.style.position = "fixed";
+      ta.style.opacity = "0";
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand("copy");
+      document.body.removeChild(ta);
+    }
+    copiedObs.value = true;
+    setTimeout(() => (copiedObs.value = false), 1500);
+  } catch (err) {
+    console.error("[stream-deck] copy obs url failed", err);
+  }
 }
 
 const STATUS_LABELS: Record<string, string> = {
@@ -456,6 +503,17 @@ watch(spectatedSteamId, (sid) => {
               @update:model-value="(v: boolean) => setAutodirector(v)"
             />
           </div>
+
+          <button
+            v-if="obsUrl"
+            type="button"
+            :disabled="copiedObs"
+            class="inline-flex items-center gap-1.5 px-3 py-1.5 font-mono text-[0.7rem] font-semibold uppercase tracking-[0.16em] rounded-md border border-border/70 bg-card/40 backdrop-blur-sm text-foreground/90 hover:bg-[hsl(var(--tac-amber)/0.12)] hover:text-[hsl(var(--tac-amber))] transition-colors disabled:opacity-100"
+            @click="copyObsUrl"
+          >
+            <component :is="copiedObs ? Check : Copy" class="size-3.5" />
+            {{ copiedObs ? "Copied" : "Copy OBS URL" }}
+          </button>
 
           <!-- Same segmented tactical bar treatment as the deck card —
                armed Stop inverts to filled red w/ glow + filled icon. -->
