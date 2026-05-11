@@ -9,6 +9,7 @@ import MatchInfo from "~/components/match/MatchInfo.vue";
 import MatchHighlightsReel from "~/components/match/MatchHighlightsReel.vue";
 import MatchActions from "~/components/match/MatchActions.vue";
 import MatchHudPicker from "~/components/match/MatchHudPicker.vue";
+import MatchHudLayoutPicker from "~/components/match/MatchHudLayoutPicker.vue";
 import MatchRegionVeto from "~/components/match/MatchRegionVeto.vue";
 import { e_match_status_enum } from "~/generated/zeus";
 import MatchMapVeto from "~/components/match/MatchMapVeto.vue";
@@ -122,6 +123,11 @@ const vsBaseClasses =
         >
           <MatchHudPicker
             :match-id="match.id"
+            :can-edit="!!match.is_organizer"
+          />
+          <MatchHudLayoutPicker
+            :match-id="match.id"
+            :match-options-id="match.options.id"
             :can-edit="!!match.is_organizer"
           />
         </div>

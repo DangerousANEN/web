@@ -98,7 +98,18 @@ interface BlockConfig {
   y: number;
   width: number;
   height: number;
-  style: Record<string, unknown>;
+  style: {
+    backgroundColor?: string;
+    color?: string;
+    fontFamily?: string;
+    fontSize?: string;
+    fontWeight?: string;
+    border?: string;
+    borderRadius?: string;
+    padding?: string;
+    textAlign?: string;
+    opacity?: string;
+  };
   data: Record<string, unknown>;
 }
 
@@ -209,6 +220,38 @@ async function deleteLayout(id: string) {
   }
 }
 
+// ---- Duplicate layout ----
+async function duplicateLayout(layout: HudLayout) {
+  try {
+    const result = await apolloClient.mutate({
+      mutation: generateMutation({
+        insert_hud_layouts_one: [
+          {
+            object: {
+              name: `${layout.name} (Copy)`,
+              slug: `${layout.slug}-copy-${Date.now()}`,
+              category: layout.category,
+              config: layout.config,
+              is_public: false,
+            },
+          },
+          { id: true, name: true, slug: true, category: true },
+        ],
+      }),
+    });
+    toast({ title: "Layout duplicated" });
+    await loadLayouts();
+    const newId = (result.data as any)?.insert_hud_layouts_one?.id;
+    if (newId) selectedLayoutId.value = newId;
+  } catch (e: any) {
+    toast({
+      variant: "destructive",
+      title: "Failed to duplicate layout",
+      description: e?.message ?? String(e),
+    });
+  }
+}
+
 // ---- Block operations ----
 function addBlock(type: string) {
   const id = `block-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
@@ -230,7 +273,18 @@ function addBlock(type: string) {
     y: 50 + (blocks.value.length * 20) % 300,
     width: def.width,
     height: def.height,
-    style: { backgroundColor: "rgba(0,0,0,0.7)", color: "#fff" },
+    style: {
+      backgroundColor: "rgba(0,0,0,0.7)",
+      color: "#fff",
+      fontFamily: "sans-serif",
+      fontSize: "14px",
+      fontWeight: "400",
+      border: "none",
+      borderRadius: "0px",
+      padding: "8px",
+      textAlign: "left",
+      opacity: "1",
+    },
     data: {},
   });
   selectedBlockId.value = id;
@@ -319,8 +373,15 @@ watch(selectedLayoutId, (id) => {
   selectedBlockId.value = null;
 });
 
-// ---- Preview URL ----
+// ---- Preview / OBS URLs ----
 const previewUrl = computed(() => {
+  if (!selectedLayout.value) return null;
+  const domain =
+    typeof window !== "undefined" ? window.location.origin : "";
+  return `${domain}/overlay/hud/preview?layout=${selectedLayout.value.slug}`;
+});
+
+const obsUrl = computed(() => {
   if (!selectedLayout.value) return null;
   const domain =
     typeof window !== "undefined" ? window.location.origin : "";
@@ -337,6 +398,19 @@ async function copyPreviewUrl() {
     setTimeout(() => (copiedPreview.value = false), 1500);
   } catch (err) {
     console.error("copy failed", err);
+  }
+}
+
+const copiedObs = ref(false);
+async function copyObsUrl() {
+  const url = obsUrl.value;
+  if (!url) return;
+  try {
+    await navigator.clipboard.writeText(url);
+    copiedObs.value = true;
+    setTimeout(() => (copiedObs.value = false), 1500);
+  } catch (err) {
+    console.error("copy obs failed", err);
   }
 }
 
@@ -402,6 +476,18 @@ onMounted(() => {
           {{ saving ? "Saving..." : "Save" }}
         </Button>
         <Button
+          v-if="obsUrl"
+          size="sm"
+          variant="outline"
+          @click="copyObsUrl"
+        >
+          <component
+            :is="copiedObs ? Check : Copy"
+            class="size-3.5 mr-1"
+          />
+          {{ copiedObs ? "Copied" : "Copy OBS URL" }}
+        </Button>
+        <Button
           v-if="previewUrl"
           size="sm"
           variant="outline"
@@ -440,7 +526,7 @@ onMounted(() => {
               v-for="layout in layouts.filter((l) => l.category === cat.key)"
               :key="layout.id"
               type="button"
-              class="w-full text-left px-2 py-1.5 rounded text-xs flex items-center gap-2 transition-colors"
+              class="w-full text-left px-2 py-1.5 rounded text-xs flex items-center gap-2 transition-colors group"
               :class="{
                 'bg-[hsl(var(--tac-amber)/0.15)] text-[hsl(var(--tac-amber))] font-medium':
                   selectedLayoutId === layout.id,
@@ -450,6 +536,14 @@ onMounted(() => {
               @dblclick="selectedLayoutId = layout.id"
             >
               <span class="truncate flex-1">{{ layout.name }}</span>
+              <button
+                type="button"
+                class="opacity-0 group-hover:opacity-100 hover:text-[hsl(var(--tac-amber))] p-0.5"
+                :class="{ 'opacity-100': selectedLayoutId === layout.id }"
+                @click.stop="duplicateLayout(layout)"
+              >
+                <Copy class="size-3" />
+              </button>
               <button
                 type="button"
                 class="opacity-0 group-hover:opacity-100 hover:text-destructive p-0.5"
@@ -531,8 +625,16 @@ onMounted(() => {
                   top: `${block.y}px`,
                   width: `${block.width}px`,
                   height: `${block.height}px`,
-                  backgroundColor: block.style.backgroundColor as string,
-                  color: block.style.color as string,
+                  backgroundColor: block.style.backgroundColor,
+                  color: block.style.color,
+                  fontFamily: block.style.fontFamily,
+                  fontSize: block.style.fontSize,
+                  fontWeight: block.style.fontWeight,
+                  border: block.style.border || 'none',
+                  borderRadius: block.style.borderRadius,
+                  padding: block.style.padding,
+                  textAlign: block.style.textAlign as any,
+                  opacity: block.style.opacity,
                 }"
                 @mousedown="onBlockMouseDown($event, block)"
               >
@@ -620,6 +722,89 @@ onMounted(() => {
                 class="h-7 text-xs"
                 placeholder="#ffffff"
               />
+            </div>
+
+            <div class="space-y-2">
+              <Label class="text-[10px] uppercase tracking-wider">Font Family</Label>
+              <Input
+                v-model="selectedBlock.style.fontFamily"
+                type="text"
+                class="h-7 text-xs"
+                placeholder="sans-serif"
+              />
+            </div>
+
+            <div class="grid grid-cols-2 gap-2">
+              <div class="space-y-1">
+                <Label class="text-[10px] uppercase tracking-wider">Font Size</Label>
+                <Input
+                  v-model="selectedBlock.style.fontSize"
+                  type="text"
+                  class="h-7 text-xs"
+                  placeholder="14px"
+                />
+              </div>
+              <div class="space-y-1">
+                <Label class="text-[10px] uppercase tracking-wider">Weight</Label>
+                <Input
+                  v-model="selectedBlock.style.fontWeight"
+                  type="text"
+                  class="h-7 text-xs"
+                  placeholder="400"
+                />
+              </div>
+            </div>
+
+            <div class="space-y-2">
+              <Label class="text-[10px] uppercase tracking-wider">Border</Label>
+              <Input
+                v-model="selectedBlock.style.border"
+                type="text"
+                class="h-7 text-xs"
+                placeholder="1px solid #fff"
+              />
+            </div>
+
+            <div class="grid grid-cols-2 gap-2">
+              <div class="space-y-1">
+                <Label class="text-[10px] uppercase tracking-wider">Radius</Label>
+                <Input
+                  v-model="selectedBlock.style.borderRadius"
+                  type="text"
+                  class="h-7 text-xs"
+                  placeholder="0px"
+                />
+              </div>
+              <div class="space-y-1">
+                <Label class="text-[10px] uppercase tracking-wider">Padding</Label>
+                <Input
+                  v-model="selectedBlock.style.padding"
+                  type="text"
+                  class="h-7 text-xs"
+                  placeholder="8px"
+                />
+              </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-2">
+              <div class="space-y-1">
+                <Label class="text-[10px] uppercase tracking-wider">Align</Label>
+                <Input
+                  v-model="selectedBlock.style.textAlign"
+                  type="text"
+                  class="h-7 text-xs"
+                  placeholder="left"
+                />
+              </div>
+              <div class="space-y-1">
+                <Label class="text-[10px] uppercase tracking-wider">Opacity</Label>
+                <Input
+                  v-model="selectedBlock.style.opacity"
+                  type="text"
+                  class="h-7 text-xs"
+                  placeholder="1"
+                />
+              </div>
             </div>
 
             <Button

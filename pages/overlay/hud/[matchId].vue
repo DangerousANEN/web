@@ -93,12 +93,18 @@ interface OverlayHud {
   slot_key: string;
   label: string | null;
   hud_id: string | null;
+  layout_id: string | null;
   display_order: number;
   hud?: {
     id: string;
     slug: string | null;
     name: string | null;
     format?: string | null;
+  } | null;
+  layout?: {
+    id: string;
+    slug: string | null;
+    name: string | null;
   } | null;
 }
 
@@ -154,6 +160,16 @@ let pollTimer: ReturnType<typeof setInterval> | null = null;
 const layout = computed<"game" | "operator">(() => {
   if (explicitLayout.value) return explicitLayout.value;
   return layoutForSlot(slotKey.value);
+});
+
+const customLayoutSlug = computed<string | null>(() => {
+  // If a slot is requested and that slot has a custom hud_layout,
+  // return its slug so we can iframe the preview page.
+  if (!slotKey.value) return null;
+  const slot = state.value?.overlay_huds?.find(
+    (h) => h.slot_key === slotKey.value,
+  );
+  return slot?.layout?.slug ?? null;
 });
 
 const apiBase = computed(() => {
@@ -346,8 +362,16 @@ function grenadeIcons(p: SpecPlayerExt): string[] {
       { 'overlay-empty': !state?.gsi },
     ]"
   >
+    <!-- Custom HUD layout via iframe -->
+    <iframe
+      v-if="customLayoutSlug"
+      :src="`/overlay/hud/preview?layout=${encodeURIComponent(customLayoutSlug)}`"
+      class="absolute inset-0 w-full h-full border-0"
+      style="background: transparent"
+    />
+
     <!-- ───────────────────────── GAME-VIEW ──────────────────────── -->
-    <template v-if="layout === 'game'">
+    <template v-else-if="layout === 'game'">
       <header class="game-scoreboard">
         <div class="team team-ct">
           <span class="team-name">{{ ctTeamName }}</span>
@@ -385,7 +409,7 @@ function grenadeIcons(p: SpecPlayerExt): string[] {
     </template>
 
     <!-- ─────────────────────── OPERATOR-VIEW ────────────────────── -->
-    <template v-else>
+    <template v-else-if="layout === 'operator'">
       <header class="op-header">
         <div class="op-team">
           <span class="op-team-name">{{ ctTeamName }}</span>
