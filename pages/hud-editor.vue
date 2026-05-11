@@ -2,6 +2,7 @@
 import { ref, computed, onMounted, watch } from "vue";
 import { useApolloClient } from "@vue/apollo-composable";
 import { generateQuery, generateMutation } from "~/graphql/graphqlGen";
+import { order_by } from "~/generated/zeus";
 import { useToast } from "~/components/ui/toast/use-toast";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -131,7 +132,7 @@ async function loadLayouts() {
         query: generateQuery({
           hud_layouts: [
             {
-              order_by: [{ category: "asc" as const }, { name: "asc" as const }],
+              order_by: [{ category: order_by.asc }, { name: order_by.asc }],
             },
             {
               id: true,
