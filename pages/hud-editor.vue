@@ -373,7 +373,40 @@ watch(selectedLayoutId, (id) => {
   selectedBlockId.value = null;
 });
 
-// ---- Preview / OBS URLs ----
+// ---- Preview data for blocks ----
+const previewTeams = {
+  ct: { name: "NAVI", score: 13 },
+  t: { name: "VIT", score: 11 },
+};
+const previewPlayers = [
+  { name: "s1mple", team: "CT" as const, kills: 24, deaths: 14, money: 15400, alive: true },
+  { name: "b1t", team: "CT" as const, kills: 18, deaths: 16, money: 3200, alive: true },
+  { name: "ZywOo", team: "T" as const, kills: 28, deaths: 12, money: 12000, alive: true },
+  { name: "apEX", team: "T" as const, kills: 10, deaths: 20, money: 200, alive: false },
+];
+
+function blockPreviewContent(type: string): string {
+  switch (type) {
+    case "scoreboard":
+      return `${previewTeams.ct.name} ${previewTeams.ct.score} — ${previewTeams.t.score} ${previewTeams.t.name}`;
+    case "player-list":
+      return previewPlayers.map((p) => `${p.alive ? "●" : "○"} ${p.name}  ${p.kills}/${p.deaths}`).join("\n");
+    case "team-banner":
+      return `${previewTeams.ct.name}  vs  ${previewTeams.t.name}`;
+    case "kill-feed":
+      return "s1mple → ZywOo\nb1t  → apEX";
+    case "bomb-timer":
+      return "BOMB  32s";
+    case "round-info":
+      return "Round 24  —  LIVE";
+    case "custom-text":
+      return "Custom Text";
+    case "custom-image":
+      return "";
+    default:
+      return type;
+  }
+}
 const previewUrl = computed(() => {
   if (!selectedLayout.value) return null;
   const domain =
@@ -614,33 +647,40 @@ onMounted(() => {
               <div
                 v-for="block in blocks"
                 :key="block.id"
-                class="absolute border border-dashed transition-shadow cursor-move select-none"
+                class="absolute transition-shadow cursor-move select-none overflow-hidden"
                 :class="{
-                  'border-[hsl(var(--tac-amber))] shadow-[0_0_0_1px_hsl(var(--tac-amber)/0.3)]':
+                  'ring-1 ring-[hsl(var(--tac-amber))] shadow-[0_0_0_1px_hsl(var(--tac-amber)/0.3)]':
                     selectedBlockId === block.id,
-                  'border-white/20': selectedBlockId !== block.id,
+                  'ring-1 ring-white/10': selectedBlockId !== block.id,
                 }"
                 :style="{
                   left: `${block.x}px`,
                   top: `${block.y}px`,
                   width: `${block.width}px`,
                   height: `${block.height}px`,
-                  backgroundColor: block.style.backgroundColor,
-                  color: block.style.color,
-                  fontFamily: block.style.fontFamily,
-                  fontSize: block.style.fontSize,
-                  fontWeight: block.style.fontWeight,
+                  backgroundColor: block.style.backgroundColor || 'rgba(0,0,0,0.7)',
+                  color: block.style.color || '#fff',
+                  fontFamily: block.style.fontFamily || 'sans-serif',
+                  fontSize: block.style.fontSize || '14px',
+                  fontWeight: block.style.fontWeight || '400',
                   border: block.style.border || 'none',
-                  borderRadius: block.style.borderRadius,
-                  padding: block.style.padding,
-                  textAlign: block.style.textAlign as any,
-                  opacity: block.style.opacity,
+                  borderRadius: block.style.borderRadius || '0px',
+                  padding: block.style.padding || '8px',
+                  textAlign: (block.style.textAlign as any) || 'left',
+                  opacity: block.style.opacity ?? '1',
+                  whiteSpace: 'pre-line',
                 }"
                 @mousedown="onBlockMouseDown($event, block)"
               >
-                <div class="text-xs font-mono p-1 opacity-70">
-                  {{ BLOCK_TYPES.find((b) => b.type === block.type)?.label ?? block.type }}
+                <div
+                  v-if="block.type === 'custom-image'"
+                  class="w-full h-full flex items-center justify-center text-white/30 text-xs"
+                >
+                  [IMAGE]
                 </div>
+                <template v-else>
+                  {{ blockPreviewContent(block.type) }}
+                </template>
               </div>
             </div>
           </div>
