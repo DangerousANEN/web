@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import { FormControl, FormField, FormItem } from "~/components/ui/form";
 import { Input } from "~/components/ui/input";
+import { Textarea } from "~/components/ui/textarea";
+import { Switch } from "~/components/ui/switch";
+import { Card } from "~/components/ui/card";
 import { Calendar as CalendarIcon } from "lucide-vue-next";
 import { Calendar } from "@/components/ui/calendar";
 import { Button } from "@/components/ui/button";
@@ -37,6 +40,35 @@ import MatchOptions from "~/components/MatchOptions.vue";
             <Input v-bind="componentField" />
             <FormMessage />
           </FormControl>
+        </FormItem>
+      </FormField>
+
+      <FormField v-slot="{ value, handleChange }" name="is_paid">
+        <FormItem>
+          <Card class="cursor-pointer" @click="handleChange(!value ? true : false)">
+            <div class="flex flex-col space-y-3 p-4">
+              <div class="flex justify-between items-center">
+                <FormLabel class="text-lg font-semibold">{{ $t("tournament.form.is_paid") || "Paid Tournament" }}</FormLabel>
+                <FormControl>
+                  <Switch
+                    class="pointer-events-none"
+                    :model-value="value === true"
+                    @update:model-value="handleChange($event ? true : false)"
+                  />
+                </FormControl>
+              </div>
+            </div>
+          </Card>
+        </FormItem>
+      </FormField>
+
+      <FormField v-if="form.values.is_paid" v-slot="{ componentField }" name="payment_details">
+        <FormItem>
+          <FormLabel>{{ $t("tournament.form.payment_details") || "Payment Details" }}</FormLabel>
+          <FormControl>
+            <Textarea v-bind="componentField" placeholder="Enter bank details, instructions, etc." />
+          </FormControl>
+          <FormMessage />
         </FormItem>
       </FormField>
 
@@ -224,6 +256,8 @@ export default {
               }),
               description: z.string().nullable().default(null),
               auto_start: z.boolean().default(true),
+              is_paid: z.boolean().default(false),
+              payment_details: z.string().nullable().default(null),
             },
             useApplicationSettingsStore().settings,
           ),
@@ -326,6 +360,8 @@ export default {
             start: this.form.values.start,
             description: this.form.values.description,
             auto_start: this.form.values.auto_start,
+            is_paid: this.form.values.is_paid,
+            payment_details: this.form.values.payment_details,
           },
           mutation: generateMutation({
             update_tournaments_by_pk: [
@@ -338,6 +374,8 @@ export default {
                   start: $("start", "timestamptz!"),
                   description: $("description", "String"),
                   auto_start: $("auto_start", "Boolean!"),
+                  is_paid: $("is_paid", "Boolean!"),
+                  payment_details: $("payment_details", "String"),
                 },
               },
               {
@@ -413,6 +451,10 @@ export default {
                 start: this.form.values.start,
                 description: this.form.values.description,
                 auto_start: this.form.values.auto_start,
+                is_paid: this.form.values.is_paid,
+                payment_details: this.form.values.payment_details,
+            is_paid: this.form.values.is_paid,
+            payment_details: this.form.values.payment_details,
                 options: {
                   data: setupOptionsSetMutation(!!form.map_pool_id),
                 },

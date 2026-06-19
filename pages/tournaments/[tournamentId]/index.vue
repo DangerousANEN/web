@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import TournamentStageBuilder from "~/components/tournament/TournamentStageBuilder.vue";
+import TournamentPayments from "~/components/tournament/TournamentPayments.vue";
 import TournamentJoinForm from "~/components/tournament/TournamentJoinForm.vue";
 import TournamentTeam from "~/components/tournament/TournamentTeam.vue";
 import TournamentForm from "~/components/tournament/TournamentForm.vue";
@@ -450,6 +451,13 @@ const tournamentAdminBodyClasses = "border-t border-border pt-[0.85rem]";
               variant="underline"
               :class="[tacticalTabsListClasses, 'h-auto flex-wrap']"
             >
+              <TabsTrigger
+                v-if="tournament.is_organizer && tournament.is_paid"
+                value="payments"
+                :class="tacticalTabsTriggerClasses"
+              >
+                {{ $t("tournament.payments") || "Payments" }}
+              </TabsTrigger>
               <TabsTrigger value="overview" :class="tacticalTabsTriggerClasses">
                 {{ $t("tournament.overview") }}
               </TabsTrigger>
@@ -528,6 +536,11 @@ const tournamentAdminBodyClasses = "border-t border-border pt-[0.85rem]";
       </div>
 
       <div class="mt-6">
+        <TabsContent value="payments" v-if="tournament?.is_organizer && tournament?.is_paid">
+          <PageTransition>
+            <TournamentPayments :tournament="tournament" />
+          </PageTransition>
+        </TabsContent>
         <TabsContent value="overview">
           <PageTransition>
             <TournamentStageBuilder

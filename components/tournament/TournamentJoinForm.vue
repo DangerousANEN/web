@@ -118,6 +118,10 @@ import { Card } from "~/components/ui/card";
       </FormField>
     </template>
 
+    <div v-if="tournament.is_paid && !tournament.is_organizer" class="p-4 bg-muted rounded-md mb-4">
+      <h3 class="font-bold mb-2">{{ $t("tournament.form.payment_details") || "Payment Details" }}</h3>
+      <p class="whitespace-pre-wrap">{{ tournament.payment_details }}</p>
+    </div>
     <Button
       type="submit"
       :disabled="
@@ -309,6 +313,7 @@ export default {
                         {
                           player_steam_id: addPlayerSteamId,
                           tournament_id: this.$route.params.tournamentId,
+                          payment_status: this.tournament.is_paid ? 'pending' : 'none',
                         },
                       ]
                     : [],
