@@ -211,6 +211,44 @@ const obsUrl = computed(() => {
   return `${webDomain.value}/overlay/video/${matchId.value}?whep=${encodeURIComponent(url)}`;
 });
 
+// Veto overlay URL — separate browser source for OBS that doesn't
+// depend on the game streamer pod being live. It pulls veto state from
+// the public /overlay/state/:matchId endpoint, so it works during the
+// veto phase even when no stream is running.
+const vetoOverlayUrl = computed(() => {
+  return `${webDomain.value}/overlay/hud/${matchId.value}?layout=veto`;
+});
+
+// Standalone veto page (SSO GraphQL) — richer than the no-auth layout,
+// used when the operator is logged in and wants the full-painted veto
+// board (with logos, animated transitions, etc.)
+const vetoStandaloneUrl = computed(() => {
+  return `${webDomain.value}/overlay/veto/${matchId.value}`;
+});
+
+const copiedVeto = ref(false);
+async function copyVetoUrl() {
+  const url = vetoOverlayUrl.value;
+  try {
+    if (navigator.clipboard?.writeText) {
+      await navigator.clipboard.writeText(url);
+    } else {
+      const ta = document.createElement("textarea");
+      ta.value = url;
+      ta.style.position = "fixed";
+      ta.style.opacity = "0";
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand("copy");
+      document.body.removeChild(ta);
+    }
+    copiedVeto.value = true;
+    setTimeout(() => (copiedVeto.value = false), 1500);
+  } catch (err) {
+    console.error("[stream-deck] copy veto url failed", err);
+  }
+}
+
 const copiedObs = ref(false);
 async function copyObsUrl() {
   const url = obsUrl.value;
@@ -490,6 +528,13 @@ const {
   teamTScore,
 } = useStreamerGsi(matchId, isLiveRef);
 
+// Grenade cam watcher — surfaces the player currently holding a
+// grenade (smoke/flash/molotov/HE) so the operator can cut to them
+// quickly during lineup execution. No auto-slot switch — just a
+// visible badge.
+import { useGrenadeWatcher } from "~/composables/useGrenadeWatcher";
+const { grenadeHolder } = useGrenadeWatcher(matchId, isLiveRef);
+
 // Flash-by-slot mirrors the demo's pressSlot: a button click or a
 // digit-key press both highlight the matching slot button. Keyboard
 // arrows / Space don't have a slot button to flash, so they're
@@ -620,6 +665,26 @@ watch(spectatedSteamId, (sid) => {
           </button>
 
           <button
+            type="button"
+            :disabled="copiedVeto"
+            class="inline-flex items-center gap-1.5 px-3 py-1.5 font-mono text-[0.7rem] font-semibold uppercase tracking-[0.16em] rounded-md border border-border/70 bg-card/40 backdrop-blur-sm text-foreground/90 hover:bg-purple-500/15 hover:text-purple-400 transition-colors disabled:opacity-100"
+            @click="copyVetoUrl"
+          >
+            <component :is="copiedVeto ? Check : Copy" class="size-3.5" />
+            {{ copiedVeto ? "Copied" : "Copy Veto URL" }}
+          </button>
+
+          <a
+            :href="vetoStandaloneUrl"
+            target="_blank"
+            rel="noopener"
+            class="inline-flex items-center gap-1.5 px-3 py-1.5 font-mono text-[0.7rem] font-semibold uppercase tracking-[0.16em] rounded-md border border-border/70 bg-card/40 backdrop-blur-sm text-foreground/90 hover:bg-purple-500/15 hover:text-purple-400 transition-colors"
+          >
+            <ExternalLink class="size-3.5" />
+            Veto page
+          </a>
+
+          <button
             v-if="lanMode && obsLanUrl"
             type="button"
             :disabled="copiedObsLan"
@@ -722,6 +787,35 @@ watch(spectatedSteamId, (sid) => {
             CS2 is choosing the camera — clicking a target or pressing a key
             will turn this off and take manual control.
           </p>
+        </div>
+
+        <!-- Grenade cam badge — shows the player currently holding a
+             grenade (smoke/flash/molotov/HE) so the operator can cut
+             to them quickly. Driven by useGrenadeWatcher polling the
+             public /overlay/state endpoint. -->
+        <div
+          v-if="grenadeHolder"
+          class="rounded-md border border-amber-500/40 bg-amber-500/10 px-4 py-2 flex items-center gap-2 text-sm"
+        >
+          <span class="text-amber-400 font-semibold uppercase tracking-wider text-xs">
+            🎯 Nade cam
+          </span>
+          <span class="font-medium">
+            {{ grenadeHolder.name ?? grenadeHolder.steam_id }}
+          </span>
+          <span class="text-muted-foreground text-xs">
+            ({{ grenadeHolder.team ?? "?" }})
+            holding {{ grenadeHolder.weapon.replace("weapon_", "") }}
+          </span>
+          <button
+            type="button"
+            class="ml-auto px-2 py-0.5 text-xs rounded border border-amber-500/40 hover:bg-amber-500/20 transition-colors"
+            @click="
+              pressSlot(grenadeHolder.slot, String(grenadeHolder.slot))
+            "
+          >
+            Spec →
+          </button>
         </div>
 
         <!-- CONTROL DECK — shared SpectatorSlots used here, on the
