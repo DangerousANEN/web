@@ -1,37 +1,97 @@
 {
+    "pagination": {
+        "items_per_page": "на странице"
+    },
+    "trophies": {
+        "title": "Трофеи",
+        "no_trophies": "Трофеев пока нет",
+        "no_trophies_description": "Займите топ-3 турнира, чтобы получить трофей.",
+        "gold": "Золото",
+        "silver": "Серебро",
+        "bronze": "Бронза",
+        "mvp": "MVP",
+        "first_place": "1-е место",
+        "second_place": "2-е место",
+        "third_place": "3-е место",
+        "tournament": "Турнир",
+        "placement": "Место",
+        "teammates": "Сокамандники"
+    },
+    "avatar": {
+        "upload": "Загрузить аватар",
+        "change": "Изменить аватар",
+        "remove": "Удалить аватар",
+        "team_avatar": "Аватар команды",
+        "player_avatar": "Аватар игрока",
+        "player_roster_image": "Изображение игрока в составе",
+        "upload_success": "Аватар загружен",
+        "upload_failed": "Не удалось загрузить аватар",
+        "remove_success": "Аватар удалён",
+        "remove_failed": "Не удалось удалить аватар",
+        "too_large": "Размер изображения не должен превышать 5 МБ",
+        "invalid_type": "Допускаются только изображения PNG, JPEG или WebP",
+        "uploading": "Загрузка...",
+        "drop_to_upload": "Перетащите для загрузки",
+        "hint": "Перетащите или нажмите · PNG, JPEG, WebP · до 5 МБ"
+    },
     "pages": {
         "system_metrics": {
-            "node": "Узел",
             "cpu_usage": "Использование CPU",
             "memory_usage": "Использование памяти",
-            "services": "Сервисы"
+            "services": "Сервисы",
+            "network": "Сеть",
+            "search_services_placeholder": "Поиск сервисов или узлов...",
+            "filter_by_node": "Фильтр по узлу",
+            "no_services_found": "Нет сервисов, соответствующих текущим фильтрам.",
+            "search_nodes_placeholder": "Поиск узлов игровых серверов...",
+            "cpu_short": "CPU",
+            "memory_short": "Память",
+            "disk_short": "Диски",
+            "network_short": "Сеть",
+            "no_nodes_found": "Нет узлов игровых серверов, соответствующих текущим фильтрам.",
+            "only_online_nodes": "Только онлайн-узлы"
         },
         "system_logs": {
             "follow_logs": "Следовать",
             "timestamps": "Временные метки"
         },
-        "login": {
-            "sign_in": "Войти через Steam",
-            "powered_by": "Работает на"
-        },
         "coming_soon": "Скоро!",
         "tournaments": {
             "title": "Предстоящие турниры",
             "create": "Создать турнир",
+            "open_for_registration": "Открыта регистрация",
             "tabs": {
-                "tournaments": "Турниры",
-                "my_recent": "Мои последние турниры"
+                "upcoming": "Предстоящие",
+                "no_live_title": "Нет турниров в эфире",
+                "no_upcoming_title": "Нет предстоящих турниров",
+                "no_finished_title": "Нет завершённых турниров"
             },
-            "no_recent": "Нет последних турниров."
+            "no_finished": "Завершённые турниры не найдены."
+        },
+        "manage_tournaments": {
+            "title": "Управление турнирами",
+            "description": "Просмотр и управление всеми турнирами на платформе.",
+            "search_by_id": "Поиск по ID турнира",
+            "enter_tournament_id": "Введите ID турнира...",
+            "search_by_name": "Поиск по названию",
+            "enter_tournament_name": "Введите название турнира...",
+            "filter_by_status": "Фильтр по статусу",
+            "select_statuses": "Выберите статусы...",
+            "clear_all": "Очистить всё",
+            "sort_by": "Сортировать по",
+            "created_at": "Дата создания",
+            "start": "Дата начала",
+            "newest_first": "Сначала новые",
+            "oldest_first": "Сначала старые",
+            "only_my_tournaments": "Только мои организованные турниры",
+            "showing": "Показано",
+            "tournaments": "турниров"
         },
         "teams": {
             "title": "Команды",
-            "description": "Управление командами",
             "create": "Создать",
-            "tabs": {
-                "my_teams": "Мои команды",
-                "other_teams": "Другие команды"
-            },
+            "no_teams_title": "Команды не найдены",
+            "no_teams": "Команды не найдены.",
             "search": "Поиск"
         },
         "settings": {
@@ -39,7 +99,39 @@
                 "title": "Настройки аккаунта",
                 "description": "Подробности вашего аккаунта",
                 "my_account": "Мой счет",
-                "appearance": "Внешний вид",
+                "api_keys": "API ключи",
+                "api_keys_management": {
+                    "your_api_keys": "Ваши API ключи",
+                    "api_keys_description": "API ключи позволяют программно аутентифицироваться через API 5stack.",
+                    "add_api_key": "Добавить API ключ",
+                    "create_new_api_key": "Создать новый API ключ",
+                    "create_new_description": "Создайте новый API ключ с описательной меткой для идентификации его назначения.",
+                    "label": "Метка",
+                    "label_placeholder": "напр., Моё приложение, Разработка, Продакшен",
+                    "label_description": "Выберите описательное имя для идентификации этого API ключа.",
+                    "created": "Создан",
+                    "last_used": "Последнее использование",
+                    "never": "Никогда",
+                    "actions": "Действия",
+                    "delete_confirmation_title": "Удалить API ключ",
+                    "delete_confirmation_description": "Вы уверены, что хотите удалить API ключ \"{label}\"? Это действие нельзя отменить, и все приложения, использующие этот ключ, потеряют доступ.",
+                    "create_api_key": "Создать API ключ",
+                    "delete_api_key_action": "Удалить API ключ",
+                    "api_key_deleted": "API ключ удалён",
+                    "api_key_deleted_description": "API ключ был успешно удалён.",
+                    "error_creating": "Ошибка",
+                    "error_creating_description": "Не удалось создать API ключ. Пожалуйста, попробуйте снова.",
+                    "error_deleting": "Ошибка",
+                    "error_deleting_description": "Не удалось удалить API ключ. Пожалуйста, попробуйте снова.",
+                    "copy_key_dialog": {
+                        "title": "API ключ создан",
+                        "description": "Ваш новый API ключ успешно создан. Пожалуйста, скопируйте его сейчас, так как он больше не будет показан.",
+                        "api_key_label": "API ключ",
+                        "copied_button": "Я скопировал ключ",
+                        "warning_title": "Важно:",
+                        "warning_message": "Это единственный раз, когда вы сможете увидеть этот API ключ. Обязательно скопируйте и сохраните его в надежном месте."
+                    }
+                },
                 "name": "Название",
                 "avatar_url": "URL аватара",
                 "country": "Страна",
@@ -50,107 +142,290 @@
                 "matchmaking": "Матчмейкинг",
                 "update_success": "Обновленный профиль",
                 "discord": {
-                  "unlink": "Разногласия Unlink",
-                  "link": "Диссонация Link",
-                  "unlink_dialog": {
-                      "title": "Учетная запись Unlink Discord",
-                      "description": "Вы уверены, что хотите удалить свою учетную запись Discord? Это удалит связь между вашими учетными записями 5Stack и Discord.",
-                      "cancel": "Отмена",
-                      "confirm": "Ссылка"
-                  },
-                  "unlinked": "Удачно несвязанный аккаунт"
+                    "unlink": "Разногласия Unlink",
+                    "link": "Диссонация Link",
+                    "unlink_dialog": {
+                        "title": "Учетная запись Unlink Discord",
+                        "description": "Вы уверены, что хотите удалить свою учетную запись Discord? Это удалит связь между вашими учетными записями 5Stack и Discord.",
+                        "confirm": "Ссылка"
+                    },
+                    "unlinked": "Удачно несвязанный аккаунт"
                 }
             },
-            "appearance": {
-                "title": "Внешний вид",
-                "description": "Настройка внешнего вида приложения",
-                "theme": "Тема",
-                "theme_description": "Выберите цветовую схему для приложения",
-                "light": "Светлая",
-                "dark": "Темная"
+            "notifications": {
+                "title": "Уведомления",
+                "description": "Настройте предпочтения для уведомлений в чате и других событий.",
+                "chat_sound": {
+                    "title": "Звуковые уведомления чата",
+                    "description": "Воспроизводить звук при получении новых сообщений в чате"
+                },
+                "volume": {
+                    "title": "Громкость"
+                },
+                "test_chat_sound": "Проверить звук чата",
+                "test_match_found_sound": "Проверить звук найденного матча",
+                "test_tick_sound": "Проверить звук тика",
+                "test_countdown_sound": "Проверить звук обратного отсчёта"
             },
             "application": {
+                "update_success": "Обновлено",
+                "db_backups": {
+                    "name": "Название",
+                    "size": "Размер",
+                    "created_at": "Создано"
+                },
                 "telemetry": {
-                  "title": "Телеметрия",
-                  "telemetry": "Телеметрия",
-                  "telemetry_description": "Помогите улучшить 5stack путем обмена анонимными данными об использовании.",
-                  "update": "Обновленные настройки Telemetry"
+                    "title": "Телеметрия",
+                    "telemetry": "Телеметрия",
+                    "telemetry_description": "Помогите улучшить 5stack путем обмена анонимными данными об использовании.",
+                    "update": "Обновленные настройки Telemetry",
+                    "update_success": "Настройки телеметрии успешно обновлены",
+                    "google_tag_manager_code": "Код Google Tag Manager",
+                    "google_tag_manager_code_description": "Google Tag Manager — это система управления тегами, которая позволяет управлять и размещать теги на вашем сайте."
                 },
                 "matchmaking": {
-                  "title": "Матчмейкинг",
-                  "description": "Управление настройками matchmaking"
+                    "title": "Матчмейкинг",
+                    "description": "Управление настройками matchmaking",
+                    "updated": "Настройки успешно обновлены"
+                },
+                "chat": {
+                    "title": "Настройки чата",
+                    "description": "Настройте, как долго сохраняются сообщения в чате.",
+                    "chat_message_ttl": "TTL сообщений чата (секунды)",
+                    "chat_message_ttl_description": "Количество секунд для хранения сообщений в чате перед их удалением.",
+                    "updated": "Настройки чата успешно обновлены"
                 },
                 "discord": {
-                  "title": "Discord",
-                  "invite_link": "Ссылка-приглашение Discord",
-                  "webhook": "Discord Webhook",
-                  "webhook_description": "Мы используем этот Discord Webhook для отправки уведомлений, требующих действий от игрока. Например: проблемы с матчем, баги и т.д.",
-                  "support_role": "ID роли поддержки Discord",
-                  "support_role_description": "Эта роль будет упомянута при использовании для действий поддержки. Вы можете получить ID роли из приложения Discord, включив режим разработчика и нажав правой кнопкой мыши для копирования ID.",
-                  "update": "Обновить"
+                    "title": "Discord",
+                    "invite_link": "Ссылка-приглашение Discord",
+                    "webhook": "Discord Webhook",
+                    "webhook_description": "Мы используем этот Discord Webhook для отправки уведомлений, требующих действий от игрока. Например: проблемы с матчем, баги и т.д.",
+                    "support_role": "ID роли поддержки Discord",
+                    "support_role_description": "Эта роль будет упомянута при использовании для действий поддержки. Вы можете получить ID роли из приложения Discord, включив режим разработчика и нажав правой кнопкой мыши для копирования ID.",
+                    "updated": "Настройки Discord обновлены",
+                    "match_notifications": {
+                        "title": "Уведомления о статусе матча",
+                        "description": "Настройте уведомления Discord для изменений статуса матча. Эти настройки управляют уведомлениями как в панели, так и в Discord.",
+                        "webhook": "URL вебхука уведомлений о матче",
+                        "webhook_description": "Выделенный вебхук для уведомлений о статусе матча. Если не задан, используется вебхук поддержки.",
+                        "role_id": "ID роли уведомлений о матче",
+                        "role_id_description": "Эти роли будут упомянуты в уведомлениях о статусе матча. Вы можете добавить несколько ID ролей через запятую.",
+                        "statuses_title": "Уведомлять при изменении статуса",
+                        "events_title": "Уведомлять о событиях матча"
+                    },
+                    "server_notifications": {
+                        "title": "Уведомления сервера",
+                        "description": "Настройте уведомления Discord для узлов игровых серверов.",
+                        "disk_warning_percent": "Порог предупреждения диска (%)",
+                        "disk_warning_percent_description": "Отправлять удаляемое уведомление, когда использование диска превышает этот процент. Установите 0 для отключения.",
+                        "disk_critical_percent": "Критический порог диска (%)",
+                        "disk_critical_percent_description": "Отправлять неудаляемое уведомление, когда использование диска превышает этот процент. Установите 0 для отключения."
+                    }
                 },
                 "game_type_configs": {
-                  "title": "Тип игры Configs",
-                  "description": "Управляйте конфигурациями типа игры.",
-                  "type": "Тип игры"
+                    "title": "Тип игры Configs"
                 },
                 "streaming": {
-                  "title": "Поток",
-                  "minimum_role_to_stream": "Минимальная роль, разрешенная для потоковой передачи",
-                  "minimum_role_to_stream_description": "Эта роль сможет создавать матчи."
+                    "title": "Поток",
+                    "minimum_role_to_stream": "Минимальная роль, разрешенная для потоковой передачи",
+                    "minimum_role_to_stream_description": "Эта роль сможет создавать матчи.",
+                    "minimum_role_to_spectate": "Минимальная роль для наблюдения (без задержки)",
+                    "minimum_role_to_spectate_description": "Эта роль сможет подключаться и наблюдать за матчами.",
+                    "playcast": "Playcast",
+                    "playcast_description": "Включить Playcast вместо прямого использования TV портов.",
+                    "playcast_learn_more": "Подробнее",
+                    "updated": "Настройки трансляции обновлены"
                 },
                 "create_matches_role": "Минимальная роль для создания матчей",
                 "create_matches_role_description": "Эта роль сможет создавать матчи.",
                 "create_tournaments_role": "Роль для создания турниров",
                 "create_tournaments_role_description": "Эта роль позволит создавать турниры.",
+                "dedicated_servers_min_role_to_connect": "Минимальная роль для подключения к выделенным серверам с защитой паролем",
+                "dedicated_servers_min_role_to_connect_description": "Только игроки этой роли или выше могут подключаться к выделенным серверам, требующим пароль.",
                 "matchmaking_min_role": "Минимальная роль, разрешенная для участия в игре",
                 "matchmaking_min_role_description": "Эта роль сможет присоединиться к сватовству.",
                 "max_acceptable_latency": "Максимально приемлемый задержка",
                 "max_acceptable_latency_description": "Это максимальная задержка, которую игрок может иметь, чтобы присоединиться к матчу.",
-                "update": "Обновить",
+                "lineup_add_without_invite": "Минимальная роль для добавления игроков в состав без приглашения",
+                "lineup_add_without_invite_description": "Эта роль сможет добавлять игроков в составы матчей без предварительной отправки приглашения.",
+                "default_models": "Модели игроков по умолчанию",
+                "auto_cancel_duration": "Время автоотмены",
+                "auto_cancel_duration_description": "Время в минутах, по истечении которого матч будет автоматически отменён, если он не начался в течение этого времени.",
+                "live_match_timeout": "Тайм-аут живого матча",
+                "live_match_timeout_description": "Время в минутах до автоматической отмены живого матча (тайм-аут безопасности). По умолчанию: 180 минут (3 часа).",
+                "matchmaking_type_description": "Включите матчмейкинг для каждого типа, чтобы игроки могли присоединяться к матчмейкингу для этого типа матчей.",
                 "players": {
-                  "force_name_registration": "Принудительная регистрация имени игрока",
-                  "force_name_registration_description": "Если включена принудительная регистрация игрока, игрок должен будет отправить имя, которое будет использоваться на платформе."
+                    "force_name_registration": "Принудительная регистрация имени игрока",
+                    "force_name_registration_description": "Если включена принудительная регистрация игрока, игрок должен будет отправить имя, которое будет использоваться на платформе.",
+                    "refresh_all_title": "Обновить всех игроков",
+                    "refresh_all_description": "Повторная синхронизация всех данных игроков в поисковом индексе. Используйте, если информация об игроках (например, ELO) устарела или отсутствует.",
+                    "refresh_button": "Обновить всех игроков",
+                    "refreshing": "Обновление...",
+                    "refresh_queued": "Обновление игроков успешно добавлено в очередь",
+                    "refresh_failed": "Не удалось обновить игроков",
+                    "error_occurred": "Произошла ошибка",
+                    "refresh_dialog_title": "Обновить всех игроков?",
+                    "refresh_dialog_description": "Это поставит в очередь задачу на повторную синхронизацию всех данных игроков в поисковом индексе Typesense. Это может занять несколько минут в зависимости от количества игроков."
+                },
+                "branding": {
+                    "general": "Общие",
+                    "general_description": "Базовые настройки внешнего вида панели.",
+                    "brand_name": "Название бренда",
+                    "brand_name_description": "Отображается в боковой панели и заголовке страницы.",
+                    "border_radius": "Радиус скругления",
+                    "border_radius_description": "Управляет скруглением кнопок, карточек и полей ввода.",
+                    "show_separators": "Показывать разделители",
+                    "show_separators_description": "Отображать горизонтальные разделительные линии между разделами.",
+                    "logo": "Логотип",
+                    "logo_description": "Загрузите пользовательский логотип для боковой панели. Рекомендуется: квадратное изображение, PNG или SVG.",
+                    "upload_logo": "Загрузить логотип",
+                    "favicon": "Favicon",
+                    "favicon_description": "Загрузите пользовательский Favicon. Рекомендуется: квадратное изображение, PNG или ICO.",
+                    "upload_favicon": "Загрузить Favicon",
+                    "remove": "Удалить",
+                    "login_page": "Страница входа",
+                    "login_page_description": "Настройте ссылку в подвале страницы входа.",
+                    "show_login_footer": "Показывать подвал страницы входа",
+                    "show_login_footer_description": "Отображать ссылку в подвале на странице входа.",
+                    "footer_text": "Текст подвала",
+                    "footer_url": "URL подвала",
+                    "theme_colors": "Цвета темы",
+                    "theme_colors_description": "Настройте цвета темы. Изменения отображаются в реальном времени.",
+                    "light_mode": "Светлый режим",
+                    "dark_mode": "Тёмный режим",
+                    "save_branding": "Сохранить брендинг",
+                    "reset_to_defaults": "Сбросить к значениям по умолчанию",
+                    "export_theme": "Экспортировать тему",
+                    "import_theme": "Импортировать тему",
+                    "upload_failed": "Ошибка загрузки",
+                    "delete_failed": "Ошибка удаления",
+                    "branding_saved": "Брендинг сохранён",
+                    "save_failed": "Ошибка сохранения",
+                    "branding_reset": "Брендинг сброшен к значениям по умолчанию",
+                    "reset_failed": "Ошибка сброса",
+                    "theme_exported": "Тема экспортирована",
+                    "export_failed": "Ошибка экспорта",
+                    "import_failed": "Ошибка импорта",
+                    "invalid_theme_file": "Недействительный файл темы",
+                    "sections": {
+                        "core": "Основное",
+                        "cards_borders": "Карточки и границы",
+                        "sidebar": "Боковая панель",
+                        "top_nav": "Верхняя панель",
+                        "tactical": "Тактическое"
+                    },
+                    "colors": {
+                        "background": "Фон",
+                        "foreground": "Передний план (текст)",
+                        "primary": "Основной (кнопки)",
+                        "primary_foreground": "Передний план основного (текст кнопки)",
+                        "secondary": "Дополнительный",
+                        "secondary_foreground": "Передний план дополнительного",
+                        "accent": "Акцентный (выбранные элементы)",
+                        "accent_foreground": "Передний план акцентного",
+                        "muted": "Приглушённый (мягкий фон)",
+                        "muted_foreground": "Передний план приглушённого (вторичный текст)",
+                        "destructive": "Деструктивный (удаление/ошибка)",
+                        "destructive_foreground": "Передний план деструктивного",
+                        "warning": "Предупреждение",
+                        "warning_foreground": "Передний план предупреждения",
+                        "card": "Фон карточки",
+                        "card_foreground": "Текст карточки",
+                        "border": "Границы",
+                        "popover": "Фон всплывающего окна",
+                        "popover_foreground": "Текст всплывающего окна",
+                        "input": "Границы ввода",
+                        "ring": "Кольцо фокуса",
+                        "sidebar_background": "Фон боковой панели",
+                        "sidebar_foreground": "Текст боковой панели",
+                        "sidebar_accent": "Активный/Наведение боковой панели",
+                        "sidebar_accent_foreground": "Активный текст боковой панели",
+                        "sidebar_border": "Граница боковой панели",
+                        "sidebar_primary": "Основной цвет боковой панели",
+                        "sidebar_primary_foreground": "Основной текст боковой панели",
+                        "sidebar_ring": "Кольцо фокуса боковой панели",
+                        "topnav_background": "Фон верхней панели",
+                        "topnav_foreground": "Текст верхней панели",
+                        "topnav_accent": "Наведение верхней панели",
+                        "topnav_accent_foreground": "Текст наведения верхней панели",
+                        "topnav_border": "Граница верхней панели",
+                        "topnav_primary": "Основной цвет верхней панели",
+                        "topnav_primary_foreground": "Основной текст верхней панели",
+                        "topnav_ring": "Кольцо фокуса верхней панели",
+                        "tactical_amber": "Тактический акцент (янтарные выделения)",
+                        "tactical_amber_foreground": "Текст тактического акцента"
+                    }
+                },
+                "fixtures": {
+                    "dev_only_notice": "Тестовые данные доступны только в режиме разработки.",
+                    "load_title": "Загрузить демо-данные",
+                    "load_description": "Заполнить базу данных примерами игроков, команд, матчей и турниров для тестирования.",
+                    "loading": "Загрузка...",
+                    "loaded_title": "Демо-данные загружены",
+                    "loaded_description": "Тестовые данные в данный момент загружены в базу данных.",
+                    "processing": "Обработка...",
+                    "load_dialog_title": "Загрузить тестовые данные?",
+                    "load_dialog_description": "Это добавит 40 игроков, 8 команд, ~120 матчей и 4 турнира в базу данных. Это пример данных для целей разработки.",
+                    "load_button": "Загрузить тестовые данные",
+                    "reload_dialog_title": "Перезагрузить тестовые данные?",
+                    "reload_dialog_description": "Это удалит все существующие тестовые данные и загрузит свежие копии. Любые изменения, внесенные в тестовых игроков, матчи или турниры, будут потеряны.",
+                    "reload_button": "Перезагрузить тестовые данные",
+                    "remove_dialog_title": "Удалить тестовые данные?",
+                    "remove_dialog_description": "Это удалит всех тестовых игроков, команды, матчи и турниры из базы данных. Это действие нельзя отменить.",
+                    "remove_button": "Удалить тестовые данные",
+                    "loaded_success": "Тестовые данные успешно загружены",
+                    "load_failed": "Не удалось загрузить тестовые данные",
+                    "removed_success": "Тестовые данные успешно удалены",
+                    "remove_failed": "Не удалось удалить тестовые данные"
                 },
                 "servers": {
-                  "title": "Настройки сервера",
-                  "enable_cpu_pinning": "Включить CPU Пиннинг",
-                  "enable_cpu_pinning_description": "Включите CPU на узлах игрового сервера для лучшей производительности",
-                  "number_of_cpus_per_server": "Количество процессоров на сервер",
-                  "number_of_cpus_per_server_description": "Количество процессоров для выделения на сервер",
-                  "reserved_disk_space_fresh_gb": "Required Disk Space - Fresh Install (GB)",
-                  "reserved_disk_space_fresh_gb_description": "Minimum disk space in GB required for a fresh node provisioning (CS2 not yet installed). Set to 0 to disable.",
-                  "reserved_disk_space_existing_gb": "Required Disk Space - Existing Install (GB)",
-                  "reserved_disk_space_existing_gb_description": "Minimum disk space in GB required when CS2 is already installed on the node. Set to 0 to disable.",
-                  "disk_warning_percent": "Disk Warning Threshold (%)",
-                  "disk_warning_percent_description": "Send a deletable notification when disk usage exceeds this percentage. Set to 0 to disable.",
-                  "disk_critical_percent": "Disk Critical Threshold (%)",
-                  "disk_critical_percent_description": "Send a non-deletable notification when disk usage exceeds this percentage. Set to 0 to disable.",
-                  "update": "Обновить",
-                  "update_cpu_pinning": "Процессор Pinning обновился"
+                    "title": "Настройки сервера",
+                    "enable_cpu_pinning": "Включить CPU Пиннинг",
+                    "enable_cpu_pinning_description": "Включите CPU на узлах игрового сервера для лучшей производительности",
+                    "number_of_cpus_per_server": "Количество процессоров на сервер",
+                    "number_of_cpus_per_server_description": "Количество процессоров для выделения на сервер",
+                    "reserved_disk_space_fresh_gb": "Требуемое место на диске — новая установка (ГБ)",
+                    "reserved_disk_space_fresh_gb_description": "Минимальное место на диске в ГБ, необходимое для нового развёртывания узла (CS2 ещё не установлен). Установите 0 для отключения.",
+                    "reserved_disk_space_existing_gb": "Требуемое место на диске — существующая установка (ГБ)",
+                    "reserved_disk_space_existing_gb_description": "Минимальное место на диске в ГБ, необходимое когда CS2 уже установлен на узле. Установите 0 для отключения.",
+                    "update_cpu_pinning": "Процессор Pinning обновился"
                 },
                 "demo_settings": {
-                  "update": "Обновить",
-                  "title": "Демо-настройки",
-                  "min_retention": "Минимальное удержание",
-                  "max_storage": "Максимальное хранение",
-                  "cloudflare_worker_url": "Cloudflare Worker URL",
-                  "max_storage_description": "Максимальный размер хранилища для демонстрационных файлов в GB.",
-                  "cloudflare_worker_url_description": "URL сотрудника Cloudflare, который будет использоваться для хранения и извлечения демонстрационных файлов.",
-                  "min_retention_description": "Минимальные дни хранения демо-файлов.",
-                  "current_storage": "Текущее хранение",
-                  "used_storage": "Приблизительное хранение используется",
-                  "test_s3_title": "Тест S3",
-                  "test_s3_description": "Проверьте соединение с S3 и загрузите файл на демо-корзину.",
-                  "test_upload": "Тестовая загрузка",
-                  "test_upload_success": "Успешная загрузка теста",
-                  "test_upload_failed": "Ошибка загрузки теста",
-                  "test_download": "Проверить загрузку",
-                  "test_download_failed": "Проверить загрузку не удалось"
+                    "title": "Демо-настройки",
+                    "min_retention": "Минимальное удержание",
+                    "max_storage": "Максимальное хранение",
+                    "cloudflare_worker_url": "URL Cloudflare Worker",
+                    "max_storage_description": "Максимальный размер хранилища для демонстрационных файлов в GB.",
+                    "cloudflare_worker_url_description": "URL сотрудника Cloudflare, который будет использоваться для хранения и извлечения демонстрационных файлов.",
+                    "min_retention_description": "Минимальные дни хранения демо-файлов.",
+                    "used_storage": "Приблизительное хранение используется",
+                    "test_s3_title": "Тест S3",
+                    "test_s3_description": "Проверьте соединение с S3 и загрузите файл на демо-корзину.",
+                    "test_upload": "Тестовая загрузка",
+                    "test_upload_success": "Успешная загрузка теста",
+                    "test_upload_failed": "Ошибка загрузки теста",
+                    "test_download": "Проверить загрузку",
+                    "test_download_failed": "Проверить загрузку не удалось",
+                    "demo_network_limiter": "Глобальный сетевой лимитер demo",
+                    "demo_network_limiter_description": "Глобальный сетевой лимитер для файлов demo.",
+                    "updated_s3_settings": "Настройки S3 обновлены",
+                    "clips_used_storage": "Приблизительно использовано для хайлайтов",
+                    "clips_min_retention": "Минимальное хранение",
+                    "clips_min_retention_description": "Минимальное количество дней хранения клипов хайлайтов до того, как они могут быть автоматически удалены.",
+                    "clips_max_storage": "Максимальный объём",
+                    "clips_max_storage_description": "Максимальный размер хранилища для клипов хайлайтов в ГБ. При превышении этого лимита сначала удаляются самые старые клипы.",
+                    "highlights_section": "Хайлайты",
+                    "auto_generate_match_clips": "Автогенерация хайлайтов матча",
+                    "auto_generate_match_clips_description": "Когда матч завершается и метаданные demo обрабатываются, автоматически ставить в очередь хайлайт \"Обзор матча\" для каждого игрока, совершившего хотя бы одно убийство. Рендеринг выполняется последовательно на одном поде game-streamer и попадает в библиотеку каждого игрока с видимостью по умолчанию, заданной ниже.",
+                    "auto_clip_default_visibility": "Видимость по умолчанию для авто-нарезок",
+                    "auto_clip_default_visibility_description": "С какого уровня видимости начинаются новые авто-нарезки. Приватный — самый безопасный вариант: только пользователи со статусом streamer+ могут просматривать приватные нарезки через «Управление нарезками». Публичный пропускает модерацию и сразу публикует нарезку в общей ленте (если включён публичный режим).",
+                    "visibility_private": "Приватный",
+                    "visibility_unlisted": "Ссылка",
+                    "visibility_public": "Публичный"
                 },
                 "update_map_pools": {
-                  "title": "Автоматическое обновление Map Pools",
-                  "description": "Автоматическое добавление/обновление пулов карт при добавлении или удалении новых карт из пула активных операций."
+                    "title": "Автоматическое обновление Map Pools",
+                    "description": "Автоматическое добавление/обновление пулов карт при добавлении или удалении новых карт из пула активных операций."
                 }
             },
             "language": {
@@ -162,66 +437,99 @@
             "matchmaking": {
                 "title": "Настройки для игр",
                 "description": "Настройте свои предпочтения и просмотрите задержки в регионе.",
-                "region": "Регион",
                 "average_latency": "Задержка",
                 "preferred": "Предпочтительный",
                 "max_acceptable_latency": "Максимально приемлемый задержка",
                 "max_latency_description": "Если никакие регионы не предпочтительнее, сватовство будет использовать только регионы с задержкой ниже этого значения."
             }
         },
+        "watch": {
+            "title": "Смотреть",
+            "upcoming_matches": "Предстоящие"
+        },
         "regions": {
             "title": "Регионы",
             "description": "Управление регионами",
             "create": "Создать",
             "table": {
-                "name": "Название",
-                "status": "Статус",
                 "available_servers": "Доступные серверы",
-                "description": "Описание",
                 "use_lan_ip": "Использовать LAN",
                 "use_steam_relay": "Используйте Steam Relay",
-                "use_steam_relay_description": "Включите Steam Relay для игровых серверов, чтобы скрыть их IP-адрес от общественности.",
-                "actions": "Действия"
+                "use_steam_relay_description": "Включите Steam Relay для игровых серверов, чтобы скрыть их IP-адрес от общественности."
             },
             "edit": "Редактировать",
             "delete": {
                 "title": "Удалить регион",
-                "description": "Вы уверены, что хотите удалить этот регион?",
-                "cancel": "Отмена",
-                "confirm": "Удалить"
-            }
+                "description": "Вы уверены, что хотите удалить этот регион?"
+            },
+            "deleted": "Регион удалён"
         },
         "players": {
             "title": "Игроки",
-            "search": "Поиск игроков",
+            "filter_by_privilege": "Фильтр по привилегии",
+            "select_privileges": "Выбрать привилегии",
+            "filter_by_country": "Фильтр по стране",
+            "select_country": "Выберите страну...",
+            "search_country": "Поиск страны...",
+            "no_country_found": "Страна не найдена.",
+            "countries_selected": "стран выбрано",
+            "elo_range": "Диапазон ELO",
+            "filter_chips": {
+                "elo_min": "Мин. ELO",
+                "elo_max": "Макс. ELO",
+                "countries": "Страны",
+                "privilege": "Привилегия",
+                "sanctions_min": "Санкции ≥",
+                "played": "Сыграно",
+                "banned": "Забанен",
+                "gagged": "Заглушен",
+                "muted": "Мут",
+                "headshot_pct": "HS%"
+            },
+            "played_matches": "Сыграно матчей",
+            "min_sanctions": "Минимум санкций",
+            "is_banned": "Забанен",
+            "is_gagged": "Загэгжен",
+            "is_muted": "Замьючен",
+            "table": {
+                "elo": "ELO",
+                "last_sign_in_at": "Последний вход",
+                "privilege": "Привилегия",
+                "kdr": "KDR",
+                "no_players": "Игроки не найдены"
+            },
             "detail": {
-                "player_stats": "Статистика игрока",
-                "kills": "Убийства",
-                "assists": "Помощь",
-                "deaths": "Смерти",
                 "kd": "K/D",
-                "last_ten_wins": "Последние 10 побед",
-                "last_ten_losses": "Последние 10 поражений",
-                "matches": "Матчи"
+                "recent_wins_and_losses": "Недавние победы и поражения",
+                "elo_history": "История ELO",
+                "no_elo_history": "Сыграйте матч для генерации ELO",
+                "play_a_match": "Играть",
+                "matches": "Матчи",
+                "tournaments": "Турниры",
+                "no_matches": "Пока нет матчей",
+                "no_matches_description": "История матчей появится здесь после игр.",
+                "no_tournaments": "Для этого игрока турниры не найдены.",
+                "no_tournaments_description": "Турниры, в которых участвовал этот игрок, появятся здесь.",
+                "weapon_kills": "Самые используемые оружия",
+                "no_weapon_kills": "Оружия не записаны",
+                "edit_player": "Редактировать игрока",
+                "name": "Имя",
+                "role": "Роль"
             }
         },
         "play": {
+            "title": "Играть",
             "open_matches": {
-                "title": "Открытые матчи",
                 "description": "Доступные матчи"
+            },
+            "open_registration_tournaments": {
+                "description": "Турниры, открытые для регистрации всем желающим."
             }
         },
         "matches": {
-            "title": "Матчи",
-            "description": "Управление матчами",
             "create": "Создать",
-            "last_ten_wins": "Последние 10 побед",
-            "last_ten_losses": "Последние 10 поражений",
-            "my_match_history": "Моя история матчей",
-            "other_matches": "Другие матчи",
             "match_updated": "Матч Обновлен",
             "create_page": {
-                "title": "Создать",
                 "pick_up_game": "Матч для всех",
                 "pick_up_game_description": "Создать матч для всех",
                 "team_1": "Команда 1",
@@ -230,9 +538,25 @@
                 "intra_team_scrimmage": "Тренировочный матч внутри команды",
                 "create_button": "Создать",
                 "update_button": "Обновить матч"
+            }
+        },
+        "toasts": {
+            "copied_to_clipboard": "Скопировано в буфер обмена"
+        },
+        "gpu_nodes": {
+            "title": "Узлы GPU",
+            "description": "Узлы игровых серверов с поддержкой GPU, которые обеспечивают прямые трансляции, воспроизведение демок и рендеринг хайлайтов. На каждом GPU одновременно работает не более одного потребителя.",
+            "idle": "Свободен",
+            "table": {
+                "node": "Узел",
+                "region": "Регион",
+                "gpu_devices": "Устройства GPU",
+                "status": "Статус",
+                "busy_with": "Занят"
             },
-            "detail": {
-                "schedule": "Запланировать"
+            "empty": {
+                "title": "Нет узлов GPU",
+                "description": "Ни одного узла игрового сервера с GPU не зарегистрировано. Включите поддержку GPU на узле, чтобы сделать его доступным для стриминга и рендеринга."
             }
         },
         "game_server_nodes": {
@@ -242,27 +566,35 @@
                 "title": "Не поддерживается",
                 "description": "Эта платформа не поддерживается"
             },
+            "no_nodes_title": "Нет узлов игровых серверов",
+            "display_metrics": "Показать метрики",
             "create": "Создать узел",
-            "installation_script": "Скрипт установки",
             "cs_version_info": "Информация о версии CS",
+            "hide_offline": "Скрыть офлайн-узлы",
+            "only_enabled": "Только включённые узлы",
+            "setup_dialog": {
+                "title": "Настройка узла игрового сервера",
+                "description": "Запустите этот скрипт установки на вашем сервере, чтобы подключить его к 5Stack",
+                "installation_script": "Скрипт установки",
+                "waiting_title": "Ожидание подключения узла...",
+                "waiting_description": "Запустите скрипт установки на вашем сервере. Статус обновится автоматически при подключении узла.",
+                "new_node": "Узел игрового сервера успешно подключён",
+                "close": "Закрыть"
+            },
             "status": {
-                "offline": "Не в сети",
-                "online": "Только онлайн",
                 "setup": "Настройка",
                 "not_accepting": "Не принимать новые матчи"
             },
             "table": {
                 "node": "Узел",
-                "lan_public_ip": "LAN/Публичный IP",
                 "cs_build_id": "Сборка CS",
-                "region": "Регион",
                 "capacity": "Емкость",
                 "ports": "Порты",
                 "ports_tooltip": "Доступный диапазон портов",
-                "enabled": "Включено",
                 "no_nodes": "Нет узлов",
                 "supports_low_latency": "Поддерживает низкую задержку",
-                "supports_cpu_pinning": "Поддержка CPU Пиннинг"
+                "supports_cpu_pinning": "Поддержка CPU Пиннинг",
+                "cpu_governor": "CPU Governor"
             },
             "build_id": "ID сборки",
             "last_updated": "Последнее обновление"
@@ -270,18 +602,18 @@
         "dedicated_servers": {
             "title": "Выделенный",
             "description": "Управление выделенными серверами",
+            "no_servers_title": "Нет выделенных серверов",
+            "no_servers": "Выделенные серверы не найдены.",
             "create": {
                 "title": "Создать сервер"
             },
             "table": {
                 "connection_details": "Детали подключения",
                 "label": "Метка",
-                "region": "Регион",
+                "type": "Тип",
+                "port": "Игровой порт",
                 "tv_port": "Порт TV",
-                "plugin_version": "Версия плагина",
-                "enabled": "Включено",
-                "yes": "Да",
-                "no": "Нет"
+                "enabled": "Включено"
             },
             "detail": {
                 "enabled": "Включено",
@@ -289,28 +621,22 @@
                 "hide_config": "Скрыть конфигурацию",
                 "show_config": "Показать конфигурацию",
                 "config_location": "Расположение конфигурационного файла",
-                "copy": "Копировать",
-                "edit": "Редактировать",
-                "delete": "Удалить",
+                "files": "Файлы",
                 "status": {
-                  "disconnected": "Сервер отключен",
-                  "no_rcon": "Сервер подключен, но RCON недоступен",
-                  "connected": "Сервер подключен, RCON доступен",
-                  "plugin_version_mismatch": "версия плагина не обновлена"
+                    "disconnected": "Сервер отключен",
+                    "no_rcon": "Сервер подключен, но RCON недоступен",
+                    "connected": "Сервер подключен, RCON доступен",
+                    "plugin_version_mismatch": "версия плагина не обновлена"
                 },
                 "delete_confirm": {
-                  "title": "Удалить сервер",
-                  "description": "Вы уверены, что хотите удалить этот сервер?",
-                  "cancel": "Отмена",
-                  "continue": "Продолжить"
+                    "title": "Удалить сервер",
+                    "description": "Вы уверены, что хотите удалить этот сервер?",
+                    "continue": "Продолжить"
                 }
             }
         },
         "public_servers": {
             "title": "Публичные серверы",
-            "description": "Просмотр и подключение к публичным серверам",
-            "online": "Online",
-            "offline": "Offline",
             "players": "Игроки",
             "no_servers_title": "Нет доступных серверов",
             "no_public_servers": "В данный момент нет доступных публичных серверов.",
@@ -318,7 +644,6 @@
         },
         "map_pools": {
             "title": "По умолчанию Map Pools",
-            "description": "Управляйте пулами карт и доступными картами для сватовства.",
             "form": {
                 "name": "Название",
                 "name_description": "Это должно соответствовать названию карты в игре, которую распознает сервер.",
@@ -332,34 +657,30 @@
                 "update_map": "Обновление карты",
                 "delete_map": "Удалить карту",
                 "delete_confirm": {
-                  "title": "Удалить карту",
-                  "description": "Вы уверены, что хотите удалить эту карту? Это действие не может быть отменено.",
-                  "cancel": "Отмена",
-                  "confirm": "Удалить"
+                    "title": "Удалить карту",
+                    "description": "Вы уверены, что хотите удалить эту карту? Это действие не может быть отменено."
                 },
                 "success": {
-                  "create": "Карта успешно создана",
-                  "update": "Карта успешно обновлена",
-                  "delete": "Карта успешно удалена",
-                  "workshop_refresh": "Подробности карты семинара успешно обновлены"
+                    "create": "Карта успешно создана",
+                    "update": "Карта успешно обновлена",
+                    "delete": "Карта успешно удалена",
+                    "workshop_refresh": "Подробности карты семинара успешно обновлены"
                 },
                 "error": {
-                  "create": "Ошибка создания карты",
-                  "update": "Обновление карты ошибок",
-                  "invalid_workshop": "Недействительная карта мастерской. Пожалуйста, проверьте, существует ли идентификатор в Steam Workshop.",
-                  "workshop_refresh": "Обновление деталей карты мастерской"
+                    "create": "Ошибка создания карты",
+                    "update": "Обновление карты ошибок",
+                    "invalid_workshop": "Недействительная карта мастерской. Пожалуйста, проверьте, существует ли идентификатор в Steam Workshop.",
+                    "workshop_refresh": "Обновление деталей карты мастерской"
                 },
                 "refresh_workshop": "Обновить детали"
             },
             "pool": {
-                "title": "По умолчанию {type} Бассейн карт",
-                "description": "Управление картами в пуле",
-                "modify_maps": "Изменить карты в бассейне"
+                "modify_maps": "Изменить карты в бассейне",
+                "pool_heading": "Пул {type}"
             },
             "add_new_map": "Добавить новую карту",
-            "edit": "Редактировать",
             "maps": "Доступные карты",
-            "active_duty": "Active Duty",
+            "active_duty": "Активный пул",
             "available_modes": "Доступно в режимах",
             "workshop_id": "Семинар Ссылка",
             "search": "Карты поиска"
@@ -372,34 +693,275 @@
         "manage_matches": {
             "title": "Управлять матчами",
             "only_my_matches": "Только мои организованные матчи",
-            "description": "Просмотр и управление всеми матчами на платформе."
-        }
-    },
-    "notifications": {
-        "match": {
-            "title": "Матч приглашений"
+            "description": "Просмотр и управление всеми матчами на платформе.",
+            "no_matches": "Матчи не найдены.",
+            "search_by_name": "Поиск по названию",
+            "enter_name": "Введите имя...",
+            "search_by_id": "Поиск по ID матча",
+            "enter_match_id": "Введите ID матча...",
+            "search_by_team": "Поиск по команде",
+            "enter_team_name": "Введите название команды...",
+            "filter_by_status": "Фильтр по статусу",
+            "select_statuses": "Выберите статусы...",
+            "filter_by_regions": "Фильтр по регионам",
+            "select_regions": "Выберите регионы...",
+            "clear_all": "Очистить всё",
+            "sort_by": "Сортировать по",
+            "created_at": "Дата создания",
+            "started_at": "Дата начала",
+            "scheduled_at": "Дата планирования",
+            "ended_at": "Дата окончания",
+            "newest_first": "Сначала новые",
+            "oldest_first": "Сначала старые",
+            "showing": "Показано",
+            "matches": "матчей"
+        },
+        "leaderboard": {
+            "title": "Таблица лидеров",
+            "no_results": "Нет данных таблицы лидеров для выбранных фильтров.",
+            "categories": {
+                "elo": "ELO",
+                "best_kdr": "KDR",
+                "best_win_rate": "Винрейт",
+                "highest_hs_pct": "HS%",
+                "trophies": "Трофеи"
+            },
+            "time_periods": {
+                "last_7_days": "Последние 7 дней",
+                "last_30_days": "Последние 30 дней",
+                "all_time": "За всё время"
+            },
+            "match_types": {
+                "all": "Все типы",
+                "competitive": "Соревновательный",
+                "wingman": "Напарник",
+                "duel": "Дуэль"
+            },
+            "columns": {
+                "rank": "#",
+                "matches": "Матчи"
+            },
+            "col": {
+                "elo": "ELO",
+                "elo_change": "Изменение ELO",
+                "win_streak": "Серия побед",
+                "kdr": "K/D",
+                "kills": "Убийства",
+                "deaths": "Смерти",
+                "wins": "Победы",
+                "losses": "Поражения",
+                "hs_pct": "HS%",
+                "total_kills": "Всего убийств",
+                "gold": "Золото",
+                "silver": "Серебро",
+                "bronze": "Бронза",
+                "mvp": "MVP",
+                "total_trophies": "Всего"
+            },
+            "exclude_tournaments": "Исключить турниры"
+        },
+        "database": {
+            "query_copied": "Запрос скопирован в буфер обмена",
+            "copy_failed": "Не удалось скопировать в буфер обмена",
+            "filters": {
+                "select_schemas": "Выберите схемы...",
+                "search_schemas": "Поиск схем...",
+                "no_schemas": "Схемы не найдены",
+                "schemas_selected": "схем выбрано"
+            },
+            "tabs": {
+                "queries": "Производительность запросов",
+                "connections": "Подключения",
+                "locks": "Блокировки и транзакции",
+                "io": "Ввод-вывод и буферы",
+                "index_usage": "Использование индексов",
+                "storage": "Хранилище",
+                "timescale": "TimescaleDB",
+                "backups": "Резервные копии"
+            },
+            "columns": {
+                "schema": "Схема",
+                "table": "Таблица",
+                "index": "Индекс",
+                "user": "Пользователь",
+                "app": "Приложение",
+                "client": "Клиент",
+                "state": "Состояние",
+                "duration": "Длительность",
+                "query": "Запрос",
+                "pid": "PID"
+            },
+            "query_performance": {
+                "no_stats": "Статистика запросов не найдена",
+                "search_query": "Поиск запроса",
+                "min_calls": "Мин. вызовов",
+                "sort_by": "Сортировать по",
+                "avg_time": "Среднее время",
+                "max_time": "Макс. время",
+                "total_time": "Общее время",
+                "calls": "Вызовы",
+                "temp_blocks": "Временные блоки",
+                "filter_by_query_text": "Фильтр по тексту запроса...",
+                "search_tables": "Поиск таблиц...",
+                "search_indexes": "Поиск индексов...",
+                "granted": "Предоставлено",
+                "mode": "Режим",
+                "relation": "Отношение"
+            },
+            "connections": {
+                "no_active_queries": "Нет активных запросов",
+                "no_connections": "Подключения не найдены",
+                "active_queries_title": "Активные запросы",
+                "all_connections_title": "Все подключения",
+                "wait_event": "Событие ожидания",
+                "total": "Всего",
+                "active": "Активные",
+                "idle": "Простаивают",
+                "idle_in_txn": "Простаивают в транзакции",
+                "waiting": "Ожидают"
+            },
+            "locks": {
+                "no_locks": "Нет активных блокировок",
+                "no_table_stats": "Статистика таблиц недоступна",
+                "stats_title": "Статистика базы данных",
+                "cache_hit_ratio": "Коэффициент попаданий в кэш",
+                "active_backends": "Активные бэкенды",
+                "tuples_inserted": "Кортежей вставлено",
+                "tuples_updated": "Кортежей обновлено",
+                "tuples_deleted": "Кортежей удалено",
+                "current_locks": "Текущие блокировки",
+                "lock_type": "Тип блокировки",
+                "table_maintenance_title": "Статистика обслуживания таблиц",
+                "live_tuples": "Живые кортежи",
+                "dead_tuples": "Мёртвые кортежи",
+                "last_vacuum": "Последний Vacuum",
+                "last_autovacuum": "Последний Autovacuum",
+                "last_analyze": "Последний Analyze",
+                "commits": "Коммиты",
+                "rollbacks": "Откаты",
+                "deadlocks": "Взаимоблокировки"
+            },
+            "io": {
+                "tabs": {
+                    "table_io": "I/O таблиц",
+                    "index_io": "I/O индексов"
+                },
+                "table_io_stats": "Статистика I/O таблиц",
+                "index_io_stats": "Статистика I/O индексов",
+                "no_table_stats": "Статистика I/O таблиц недоступна",
+                "no_index_io_stats": "Статистика I/O индексов недоступна",
+                "heap_hits": "Попадания в кучу",
+                "heap_reads": "Чтения кучи",
+                "index_hits": "Попадания в индекс",
+                "index_reads": "Чтения индекса",
+                "blocks_hit": "Найдено блоков",
+                "blocks_read": "Прочитано блоков",
+                "cache_hit_pct": "Попадание в кэш %"
+            },
+            "index_usage": {
+                "title": "Статистика использования индексов",
+                "schema": "Схема",
+                "table": "Таблица",
+                "index": "Индекс",
+                "index_scans": "Сканирований индекса",
+                "tuples_read": "Прочитано кортежей",
+                "tuples_fetched": "Получено кортежей",
+                "index_size": "Размер индекса",
+                "table_size": "Размер таблицы",
+                "size_ratio": "% от таблицы",
+                "no_stats": "Статистика использования индексов недоступна"
+            },
+            "storage": {
+                "overview": "Обзор хранилища",
+                "total_database_size": "Общий размер базы данных",
+                "total_table_size": "Общий размер таблиц",
+                "total_indexes_size": "Общий размер индексов",
+                "reclaimable_space": "Высвобождаемое место",
+                "from_dead_tuples": "Из мёртвых кортежей",
+                "table_sizes": "Детали хранилища таблиц",
+                "schema": "Схема",
+                "table": "Таблица",
+                "total_size": "Общий размер",
+                "table_size": "Размер таблицы",
+                "indexes_size": "Индексы",
+                "live_tuples": "Активные кортежи",
+                "dead_tuples": "Мёртвые кортежи",
+                "dead_tuple_size": "Размер мёртвых кортежей",
+                "no_tables": "Нет доступной информации о хранении таблиц"
+            },
+            "timescale": {
+                "no_data_title": "Нет данных TimescaleDB",
+                "no_data_description": "Расширение TimescaleDB не установлено или гипертаблицы не настроены.",
+                "no_jobs": "Фоновые задания не настроены",
+                "total_chunks": "Всего чанков",
+                "background_jobs": "Фоновые задания",
+                "hypertable_name": "Имя гипертаблицы",
+                "hypertables": "Гипертаблицы",
+                "hypertable": "Гипертаблица",
+                "chunks": "Чанки",
+                "compression": "Сжатие",
+                "job_id": "ID задания",
+                "job_type": "Тип задания",
+                "last_run_status": "Статус последнего запуска",
+                "next_start": "Следующий запуск",
+                "not_run": "Не запускалось",
+                "not_scheduled": "Не запланировано"
+            },
+            "backups": {
+                "no_backups": "Нет доступных резервных копий базы данных"
+            },
+            "query_detail": {
+                "title": "Детали запроса",
+                "query": "Запрос",
+                "copy": "Копировать",
+                "query_copied": "Запрос скопирован в буфер обмена",
+                "plan_copied": "План выполнения скопирован в буфер обмена",
+                "copy_failed": "Не удалось скопировать в буфер обмена",
+                "statistics": "Статистика",
+                "calls": "Вызовы",
+                "avg_time": "Среднее время",
+                "max_time": "Макс. время",
+                "total_rows": "Всего строк",
+                "execution_times": "Время выполнения (мс)",
+                "min": "Мин.",
+                "mean": "Среднее",
+                "max": "Макс.",
+                "std_dev": "Ст. откл.",
+                "buffer_stats": "Статистика буферов",
+                "shared_blocks_hit": "Общие блоки: попадания",
+                "shared_blocks_read": "Общие блоки: чтения",
+                "cache_hit_ratio": "Доля попаданий в кэш",
+                "local_blocks_hit": "Локальные блоки: попадания",
+                "local_blocks_read": "Локальные блоки: чтения",
+                "temp_blocks_written": "Временные блоки: записи",
+                "execution_plan": "План выполнения",
+                "no_explain_plan": "Не удалось сгенерировать план EXPLAIN для этого запроса",
+                "not_found": "Детали запроса не найдены"
+            }
         }
     },
     "custom_match": {
-        "title": "Пользовательский матч",
         "description": "Создайте и настройте свой собственный матч. Установите правила, выберите карты и пригласите друзей для персонализированного игрового опыта."
     },
     "layouts": {
         "account_settings": {
             "title": "Настройки аккаунта",
-            "description": "Управляйте настройками и предпочтениями вашей учетной записи"
+            "description": "Управляйте настройками и предпочтениями вашей учетной записи",
+            "select_section": "Выберите раздел"
         },
         "application_settings": {
             "title": "Настройки приложения",
-            "description": "Управление настройками приложения"
+            "description": "Управление настройками приложения",
+            "select_section": "Выберите раздел",
+            "branding_nav": "Брендинг",
+            "fixtures_nav": "Фикстуры"
         },
         "system_update": {
             "title": "Обновление системы",
             "description": "Требуется обновление системы",
             "note": "Примечание: Приложение недоступно во время обновления",
             "fix_link": "Показать решение",
-            "cancel": "Отмена",
-            "update": "Обновить",
+            "updating": "Система обновляется",
             "panel_update": "Ваша панель устарела, вытащите и запустите сценарий обновления"
         },
         "match_lobby": {
@@ -407,21 +969,28 @@
         },
         "notifications": {
             "title": "Уведомления",
-            "delete": "Удалить",
             "dismiss": "Отклонить",
             "dismiss_all": "Отклонить все уведомления",
             "delete_all_read": "Удалить все прочитанные уведомления",
+            "no_notifications_title": "Нет уведомлений",
             "no_notifications": "Нет уведомлений"
         },
         "app_nav": {
             "brand": "5stack",
+            "systems_online": "{count} система онлайн | {count} систем онлайн",
             "navigation": {
+                "dashboard": "Моя статистика",
                 "play": "Играть",
-                "matches": "Матчи",
+                "watch": "Смотреть",
                 "tournaments": "Турниры",
+                "public_servers": "Публичные серверы",
                 "players": "Игроки",
                 "teams": "Команды",
-                "community": "Сообщество"
+                "leaderboard": "Таблица лидеров",
+                "search": "Поиск"
+            },
+            "community": {
+                "title": "Сообщество"
             },
             "administration": {
                 "title": "Администрирование",
@@ -429,11 +998,16 @@
                 "servers": "Серверы",
                 "dedicated_servers": "Выделенный",
                 "game_server_nodes": "Узлы Игрового Сервера",
-                "logs": "Системные Логи",
-                "metrics": "Системные Метрики",
+                "gpu_nodes": "Узлы GPU",
                 "app_settings": "Настройки Приложения",
-                "map_pools": "Пул Карт",
-                "manage_matches": "Управлять матчами"
+                "manage_matches": "Управлять матчами",
+                "manage_tournaments": "Управление турнирами"
+            },
+            "system": {
+                "title": "Система",
+                "logs": "Логи",
+                "database": "База данных",
+                "metrics": "Метрики"
             },
             "profile": {
                 "my_account": "Мои настройки",
@@ -444,30 +1018,110 @@
                 "join_discord": "Присоединиться к Discord"
             },
             "tooltips": {
+                "dashboard": "Моя статистика",
                 "play": "Играть",
-                "matches": "Матчи",
+                "watch": "Смотреть",
                 "tournaments": "Турниры",
                 "players": "Игроки",
                 "teams": "Команды",
+                "leaderboard": "Таблица лидеров",
+                "public_servers": "Публичные серверы",
                 "regions": "Регионы",
                 "servers": "Серверы",
                 "dedicated_servers": "Выделенный",
                 "game_server_nodes": "Узлы Игрового Сервера",
+                "gpu_nodes": "GPU-узлы",
                 "system_logs": "Системные Логи",
+                "database": "База данных",
                 "system_metrics": "Системные Метрики",
                 "app_settings": "Настройки Приложения",
                 "report_issue": "Сообщить о Проблеме",
                 "join_discord": "Присоединиться к Discord",
-                "map_pools": "Пул Карт",
-                "manage_matches": "Управлять матчами"
+                "manage_matches": "Управлять матчами",
+                "manage_tournaments": "Управление турнирами",
+                "search_players": "Поиск игроков"
             },
             "logout_dialog": {
                 "title": "Выйти",
                 "description": "Вы уверены, что хотите выйти?",
-                "cancel": "Отмена",
                 "confirm": "Выйти"
             }
+        },
+        "top_nav": {
+            "home": "Моя статистика",
+            "play_menu": "Играть",
+            "community_menu": "Сообщество",
+            "watch_menu": "Смотреть",
+            "login": "Войти для игры",
+            "login_mobile": "Войти",
+            "play": {
+                "find_match": "Найти матч",
+                "tournaments": "Турниры",
+                "public_servers": "Публичные серверы",
+                "hero": {
+                    "title": "Играй и соревнуйся",
+                    "subtitle": "Участвуйте в матчах и турнирах."
+                }
+            },
+            "community": {
+                "watch": {
+                    "title": "Смотреть",
+                    "subtitle": "Смотрите матчи и турниры."
+                },
+                "players": {
+                    "title": "Игроки",
+                    "subtitle": "Просмотр и поиск игроков"
+                },
+                "teams": {
+                    "title": "Команды",
+                    "subtitle": "Поиск и управление командами"
+                },
+                "leaderboard": {
+                    "title": "Таблица лидеров",
+                    "subtitle": "Лучшие игроки и рейтинги"
+                },
+                "social": {
+                    "title": "Соцсети",
+                    "join_discord": {
+                        "title": "Присоединяйтесь к нашему Discord",
+                        "subtitle": "Общение, поддержка и анонсы"
+                    }
+                }
+            }
+        },
+        "lobby_panel": {
+            "lobby_invites": "Приглашения в лобби",
+            "your_squad": "Ваш отряд",
+            "squad_description": "Организуйте команду, отправляйте приглашения и готовьтесь к голосовой связи / Discord.",
+            "create_lobby_description": "Создайте лобби, чтобы приглашать друзей и играть вместе.",
+            "create_lobby_button": "Создать лобби",
+            "voice_discord": "Голос и Discord",
+            "discord_linked": "Discord привязан",
+            "link_discord": "Привязать Discord"
+        },
+        "chat_panel": {
+            "default_title": "Чат",
+            "participants_in_chat": "{count} в чате",
+            "pop_out_tooltip": "Открыть в отдельном окне",
+            "no_chats_title": "Пока нет чатов",
+            "no_chats_description": "Как только вы присоединитесь к чату, он появится здесь."
+        },
+        "recent_games": {
+            "title": "Недавние игры",
+            "last_matches": "Последние {count} матчей",
+            "performance": "Производительность",
+            "draws_label": "Ничьи",
+            "most_played_maps": "Самые популярные карты",
+            "no_maps": "Карты появятся здесь по мере игры.",
+            "no_recent_matches_title": "Нет недавних матчей",
+            "no_recent_matches_description": "Как только вы сыграете несколько игр, они появятся здесь."
         }
+    },
+    "alt_text": {
+        "steam_login": "Вход через Steam",
+        "discord": "Discord",
+        "map_poster": "Постер карты",
+        "map_patch": "Патч карты"
     },
     "pwa": {
         "install": {
@@ -480,50 +1134,255 @@
         }
     },
     "common": {
+        "manage_custom_plugins_and_shared_files": "Эти файлы монтируются в директорию `csgo` при запуске сервера.",
+        "delete": "Удалить",
         "cancel": "Отмена",
+        "save": "Сохранить",
+        "update": "Обновить",
+        "error": "Ошибка",
+        "enabled": "Включено",
+        "all": "Все",
         "tbd": "Будет определено",
+        "yes": "Да",
+        "no": "Нет",
+        "more": "Ещё",
+        "none": "Нет",
+        "failed": "Ошибка",
+        "disabled": "Отключено",
+        "online": "Онлайн",
+        "offline": "Офлайн",
+        "degraded": "Деградировано",
+        "never": "Никогда",
+        "live": "В эфире",
+        "finished": "Завершён",
+        "scheduled": "Запланирован",
+        "show_metrics": "Показать метрики",
+        "hide_metrics": "Скрыть метрики",
+        "connected": "Подключено",
+        "disconnected": "Отключено",
+        "system": "Система",
+        "hide_details": "Скрыть подробности",
+        "show_details": "Показать подробности",
+        "enter_fullscreen": "Войти в полноэкранный режим",
+        "exit_fullscreen": "Выйти из полноэкранного режима",
+        "download": "Скачать",
+        "upload": "Загрузить",
+        "sort_ascending": "Сортировать по возрастанию",
+        "sort_descending": "Сортировать по убыванию",
         "boolean": {
             "yes": "Да",
             "no": "Нет"
         },
+        "are_you_sure": "Вы уверены, что хотите выполнить эту команду?",
+        "are_you_sure_short": "Вы уверены?",
+        "no_tables_found": "Таблицы не найдены",
         "actions": {
             "edit": "Редактировать",
             "delete": "Удалить"
         },
+        "actions_label": "Действия",
         "close": "Закрыть",
         "confirm": "Подтвердить",
-        "refresh": "Освежить"
+        "refresh": "Освежить",
+        "create": "Создать",
+        "rename": "Переименовать",
+        "creating": "Создание...",
+        "saving": "Сохранение...",
+        "loading": "Загрузка...",
+        "undo": "Отменить",
+        "redo": "Повторить",
+        "name": "Название",
+        "description": "Описание",
+        "status": "Статус",
+        "region": "Регион",
+        "filters": "Фильтры",
+        "reset_filters": "Сбросить фильтры",
+        "player": "Игрок",
+        "plugin_version": "Версия плагина",
+        "pick_date": "Выберите дату",
+        "team_name": "Название команды",
+        "coaches": "Тренеры",
+        "map_veto": "Вето карт",
+        "round": "Раунд {number}",
+        "stats": {
+            "wins": "Победы",
+            "losses": "Поражения",
+            "kills": "Убийства",
+            "deaths": "Смерти",
+            "assists": "Помощь",
+            "win_rate": "Винрейт"
+        }
+    },
+    "spotlight_search": {
+        "placeholder": "Поиск игроков...",
+        "searching": "Поиск..."
+    },
+    "file_manager_store": {
+        "load_directory_failed": "Не удалось загрузить директорию",
+        "read_file_failed": "Не удалось прочитать файл",
+        "create_directory_failed": "Не удалось создать директорию",
+        "delete_item_failed": "Не удалось удалить элемент",
+        "rename_item_failed": "Не удалось переименовать элемент",
+        "move_item_failed": "Не удалось переместить элемент",
+        "save_file_failed": "Не удалось сохранить файл",
+        "network_error": "Ошибка сети",
+        "upload_cancelled": "Загрузка отменена"
+    },
+    "file_manager": {
+        "location": "Расположение",
+        "dedicated_server_files": "Файлы выделенного сервера",
+        "game_server_node_files": "Файлы узла игрового сервера",
+        "loading_server_info": "Загрузка информации о сервере...",
+        "create_directory": {
+            "title": "Создать новую директорию",
+            "description": "Введите название для новой директории",
+            "label": "Название директории",
+            "placeholder": "моя-директория"
+        },
+        "create_file": {
+            "title": "Создать новый файл",
+            "description": "Введите название для нового файла",
+            "label": "Название файла",
+            "placeholder": "мой-файл.txt",
+            "failed": "Не удалось создать файл"
+        },
+        "delete_confirm": {
+            "title_file": "Удалить файл",
+            "title_directory": "Удалить директорию",
+            "description_file": "Вы уверены, что хотите удалить \"{name}\"? Это действие нельзя отменить.",
+            "description_directory": "Вы уверены, что хотите удалить \"{name}\"? Всё содержимое будет удалено безвозвратно."
+        },
+        "rename": {
+            "title_file": "Переименовать файл",
+            "title_directory": "Переименовать директорию",
+            "description": "Введите новое имя для \"{name}\"",
+            "label": "Новое имя"
+        },
+        "editor": {
+            "title": "Редактировать файл: {path}",
+            "description": "Внесите изменения в содержимое файла",
+            "loading": "Загрузка файла...",
+            "save_success": "Файл успешно сохранён!",
+            "load_failed": "Не удалось загрузить файл",
+            "save_failed": "Не удалось сохранить файл",
+            "unsaved_close": "У вас есть несохранённые изменения. Вы уверены, что хотите закрыть?"
+        },
+        "upload": {
+            "title": "Загрузить файлы",
+            "description": "Выберите файлы для загрузки в текущую директорию",
+            "drag_drop": "Перетащите файлы сюда или нажмите для выбора",
+            "max_size": "Максимальный размер файла: 100МБ",
+            "uploading": "Загрузка файлов...",
+            "complete": "Загрузка завершена",
+            "complete_with_errors": "Загрузка завершена с ошибками",
+            "files_failed": "Не удалось загрузить файл(ов): {count}"
+        },
+        "toolbar": {
+            "new_file": "Новый файл",
+            "new_folder": "Новая папка",
+            "upload_files": "Загрузить файлы",
+            "refresh": "Обновить"
+        },
+        "tree": {
+            "folder_name_placeholder": "название папки",
+            "file_name_placeholder": "имя файла",
+            "drop_hint": "Перетащите файлы сюда или нажмите правой кнопкой мыши для создания",
+            "files": "файлы",
+            "current": "Текущий"
+        },
+        "details_panel": {
+            "menu_file_label": "Файл",
+            "menu_edit_label": "Редактировать",
+            "menu_view_label": "Просмотр",
+            "no_file_open_title": "Файл не открыт",
+            "no_file_open_description": "Выберите файл из браузера для редактирования",
+            "close": "Закрыть",
+            "close_all": "Закрыть все",
+            "enable_word_wrap": "Включить перенос строк",
+            "disable_word_wrap": "Отключить перенос строк",
+            "show_minimap": "Показать миникарту",
+            "hide_minimap": "Скрыть миникарту",
+            "no_file_open": "Файл не открыт",
+            "unsaved_changes": "У вас есть несохраненные изменения. Вы уверены, что хотите закрыть?",
+            "unsaved_changes_all": "У вас есть несохраненные изменения. Вы уверены, что хотите закрыть все файлы?"
+        },
+        "tabs": {
+            "unsaved_changes_warning": "У вас есть несохраненные изменения в других файлах. Вы уверены, что хотите закрыть их?",
+            "unsaved_changes_right_warning": "У вас есть несохраненные изменения в файлах справа. Вы уверены, что хотите закрыть их?",
+            "unsaved_changes_left_warning": "У вас есть несохраненные изменения в файлах слева. Вы уверены, что хотите закрыть их?"
+        }
+    },
+    "error": {
+        "generic": "Произошла ошибка. Пожалуйста, попробуйте снова."
+    },
+    "roles": {
+        "user": "Пользователь",
+        "verified_user": "Проверенный пользователь",
+        "streamer": "Стример",
+        "match_organizer": "Организатор матча",
+        "tournament_organizer": "Организатор турнира",
+        "administrator": "Администратор"
+    },
+    "chat_tab_labels": {
+        "match": "Чат матча",
+        "team": "Чат команды",
+        "tournament": "Чат турнира",
+        "organizers": "Чат организаторов",
+        "matchmaking": "Чат очереди",
+        "lobby_default": "Лобби",
+        "organizers_default": "Организаторы"
+    },
+    "chat_room_subtitles": {
+        "organizers": "Глобальное лобби",
+        "tournament": "Чат турнира",
+        "matchmaking": "Чат очереди",
+        "match": "Чат матча",
+        "team": "Чат команды"
+    },
+    "latency_status": {
+        "measuring": "Измерение...",
+        "excellent": "Отлично",
+        "good": "Хорошо",
+        "fair": "Средне",
+        "poor": "Плохо"
+    },
+    "chat_page": {
+        "fallback_title": "Чат",
+        "not_found": "Чат не найден",
+        "back_to_hub": "Назад к хабу",
+        "not_open_title": "Этот чат в данный момент не открыт в вашей сессии.",
+        "not_open_description": "Сначала откройте его из боковой панели хаба, затем извлеките снова."
     },
     "tournament": {
+        "admin_label": "Админ",
+        "round_robin": {
+            "games_played": "Сыграно игр",
+            "rounds_won": "Выиграно раундов",
+            "rounds_lost": "Проиграно раундов",
+            "matches_remaining": "Осталось матчей"
+        },
+        "team_invite": {
+            "pending": "Ожидает"
+        },
+        "results_table": {
+            "matches": "Матчи"
+        },
         "paused_banner": "Этот турнир приостановлен. Новые матчи не будут автоматически запланированы.",
         "overview": "Обзор",
-        "bracket": {
-            "schedule_title": "Запланировать матч",
-            "scheduled_at": "Запланирован",
-            "currently_scheduled": "Текущее расписание",
-            "save_schedule": "Сохранить расписание",
-            "clear_schedule": "Очистить",
-            "past_time_error": "Время должно быть в будущем"
-        },
-        "teams": "Команды",
+        "updated": "Турнир обновлён",
         "settings": "Настройки",
-        "admin": "Администрирование",
-        "organizers": "Организаторы",
-        "show_organizers": "Посмотреть Организаторы",
-        "hide_organizers": "Скрыть организаторов",
         "join": {
             "title": "Присоединиться к турниру",
-            "joined_with": "Команда присоединилась",
             "add_self_to_lineup": "Добавить себя в Lineup",
             "team_owner": "Владелец",
             "requirements": "Требования"
         },
         "tournament_team": {
-            "players_registered": "Зарегистрированные игроки",
             "remove": "Удалить"
         },
         "add_team": {
-            "title": "Добавить команду"
+            "title": "Добавить команду",
+            "description": "Пригласите существующую команду или создайте новую для этого турнира."
         },
         "form": {
             "create": "Создать турнир",
@@ -531,9 +1390,9 @@
             "name": "Название",
             "description": "Описание",
             "start": "Начало",
-            "pick_date": "Выберите дату",
             "update": "Обновить",
-            "match_options": "Настройки матча",
+            "discord_notifications": "Уведомления в Discord",
+            "discord_notifications_description": "Включить уведомления Discord об изменениях статуса матчей в этом турнире. Когда отключено, отправляются только уведомления панели.",
             "auto_start": {
                 "label": "Автозапуск",
                 "description": "При включении матчи турнира планируются автоматически. При отключении организатор должен вручную запланировать каждый матч."
@@ -541,97 +1400,157 @@
         },
         "notifications": {
             "title": "Notifications",
-            "description": "Override global Discord notification settings for this tournament. Leave empty to use global defaults.",
-            "webhook": "Webhook URL",
-            "webhook_placeholder": "Leave empty to use global default",
-            "role_id": "Role ID",
-            "role_id_placeholder": "Leave empty to use global default",
-            "role_id_description": "You can add multiple Role IDs separated by commas.",
-            "statuses_title": "Notify on Status Changes",
-            "events_title": "Notify on Match Events",
-            "using_global": "Using global default",
-            "save": "Save",
-            "saved": "Notification settings updated",
-            "save_error": "Failed to save notification settings",
-            "enabled": "enabled",
-            "disabled": "disabled",
-            "default": "default",
-            "map_paused": "Map Paused",
+            "webhook": "URL вебхука",
+            "webhook_placeholder": "Оставьте пустым для использования глобального значения по умолчанию",
+            "role_id": "ID роли",
+            "role_id_placeholder": "Оставьте пустым для использования глобального значения по умолчанию",
+            "role_id_description": "Вы можете добавить несколько ID ролей, разделив их запятыми.",
+            "statuses_title": "Уведомлять об изменении статуса",
+            "events_title": "Уведомлять о событиях матча",
+            "save": "Сохранить",
+            "saved": "Настройки уведомлений обновлены",
+            "save_error": "Не удалось сохранить настройки уведомлений",
+            "map_paused": "Карта приостановлена",
             "status": {
-                "PickingPlayers": "Picking Players",
-                "Scheduled": "Scheduled",
-                "WaitingForCheckIn": "Waiting for Check-In",
-                "WaitingForServer": "Waiting for Server",
-                "Veto": "Veto",
-                "Live": "Live",
-                "Finished": "Finished",
-                "Tie": "Tie",
-                "Canceled": "Canceled",
-                "Forfeit": "Forfeit",
-                "Surrendered": "Surrendered"
+                "PickingPlayers": "Выбор игроков",
+                "Scheduled": "Запланирован",
+                "WaitingForCheckIn": "Ожидание регистрации",
+                "WaitingForServer": "Ожидание сервера",
+                "Veto": "Вето",
+                "Live": "В эфире",
+                "Finished": "Завершён",
+                "Tie": "Ничья",
+                "Canceled": "Отменён",
+                "Forfeit": "Техническое поражение",
+                "Surrendered": "Сдался"
             }
+        },
+        "voice": {
+            "title": "Голосовые каналы",
+            "description": "Автоматически создавать голосовые каналы Discord для матчей турнира. Игроки перемещаются в каналы команд при начале матчей.",
+            "guild_id_placeholder": "ID сервера Discord",
+            "enable_voice": "Включить голосовые каналы"
         },
         "table": {
             "tournament": "Турнир",
-            "status": "Статус",
             "type": "Тип",
             "teams_joined": "Присоединившиеся команды",
             "starts": "Начинается",
             "no_tournaments_found": "Турниры не найдены"
         },
         "stage": {
-            "title": "Этап",
-            "teams": "Команды",
+            "stages": "Этапы",
             "edit": "Редактировать этап",
             "delete": "Удалить этап",
             "edit_title": "Редактировать этап",
             "confirm_delete": "Удалить этап",
             "delete_description": "Вы уверены, что хотите удалить этот этап?",
-            "type": "Тип",
-            "type_placeholder": "Выберите тип этапа",
+            "deleted": "Этап удалён",
+            "delete_failed": "Не удалось удалить этап",
+            "group": "Группа {group}",
+            "stage_tab": "Этап {stage}",
             "min_teams": "Минимальное количество команд",
             "min_teams_placeholder": "Введите минимальное количество команд",
             "max_teams": "Максимальное количество команд",
             "max_teams_placeholder": "Введите максимальное количество команд",
             "update": "Обновить",
             "create": "Создать",
-            "no_stages": "Нет этапов",
-            "start_building": "Начать построение сетки",
-            "add_first": "Добавить первый этап",
             "add_another": "Добавить другой этап",
-            "not_setup": "Этап не настроен"
+            "not_setup": "Этап не настроен",
+            "groups": "Группы",
+            "groups_placeholder": "Введите количество групп для этого этапа...",
+            "match_options": "Настройки матча",
+            "default_best_of": "Формат по умолчанию",
+            "default_best_of_description": "Формат матча по умолчанию для всех раундов этого этапа.",
+            "per_round_best_of": "Формат для каждого раунда",
+            "third_place_match": "Включить матч за 3-е место",
+            "third_place_match_description": "Создать матч за 3-е место между проигравшими полуфиналистами.",
+            "decider_best_of": "Матч за 3-е место",
+            "advanced_settings": "Расширенные настройки этапа"
+        },
+        "bracket": {
+            "schedule_title": "Запланировать матч",
+            "currently_scheduled": "Текущее расписание",
+            "save_schedule": "Сохранить расписание",
+            "clear_schedule": "Очистить",
+            "past_time_error": "Время должно быть в будущем"
         },
         "match": {
             "team_1": "Команда 1",
             "team_2": "Команда 2",
-            "round_match": "Матч раунда"
+            "round_match": "Матч раунда",
+            "bye_round": "Технический раунд",
+            "scheduled_for": "Запланировано на",
+            "upper_bracket": "Верхняя сетка",
+            "lower_bracket": "Нижняя сетка",
+            "winner_of": "Победитель",
+            "loser_of": "Проигравший",
+            "winner_arrow": "Победитель →",
+            "loser_arrow": "Проигравший →",
+            "winner_bracket_arrow": "WB →",
+            "round_match_ref": "Раунд {round}, Матч {match}",
+            "round_ref": "Раунд {round}",
+            "wb_round_match_ref": "WB Раунд {round}, Матч {match}",
+            "wb_round_ref": "WB Раунд {round}",
+            "lb_round_match_ref": "LB Раунд {round}, Матч {match}",
+            "lb_round_ref": "LB Раунд {round}",
+            "winner": "Победитель",
+            "loser": "Проигравший",
+            "round_match_compact": "Р{round}М{match}",
+            "round_compact": "Р{round}",
+            "wb_round_match_compact": "WB Р{round}М{match}",
+            "wb_round_compact": "WB Р{round}",
+            "lb_round_match_compact": "LB Р{round}М{match}",
+            "lb_round_compact": "LB Р{round}",
+            "third_place_decider": "Матч за 3-е место"
+        },
+        "round_labels": {
+            "round": "Раунд {number}",
+            "opening_round": "Начальный раунд",
+            "quarter_finals": "Четвертьфиналы",
+            "semi_finals": "Полуфиналы",
+            "final": "Финал",
+            "grand_final": "Гранд-финал",
+            "wb_round": "WB Раунд {number}",
+            "wb_opening_round": "WB Открывающий раунд",
+            "wb_quarter_finals": "WB Четвертьфиналы",
+            "wb_semi_finals": "WB Полуфиналы",
+            "wb_final": "WB Финал",
+            "lb_round": "LB Раунд {number}",
+            "lb_final": "LB Финал",
+            "winner": "Победитель",
+            "advances_to_next_stage": "Проходит в следующий этап",
+            "regular_rounds": "Обычные раунды",
+            "advancement_matches": "Матчи на повышение",
+            "elimination_matches": "Матчи на выбывание"
+        },
+        "standings": {
+            "title": "Турнирная таблица"
+        },
+        "results": {
+            "title": "Результаты"
         },
         "organizer": {
             "title": "Организатор",
             "description": "Управление организаторами турнира",
             "add": "Добавить организатора",
-            "name": "Название",
-            "actions": "Действия",
             "no_organizers": "Нет организаторов",
             "no_organizers_description": "У этого турнира нет организаторов",
             "remove": "Удалить",
             "confirm_remove": "Удалить организатора",
-            "remove_description": "Вы уверены, что хотите удалить этого организатора?"
+            "remove_description": "Вы уверены, что хотите удалить этого организатора?",
+            "organized_by": "Организатор:"
         },
         "team": {
-            "manage_roster": "Управление составом",
             "eligible": "Подходит",
             "not_eligible": "Не подходит",
             "leave_tournament": "Покинуть турнир",
             "leave_team": "Покинуть",
-            "player": "Игрок",
-            "role": "Роль",
             "slot": "Слот",
             "add_player": "Добавить игрока",
             "pending_invites": "Ожидающие приглашения",
             "new": "Новый",
             "select": "Выбрать",
-            "name": "Название",
             "select_role": "Выбрать роль",
             "no_roles": "Нет ролей",
             "remove_member": "Удалить",
@@ -640,25 +1559,30 @@
             "cancel_invite": "Отменить приглашение",
             "confirm_cancel_invite": "Отменить приглашение",
             "cancel_invite_description": "Вы уверены, что хотите отменить это приглашение?",
-            "my_teams": "Мои команды",
-            "my_teams_description": "Команды, в которых вы состоите",
-            "no_eligible_teams": "Нет подходящих команд",
-            "team": "Команда",
-            "select_team": "Выбрать команду",
-            "search_team": "Поиск команды...",
-            "add_to_tournament": "Добавить в турнир"
+            "seed_label": "Сид",
+            "seed_display": "Сид #{seed}"
+        },
+        "teams": {
+            "count": "{count} команд",
+            "my_teams": "Моя команда"
         },
         "actions": {
             "open_registration": "Открыть регистрацию",
             "close_registration": "Закрыть регистрацию",
+            "start": "Начать турнир",
             "cancel": "Отмена",
+            "delete": "Удалить турнир",
+            "confirm_delete": "Удалить турнир",
+            "delete_description": "Вы уверены, что хотите удалить этот турнир? Это действие нельзя отменить.",
+            "deleted": "Турнир удалён",
+            "delete_failed": "Не удалось удалить турнир",
+            "pause": "Приостановить турнир",
+            "resume": "Возобновить турнир",
+            "reset_to_setup": "Сбросить к настройке",
             "confirm_pause": "Приостановить турнир",
             "pause_description": "Вы уверены, что хотите приостановить этот турнир? Новые матчи не будут автоматически запланированы до возобновления.",
             "resume_description": "Вы уверены, что хотите возобновить этот турнир? Все ожидающие матчи будут запланированы немедленно.",
             "update_status_failed": "Не удалось обновить статус турнира"
-        },
-        "upcoming": {
-            "empty": "Нет предстоящих турниров"
         },
         "server": {
             "remove": "Удалить",
@@ -667,12 +1591,12 @@
         }
     },
     "team": {
+        "hero": {
+            "roster": "Состав",
+            "matches": "Матчи"
+        },
         "table": {
-            "team": "Команда",
-            "wins": "Победы",
-            "losses": "Поражения",
-            "overtime_losses": "Поражения в овертайме",
-            "no_teams_found": "Команды не найдены"
+            "team": "Команда"
         },
         "invite": {
             "team_title": "Приглашение в команду",
@@ -699,11 +1623,15 @@
         },
         "members": {
             "title": "Участники",
+            "role": "Роль",
+            "starters": "Основной состав",
+            "bench": "Запасные",
+            "substitutes": "Заменяющие",
             "invite_player": "Пригласить игрока",
             "pending_invites": "Ожидающие приглашения"
         },
         "form": {
-            "name": "Название",
+            "identity": "Идентификация",
             "name_placeholder": "Введите название команды",
             "short_name": "Короткое название",
             "short_name_placeholder": "Введите короткое название команды",
@@ -712,19 +1640,30 @@
             "update": "Обновить",
             "create": "Создать"
         },
+        "roster_count_players": "игроков",
         "search": {
             "found_teams": "найдены команды",
             "placeholder": "Поиск команды...",
             "my_teams_only": "Только мои команды",
-            "no_teams_found": "Команды не найдены"
+            "no_teams_found": "Команды не найдены",
+            "owner": "Владелец",
+            "captain": "Капитан",
+            "ineligible_short": "Заблокировано",
+            "tournament_join_requires_owner_or_captain": "Вы можете присоединиться к турниру только с командами, в которых вы являетесь владельцем или капитаном."
         },
         "member": {
+            "coach": "Тренер",
+            "starter": "Основной состав",
+            "benched": "Запасной",
+            "substitute": "Замена",
             "remove": "Удалить",
             "cancel_invite": "Отменить приглашение",
             "confirm_cancel_invite": "Отменить приглашение",
             "confirm_remove": "Подтвердить удаление",
             "cancel_invite_description": "Вы уверены, что хотите отменить это приглашение?",
-            "remove_description": "Вы уверены, что хотите удалить этого участника?"
+            "remove_description": "Вы уверены, что хотите удалить этого участника?",
+            "roster_image": "Изображение состава",
+            "roster_image_description": "Загрузите изображение состава для {name} в этой команде. Переопределяет изображение игрока по умолчанию."
         }
     },
     "overlay": {
@@ -740,23 +1679,49 @@
         "layout_operator": "Операторский вид (между раундов)"
     },
     "match": {
-        "scheduled": "Запланирован",
+        "team_stats_heading": "Статистика {name}",
+        "all_maps": "Все карты",
+        "stream": {
+            "watch": "Прямой эфир"
+        },
+        "elo_details": {
+            "title": "Детали изменения ELO",
+            "elo": "ELO",
+            "team_elo_avg": "Среднее ELO команды",
+            "performance_multiplier": "Множитель эффективности",
+            "series_multiplier": "Множитель серии",
+            "maps_won_lost": "Карт выиграно / проиграно",
+            "kills_deaths_assists": "Убийства / Смерти / Помощь",
+            "kda_ratio": "Отношение (Убийства + Помощь) / Смерти",
+            "team_avg_kda": "Среднее по команде: (Убийства + Помощь) / Смерти",
+            "damage": "Урон",
+            "teams_damage_suffix": "от урона команды",
+            "formula": {
+                "k_factor_hint": "K-фактор — базовая скорость изменения ELO до применения модификаторов.",
+                "delta_hint": "Δ = фактическое ({actual}) − ожидаемое ({expected}). Положительное значение означает, что вы превзошли прогноз на основе ELO команды.",
+                "perf_hint": "Множитель эффективности — масштабируется на основе вашего KDA относительно среднего по команде и вашей доли урона команды. Ограничен 0.8×–1.2× при победах.",
+                "series_hint": "Множитель серии — чистая разница карт. BO1 = ×1, BO3 sweep = ×2, BO5 sweep = ×3. Более близкие серии меньше меняют ELO.",
+                "result_hint": "Итоговое изменение ELO после всех модификаторов, округленное до ближайшего целого числа."
+            }
+        },
+        "no_matches": "Матчи не найдены",
+        "no_matches_description": "В данный момент нет доступных матчей.",
         "simple": {
             "vs": "против"
         },
-        "my_upcoming": {
-            "no_matches": "Нет предстоящих матчей"
-        },
         "recent": {
-            "title": "Последние матчи",
-            "no_matches": "Нет последних матчей"
+            "title": "Последние матчи"
         },
         "options": {
+            "allow_coaches": "Разрешить тренеров",
+            "group": {
+                "game_settings": "Настройки игры",
+                "team_settings": "Настройки команды",
+                "veto_settings": "Настройки вето",
+                "control_settings": "Настройки управления"
+            },
             "filter_maps": "Карты фильтров",
             "table": {
-                "match": "Матч",
-                "type": "Тип",
-                "maps": "Карты",
                 "no_matches_found": "Матчи не найдены",
                 "join": "Присоединиться"
             },
@@ -766,10 +1731,10 @@
             "best_of": {
                 "label": "До",
                 "description": "Количество карт, необходимых для победы в матче",
-                "placeholder": "Выберите до"
+                "placeholder": "Выберите до",
+                "option": "Best of {count}"
             },
             "map_veto_settings": {
-                "label": "Вето карт",
                 "description": "Описание настроек вето карт",
                 "custom_pool": "Пользовательский пул карт",
                 "active_duty": "Active Duty",
@@ -781,89 +1746,104 @@
                 "show": "Показать",
                 "toggle": "Переключить",
                 "overtime": {
-                  "label": "Дополнительное время",
-                  "description": "Описание дополнительного времени"
+                    "label": "Дополнительное время",
+                    "description": "Описание дополнительного времени"
                 },
                 "knife_round": {
-                  "label": "Ножевой раунд",
-                  "description": "Описание ножевого раунда"
+                    "label": "Ножевой раунд",
+                    "description": "Описание ножевого раунда"
                 },
                 "max_rounds": {
-                  "label": "Максимальное количество раундов",
-                  "description": "Описание максимального количества раундов",
-                  "placeholder": "Введите максимальное количество раундов"
+                    "label": "Максимальное количество раундов",
+                    "description": "Описание максимального количества раундов",
+                    "placeholder": "Введите максимальное количество раундов"
                 },
                 "region": {
-                  "title": "Регион",
-                  "lan_match": "LAN матч",
-                  "veto": {
-                      "label": "Вето региона",
-                      "description": "Описание вето региона"
-                  },
-                  "preferred": "Предпочтительный регион",
-                  "single": "Регион",
-                  "placeholder": "Выбрать регион",
-                  "any": "Любой регион",
-                  "description": "Описание региона"
+                    "title": "Регион",
+                    "lan_match": "LAN матч",
+                    "veto": {
+                        "label": "Вето региона",
+                        "description": "Описание вето региона"
+                    },
+                    "preferred": "Предпочтительный регион",
+                    "placeholder": "Выбрать регион",
+                    "any": "Любой регион",
+                    "description": "Описание региона"
                 },
                 "substitutes": {
-                  "label": "Запасные",
-                  "description": "Описание запасных",
-                  "range": "Диапазон запасных"
+                    "label": "Запасные",
+                    "description": "Описание запасных",
+                    "range": "Диапазон запасных"
                 },
                 "tv_delay": {
-                  "label": "Задержка TV",
-                  "range": "Диапазон задержки"
+                    "label": "Задержка TV",
+                    "range": "Диапазон задержки"
                 },
                 "timeouts": {
-                  "tactical": {
-                      "label": "Тактический таймаут",
-                      "description": "Описание тактического таймаута"
-                  },
-                  "technical": {
-                      "label": "Технический таймаут",
-                      "description": "Описание технического таймаута"
-                  },
-                  "options": {
-                      "admins": "Администраторы",
-                      "coaches": "Тренеры",
-                      "captains": "Тренеры / Капитаны",
-                      "everyone": "Любой"
-                  }
+                    "tactical": {
+                        "label": "Тактический таймаут",
+                        "description": "Описание тактического таймаута"
+                    },
+                    "technical": {
+                        "label": "Технический таймаут",
+                        "description": "Описание технического таймаута"
+                    },
+                    "options": {
+                        "admins": "Администраторы",
+                        "coaches": "Тренеры",
+                        "captains": "Тренеры / Капитаны",
+                        "everyone": "Любой"
+                    }
                 },
-                "ready_settings": {
-                  "label": "Готовые настройки",
-                  "description": "Контролирует, как матч будет готов к началу.",
-                  "options": {
-                      "admins": "Администраторы",
-                      "coaches": "Тренеры",
-                      "captains": "Капитаны",
-                      "everyone": "Все игроки должны быть готовы"
-                  }
-                },
-                "auto_cancellation": {
-                  "label": "Отслеживание отмены",
-                  "description": "При включении матч будет автоматически отменён, если не начнётся в течение настроенного времени.",
-                  "auto_cancel_duration": {
-                      "label": "Время автоотмены (минуты)",
-                      "description": "Переопределить время автоотмены на уровне приложения для этого матча/турнира."
-                  },
-                  "live_match_timeout": {
-                      "label": "Тайм-аут активного матча (минуты)",
-                      "description": "Переопределить тайм-аут активного матча на уровне приложения для этого матча/турнира."
-                  }
-                },
-                "match_mode": {
-                  "label": "Режим матча",
-                  "description": "Управляет планированием матча. Автоматический режим позволяет системе планировать автоматически, режим администратора требует ручного планирования.",
-                  "options": {
-                    "auto": "Авто",
-                    "admin": "Админ"
-                  }
+                "default_models": {
+                    "label": "Модели игроков по умолчанию",
+                    "description": "Включить модели игроков по умолчанию для всех игроков в матче."
                 },
                 "raw_hud_overlay": {
-                  "label": "Чистая картинка (без HUD-а в видео)",
-                  "description": "Отключает встроенный HUD у CS2-стрима, чтобы HUD-ы рисовались отдельным слоем в OBS через Browser Source. Сами слоты настраиваются во вкладке «Streams» → «OBS Browser Sources»."
+                    "label": "Чистая картинка (без HUD-а в видео)",
+                    "description": "Отключает встроенный HUD у CS2-стрима, чтобы HUD-ы рисовались отдельным слоем в OBS через Browser Source. Сами слоты настраиваются во вкладке «Streams» → «OBS Browser Sources»."
+                },
+                "check_in_settings": {
+                    "label": "Настройки чек-ина",
+                    "description": "Определяет, как игроки регистрируются перед началом матча.",
+                    "options": {
+                        "admins": "Администраторы",
+                        "captains": "Капитаны",
+                        "everyone": "Все игроки должны зарегистрироваться"
+                    }
+                },
+                "ready_settings": {
+                    "label": "Готовые настройки",
+                    "description": "Контролирует, как матч будет готов к началу.",
+                    "options": {
+                        "admins": "Администраторы",
+                        "coaches": "Тренеры",
+                        "captains": "Капитаны",
+                        "everyone": "Все игроки должны быть готовы"
+                    }
+                },
+                "auto_cancellation": {
+                    "label": "Отслеживание отмены",
+                    "description": "При включении матч будет автоматически отменён, если не начнётся в течение настроенного времени.",
+                    "auto_cancel_duration": {
+                        "label": "Время автоотмены (минуты)",
+                        "description": "Переопределить время автоотмены на уровне приложения для этого матча/турнира."
+                    },
+                    "live_match_timeout": {
+                        "label": "Тайм-аут активного матча (минуты)",
+                        "description": "Переопределить тайм-аут активного матча на уровне приложения для этого матча/турнира."
+                    }
+                },
+                "match_mode": {
+                    "label": "Режим матча",
+                    "description": "Управляет планированием матча. Автоматический режим позволяет системе планировать автоматически, режим администратора требует ручного планирования.",
+                    "options": {
+                        "auto": "Авто",
+                        "admin": "Админ"
+                    }
+                },
+                "default_player_models": {
+                    "description": "Включить стандартные модели игроков для всех игроков в матче."
                 }
             },
             "max_rounds": "Максимальное количество раундов",
@@ -872,18 +1852,19 @@
             "coaches": "Тренеры",
             "overtime": "Дополнительное время",
             "knife_round": "Ножевой раунд",
-            "map_veto_enabled": "Вето карт",
             "region_veto": "Вето региона",
             "substitutes": "Запасные",
             "timeout_setting": "Настройка таймаута",
             "tech_timeout_setting": "Настройка технического таймаута",
             "ready_setting": "Готовая настройка",
-            "map_pool": "Пул карт",
-            "advanced_settings": "Показать Advanced Settings"
+            "check_in_setting": "Настройка чекина",
+            "advanced_settings": "Показать Advanced Settings",
+            "default_player_models": "Модели игроков по умолчанию"
         },
         "schedule": {
-            "pick_date": "Выберите дату",
-            "schedule": "Запланировать"
+            "schedule": "Запланировать",
+            "start_match": "Начать матч",
+            "reset": "Сбросить запланированное время"
         },
         "player": {
             "captain": "Капитан",
@@ -891,7 +1872,6 @@
                 "offline_not_ready": "Оффлайн, не готов",
                 "online_not_ready": "Онлайн, не готов",
                 "ready": "Готов",
-                "offline": "Не в сети",
                 "online_not_in_game": "Онлайн, не в игре",
                 "in_game": "В игре"
             },
@@ -902,10 +1882,11 @@
             "utility": "Утилиты",
             "opening_duels": "Начальные дуэли",
             "clutches": "Клачи",
-            "map_veto_tab": "Вето карт",
             "settings": "Настройки",
-            "server_console": "Консоль сервера",
+            "streams": "Прямые трансляции матча",
+            "admin": "Администратор",
             "randomize_teams": "Случайные команды",
+            "swap_lineups": "Поменять составы местами",
             "invited_to_match": "Приглашен в матч",
             "join_roster": "Присоединиться к составу",
             "restore_round": "Восстановить раунд",
@@ -913,24 +1894,32 @@
             "server_information": "Информация о сервере",
             "type": "Тип",
             "region": "Регион",
-            "round": "Раунд"
+            "no_logs_title": "Логи недоступны",
+            "no_logs_description": "Логи недоступны, и ни один сервер не подключен."
         },
+        "show_players": "Показать игроков",
+        "hide_players": "Скрыть игроков",
+        "round_history": "История раундов",
         "status": {
             "cancelled": "Отменен",
-            "finished": "Завершен",
             "waiting_server": "Ожидание сервера",
-            "scheduled_asap": "Запланирован как можно скорее"
+            "scheduled_asap": "Запланирован как можно скорее",
+            "paused": "Приостановлен"
         },
         "winner": {
             "set": "Установить победителя",
             "select_lineup": "Выбрать состав"
         },
         "region_veto": {
+            "ban_label": "Бан",
             "banning": "Банит",
             "organizer_override": "Переопределение организатора",
             "confirm_ban": "Подтвердить бан",
             "server_region": "Регион сервера",
-            "select_region": "Выбрать регион"
+            "select_region": "Выбрать регион",
+            "no_regions_available": "Нет доступных регионов",
+            "no_regions_available_description": "Нет регионов, доступных для вето. Обратитесь к администратору.",
+            "set_server_region": "Установить регион сервера"
         },
         "picks": {
             "decider": "Решающая карта"
@@ -939,25 +1928,55 @@
         "map_veto": {
             "is_picking": "Выбирает",
             "organizer_override": "Переопределение организатора",
-            "select_side": "Выбрать сторону",
-            "your_turn": "Ваш ход",
             "pick": "Выбрать",
             "confirm": "Подтвердить"
         },
         "map_lineup": {
             "picked": "Выбрана"
         },
-        "vs": "против",
         "auto_canceling": "Автоматическая отмена",
+        "server_error": {
+            "title": "Обновление статуса сервера",
+            "short_label": "Статус сервера"
+        },
         "actions": {
             "call_support": "Вызвать поддержку",
             "start_veto": "Начать вето",
             "skip_checkin": "Пропустить регистрацию",
             "cancel": "Отмена",
+            "delete": "Удалить матч",
+            "canceled": "Матч отменён",
+            "deleted": "Матч удалён",
+            "requested_organizer": "Запрошен организатор",
+            "pause": "Приостановить матч",
+            "resume": "Возобновить матч",
+            "match_paused": "Матч приостановлен",
+            "match_resumed": "Матч возобновлён",
+            "start_live": "Начать Live-стрим",
+            "start_live_direct": "Прямой",
+            "start_live_direct_hint": "Наблюдатель игрового порта · без задержки",
+            "start_live_tv": "TV (GOTV)",
+            "start_live_tv_hint": "Учитывает tv_delay · безопасно во время игры",
+            "start_live_waiting_tv": "Ожидание подключения TV…",
+            "stop_live": "Остановить Live-стрим",
+            "stop_live_short": "Остановить стрим",
+            "stop_live_confirm": "Нажмите ещё раз, чтобы остановить",
+            "stop_live_confirm_short": "Стоп?",
+            "cancel_live_boot": "Отменить Live-стрим (запуск…)",
+            "cancel_live_boot_short": "Отменить запуск",
+            "cancel_live_boot_confirm_short": "Отменить?",
+            "create_clips": "Создать хайлайты игрока",
+            "live_started": "Live-стрим запускается",
+            "live_stopped": "Live-стрим остановлен",
+            "clips_started": "Рендеры хайлайтов игрока в очереди",
             "fill_bots": "Заполнить ботами",
             "fill_bots_hint": "Добавляет BOT-плейсхолдеры — можно запустить матч соло",
             "fill_bots_offline": "Сервер матча офлайн",
             "bots_filled": "Боты добавлены в свободные слоты"
+        },
+        "delete_confirm": {
+            "title": "Удалить матч",
+            "description": "Вы уверены, что хотите удалить этот матч? Это действие нельзя отменить."
         },
         "lineup": {
             "stats": {
@@ -973,14 +1992,23 @@
             "discord_user": "Пользователь Discord",
             "discord_link": "Ссылка Discord"
         },
+        "invites": {
+            "title": "Приглашения",
+            "invited_player": "Приглашённый игрок",
+            "invited_by": "Приглашён пользователем",
+            "deleted_success": "Приглашение успешно удалено",
+            "delete_error": "Не удалось удалить приглашение",
+            "delete_confirm": {
+                "title": "Удалить приглашение",
+                "description": "Вы уверены, что хотите удалить приглашение для {player} ({steam_id})? Это действие нельзя отменить."
+            }
+        },
         "overview": {
             "promote_captain": "Повысить до капитана",
             "switch_teams": "Поменять команды",
             "remove_from_lineup": "Удалить из состава",
             "leave_lineup": "Покинуть состав",
-            "kills_full": "Убийства",
-            "assists_full": "Помощь",
-            "deaths_full": "Смерти",
+            "update_team_name": "Обновить название команды",
             "kd": "K/D",
             "hs": "Хедшот",
             "team_damage": "Урон по команде",
@@ -1006,26 +2034,18 @@
             "lost": "Проиграны",
             "against": "против",
             "no_clutches": "Нет клачей",
-            "vs": "против {count}",
-            "round": "Раунд"
-        },
-        "join": {
-            "live": "В прямом эфире",
-            "call_organizer": "Позвонить организатору"
+            "vs": "против {count}"
         },
         "check_in": {
-            "title": "Зарегистрироваться",
             "checked_in": "Зарегистрирован",
             "check_in": "Зарегистрироваться",
-            "description": "Описание регистрации"
+            "checked_in_description": "Вы отметили {checked} из {required} игроков, необходимых для начала матча"
         },
         "coach": {
             "assign": "Назначить тренера"
         },
-        "download_demo": "Скачать Demo",
-        "download_demos": "Скачать демо",
-        "coaches": "Тренеры",
-        "best_of": "До",
+        "map_number": "Карта {number}",
+        "map_tbd": "Карта TBD",
         "server": {
             "offline": "Оффлайн",
             "booting": "Загрузка",
@@ -1033,7 +2053,18 @@
             "select": "Выбрать",
             "dedicated": "Выделенный",
             "on_demand": "По требованию",
-            "assigned": "Назначен"
+            "assigned": "Назначен",
+            "reboot_label": "Перезагрузка сервера",
+            "reboot": "Перезагрузить",
+            "rebooting": "Перезагрузка…",
+            "reboot_description": "Перезагрузить игровой сервер",
+            "reboot_confirm_title": "Перезагрузить сервер",
+            "reboot_confirm_description": "Вы уверены, что хотите перезагрузить сервер? Это прервёт текущий матч.",
+            "reboot_started": "Перезагрузка сервера началась",
+            "join_server": "Подключиться к серверу",
+            "join_as_spectator": "Войти как наблюдатель",
+            "join_tv_stream": "Подключиться к TV-стриму",
+            "tv_delay": "TV задерживается на {delay} секунд, ожидание готовности стрима."
         },
         "lobby": {
             "access_updated": "Права доступа обновлены"
@@ -1043,30 +2074,81 @@
         "tooltips": {
             "expand": "Развернуть",
             "fullscreen": "Полный экран",
-            "download": "Скачать"
+            "toggle_right_sidebar": "Переключить правую панель",
+            "view_steam_profile": "Просмотреть профиль Steam",
+            "zoom_in": "Увеличить",
+            "zoom_in_scroll": "Увеличить (Ctrl/Cmd + прокрутка)",
+            "zoom_out": "Уменьшить",
+            "zoom_out_scroll": "Уменьшить (Ctrl/Cmd + прокрутка)",
+            "reset_zoom": "Сбросить масштаб",
+            "loading": "Загрузка",
+            "settings_section": "Раздел настроек",
+            "match_section": "Раздел матча",
+            "database_section": "Раздел базы данных"
         },
         "logs": {
             "follow": "Следовать",
             "timestamps": "Временные метки",
-            "container": "Контейнер"
+            "jump_to_live": "Перейти к Live"
         }
     },
     "player": {
+        "player": {
+            "steam_id": "Steam ID",
+            "steam": "Steam"
+        },
         "sanction": {
             "button": "Санкционировать игрока",
-            "reason_description": "Укажите четкую причину этой санкции"
+            "typed_player": "{type} игрок",
+            "reason_label": "Причина",
+            "reason_placeholder": "Введите причину санкции…",
+            "reason_description": "Укажите четкую причину этой санкции",
+            "types": {
+                "ban_description": "Игрок не может участвовать ни в какой активности",
+                "mute_description": "Игрок не может использовать голосовой чат в игре",
+                "gag_description": "Игрок не может использовать текстовый чат в игре",
+                "silence_description": "Игрок заглушён и в муте"
+            },
+            "durations": {
+                "15_minutes": "15 минут",
+                "30_minutes": "30 минут",
+                "1_hour": "1 час",
+                "1_day": "1 день",
+                "1_week": "1 неделя",
+                "1_month": "1 месяц",
+                "permanent": "Навсегда"
+            }
         },
         "search": {
-            "online_only": "Только онлайн",
             "no_players_found": "Игроки не найдены",
             "found_players": "Найдено игроков",
             "placeholder": "Поиск игроков..."
         },
         "sanctions": {
             "title": "Санкции",
+            "duration_label": "Длительность",
+            "select_duration": "Выберите длительность",
+            "sanctions": "Санкции",
             "expires": "Истекает",
-            "active_count": "Активные санкции",
-            "past_count": "Прошлые санкции"
+            "edit": "Редактировать",
+            "remove": "Удалить",
+            "edit_title": "Редактировать санкцию",
+            "edit_description": "Обновить время окончания этой санкции",
+            "clear_date": "Дата снятия",
+            "updated": "Санкция обновлена",
+            "update_failed": "Не удалось обновить санкцию",
+            "confirm_remove": "Удалить санкцию",
+            "remove_description": "Вы уверены, что хотите удалить эту санкцию? Это действие нельзя отменить.",
+            "removed": "Санкция удалена",
+            "remove_failed": "Не удалось удалить санкцию",
+            "abandoned_matches": "Покинутые матчи",
+            "match": "Матч",
+            "no_sanctions": "Нет санкций",
+            "remove_abandoned": "Удалить покинутый матч",
+            "confirm_remove_abandoned": "Удалить покинутый матч",
+            "remove_abandoned_description": "Вы уверены, что хотите удалить запись о покинутом матче? Это действие нельзя отменить.",
+            "abandoned_removed": "Покинутый матч удалён",
+            "abandoned_remove_failed": "Не удалось удалить покинутый матч"
         },
         "registration": {
             "title": "Регистрация",
@@ -1099,7 +2181,7 @@
         },
         "official": "Официальная",
         "workshop": "Workshop",
-        "active_duty": "Active Duty"
+        "active_duty": "Активный пул"
     },
     "region": {
         "form": {
@@ -1109,97 +2191,201 @@
             "create": "Создать"
         }
     },
+    "match_access": {
+        "private": "Приватный",
+        "invite": "Приглашение",
+        "friends": "Друзья",
+        "open": "Открытый",
+        "invite_only_description": "Только приглашённые игроки могут присоединиться",
+        "invite_code_description": "Для присоединения требуется код приглашения",
+        "friends_only_description": "Только ваши друзья в Steam могут присоединиться",
+        "open_description": "Любой может присоединиться к лобби"
+    },
     "matchmaking": {
+        "cancel_matchmaking": "Отменить матчмейкинг",
         "searching_for_match": "Поиск совпадения {type}",
+        "in_queue_label": "В очереди",
+        "searching": "Поиск",
+        "elapsed": "Прошло",
+        "others_searching": "{count} другой ищет | {count} других ищут",
+        "match_found": "Матч найден",
+        "waiting_for_players": "Ожидание игроков",
+        "waiting_on_others": "Ожидание других",
+        "confirmed": "Подтверждено",
+        "ready": "Готов",
+        "locked_in": "Заблокировано",
         "invites": "Приглашения",
         "lobby": {
             "access": "Доступ в лобби",
             "access_description": "Определяет, кто может присоединиться к лобби. Открытие позволяет любому присоединиться, друзья позволяют только друзьям вступить в игру, а Приглашение позволяет только пригласить вас в игру.",
-            "title": "Лобби матчмейкинга",
             "leave": "Выйти",
             "invite_player": "Пригласить игрока",
-            "invites": "Приглашения",
-            "access_updated": "Права доступа обновлены",
-            "join": "Вступить в Лобби"
+            "access_updated": "Права доступа обновлены"
         },
         "friends": {
             "title": "Друзья",
             "sync": "Синхронизировать",
-            "search": "Добавить друзей",
+            "search_placeholder": "Поиск друзей…",
             "pending_requests": "Ожидающие запросы",
-            "online": "В сети",
             "invite_to_lobby": "Пригласить в лобби",
             "invite_to_match": "Пригласить игрока на матч",
             "remove": "Удалить",
-            "join_lobby": "Присоединиться к Лобби",
-            "offline": "Не в сети",
-            "view_profile": "Просмотр профиля"
+            "in_match": "В матче",
+            "in_lobby": "В лобби"
         },
-        "players": {
-            "title": "Игроки"
+        "others": {
+            "title": "Другие"
         },
         "banned": "Забанен",
         "go_to_match": "Перейти к матчу",
         "confirm_selection": "Присоединяйтесь к Queue",
+        "in_queue": "в очереди",
         "temp_banned": "Временно забанен",
         "settings_section": {
-            "toggle": "Адаптация настроек",
-            "queue_order": "Порядок очереди"
+            "toggle": "Адаптация настроек"
         },
-        "high_latency_warning": "Ваша задержка слишком высока для конкурентных матчей"
+        "high_latency_warning": "Ваша задержка слишком высока для конкурентных матчей",
+        "no_preferred_regions": "Выберите хотя бы один предпочтительный регион в настройках матчмейкинга"
     },
     "game_server": {
+        "lan_ip": "LAN IP",
+        "public_ip": "Public IP",
+        "low_latency": "Низкая задержка",
+        "cpu_pinning": "CPU Pinning",
+        "game_server_versions": "Версии игрового сервера",
+        "cs_build": "Сборка CS",
         "update_cs": "Обновить CS",
-        "pin_build_id": "Версия Pin Server",
+        "note_label": "Примечание:",
+        "one_cpu_core": "1 ядро CPU",
         "unpin_build_id": "Использовать последнюю версию",
+        "use_latest_version": "Автоматически использовать последнюю версию CS2",
         "pinned_build_id": "Установлена версия сервера",
+        "unpin_plugin_version": "Использовать последнюю версию плагина",
+        "use_latest_plugin": "Автоматически использовать последнюю версию плагина",
+        "auto": "Последняя",
+        "current": "текущая",
+        "plugin_not_supported": "Версия плагина не поддерживается",
+        "pinned_plugin_version": "Версия плагина зафиксирована",
+        "plugin_version_supports": "Поддерживает",
+        "plugin_version_published": "Опубликовано",
         "install_cs": "Установить CS",
+        "install_csgo": "Установить CS:GO",
+        "update_csgo": "Обновить CS:GO",
+        "overprovisioned_warning": "Переподписка",
+        "overprovisioned_warning_description": "Вы назначили {total_server_count} возможных серверов, но ваш сервер может поддерживать только {max_servers} серверов.",
+        "cpu_model": "Модель CPU",
+        "cpu_sockets": "Сокеты CPU",
+        "cpu_cores_per_socket": "Ядра CPU/Сокет",
+        "cpu_threads_per_core": "Потоки CPU/Ядро",
+        "cpu_frequency_warning": "Максимальная частота CPU менее 3 ГГц может повлиять на производительность сервера CS2",
+        "disks_label": "Диски",
         "select_region": "Выбрать регион",
         "remove_node": "Удалить узел",
+        "show_update_logs": "Показать логи обновлений",
         "edit_label": "Редактировать этикетку",
+        "edit_ports": "Редактировать порты",
+        "edit_ports_description": "Установите разрешённый диапазон портов для этого узла.",
+        "port_start": "Начальный порт",
+        "port_end": "Конечный порт",
+        "files": "Файлы",
         "label_placeholder": "Введите этикетку узла",
         "update_label": "Обновление Label",
+        "version_pinning_not_supported": "Фиксация версии не поддерживается на этом сервере.",
         "validation": {
-            "start_port_less_than_end": "Начальный порт должен быть меньше конечного",
             "end_port_greater_than_start": "Конечный порт должен быть больше начального"
         },
         "toast": {
             "cs_updating": "Обновление CS",
+            "csgo_installing": "CS:GO устанавливается на узле",
             "ports_updated": "Порты обновлены",
-            "label_updated": "Обновление Node Label"
+            "label_updated": "Обновление Node Label",
+            "scheduling_updated": "Планирование Node обновлено"
         },
-        "disk_usage": "Disk Usage",
-        "disk_used": "Used",
-        "disk_available": "Available"
+        "enable_scheduling": "Включить планирование",
+        "disable_scheduling": "Отключить планирование",
+        "enable_node": "Включить Node",
+        "disable_node": "Отключить Node",
+        "learn_more": "Подробнее",
+        "governor_performance_recommended": "Для оптимальной производительности сервера рекомендуется профиль Performance",
+        "max_servers": "Макс. серверов",
+        "hardware": "Оборудование",
+        "cpu_info_title": "Информация о CPU",
+        "cpu_speed": "Скорость",
+        "gpu_present": "GPU доступен",
+        "gpu_not_present": "GPU недоступен",
+        "gpu_description": "На этом узле доступна видеокарта для серверных задач",
+        "disk_usage": "Использование диска",
+        "disk_used": "Использовано",
+        "disk_available": "Доступно"
+    },
+    "system_metrics": {
+        "no_metrics_available": "Метрики недоступны",
+        "node_telemetry": "Телеметрия узла",
+        "loading_metrics": "Загрузка данных метрик…",
+        "no_metrics_description": "Для этого узла пока нет данных метрик. Они появятся, когда узел начнёт отправлять данные."
     },
     "chat": {
         "lobby_chat": "Чат лобби",
-        "message_placeholder": "Напишите сообщение..."
+        "message_placeholder": "Напишите сообщение...",
+        "new_since_last_visit": "Новое",
+        "no_participants": "В этом чате пока нет никого.",
+        "no_messages_yet": "Сообщений пока нет",
+        "start_the_conversation": "Напишите что-нибудь, чтобы начать беседу.",
+        "jump_to_new": "Перейти к новому",
+        "new_messages": "Новые сообщения",
+        "organizers": {
+            "title": "Чат организаторов",
+            "no_access": "У вас нет доступа к этой странице.",
+            "sidebar_hint": "Чат доступен на правой панели во вкладке Чаты."
+        }
     },
     "charts": {
-        "usage": "Использование"
+        "usage": "Использование",
+        "mount_os": "ОС",
+        "mount_demos": "Демки"
     },
     "server": {
+        "join_server": "Подключиться к серверу",
         "form": {
             "label": "Метка",
             "host": "Хост",
             "region": "Регион",
             "select_region": "Выбрать регион",
+            "server_configuration": "Тип настройки сервера",
+            "use_game_server_node": "Сервер на игровом узле",
+            "use_manual_host_configuration": "Ручная настройка хоста",
+            "game_server_node": "Узел игрового сервера",
+            "select_game_server_node": "Выберите узел игрового сервера",
+            "game_server_node_description": "Выберите узел игрового сервера с установленным CS",
+            "type": "Тип сервера",
+            "select_type": "Выберите тип сервера",
+            "game": "Игра",
+            "csgo_ranked_unavailable_title": "Ранговый режим недоступен",
+            "csgo_ranked_unavailable_description": "Ранговый режим пока недоступен для серверов CS:GO.",
+            "ranked_server": "Ранговый сервер",
+            "ranked_server_description": "Полностью управляемый ранговый режим от 5stack.",
+            "valve_presets": "Пресеты Valve",
+            "valve_presets_description": "Выберите из обычного/соревновательного и других пресетов Valve.",
+            "connect_password": "Пароль подключения",
+            "connect_password_description": "Пароль, необходимый для подключения к серверу (необязательно)",
             "rcon_password": "Пароль RCON",
             "rcon_password_description": "Описание пароля RCON",
             "port": "Порт",
             "tv_port": "Порт TV",
             "update": "Обновить",
-            "create": "Создать"
+            "create": "Создать",
+            "max_players": "Макс. игроков",
+            "max_players_description": "Максимальное количество игроков, которые могут подключиться к серверу"
         },
         "rcon": {
-            "quick_commands": "Быстрые команды",
+            "console_output": "Вывод консоли",
+            "no_commands_yet": "Команд пока не выполнялось",
+            "enter_command_hint": "Введите команду выше, чтобы начать",
+            "connect_failed": "Не удалось подключиться к RCON игрового сервера",
             "refresh_match": "Обновить матч",
             "metamod_info": "Информация о Metamod",
             "css_info": "Информация о CSS",
-            "output": "Вывод",
-            "command_placeholder": "Введите команду",
-            "send_command": "Отправить команду"
+            "command_placeholder": "Введите команду"
         }
     },
     "components": {
@@ -1211,19 +2397,21 @@
         "edit_map": "Редактировать карту"
     },
     "validation": {
-        "map_pool_required": "Требуется картографический бассейн"
+        "map_pool_required": "Требуется картографический бассейн",
+        "date_must_be_future": "Дата должна быть в будущем",
+        "label_required": "Метка обязательна",
+        "label_too_long": "Метка должна быть короче 50 символов"
     },
     "game_type_configs": {
+        "configuration_title": "Конфигурация {type}",
         "form": {
             "cfg": "Конфигурация",
             "create": "Создать конфигурацию",
             "update": "Обновление Config",
-            "edit": "Редактировать Config",
             "revert_to_defaults": "Вернуться в Дефолты",
             "revert_confirm": {
                 "title": "Вернуться в Дефолты",
                 "description": "Вы уверены, что хотите вернуть эту конфигурацию к ее значениям по умолчанию? Это действие не может быть отменено.",
-                "cancel": "Отмена",
                 "confirm": "Вернуться"
             },
             "success": {
@@ -1237,5 +2425,42 @@
                 "revert": "Ошибка, возвращающая конфигурацию к по умолчанию"
             }
         }
+    },
+    "streams": {
+        "move_to_global_view": "Перейти к глобальному виду",
+        "section_title": "Live-стримы",
+        "section_description": "Управление ссылками на live-стримы для этого матча. Эти ссылки видны зрителям и комментаторам.",
+        "no_streams_title": "Нет live-стримов",
+        "no_streams": "В данный момент для этого матча нет доступных трансляций.",
+        "add": "Добавить стрим",
+        "add_new": "Добавить новый стрим",
+        "add_description": "Добавить новую ссылку на стрим для этого матча.",
+        "added_successfully": "Стрим добавлен",
+        "stream_added_message": "Стрим успешно добавлен.",
+        "add_error": "Не удалось добавить стрим. Попробуйте ещё раз.",
+        "update": "Обновить стрим",
+        "edit_stream": "Редактировать стрим",
+        "edit_description": "Обновить информацию о стриме.",
+        "updated_successfully": "Стрим обновлён",
+        "stream_updated_message": "Стрим успешно обновлён.",
+        "update_error": "Не удалось обновить стрим. Попробуйте ещё раз.",
+        "deleted_successfully": "Стрим удалён",
+        "stream_deleted_message": "Стрим успешно удалён.",
+        "delete_error": "Не удалось удалить стрим. Попробуйте ещё раз.",
+        "priority_update_error": "Не удалось обновить приоритеты стримов. Попробуйте ещё раз.",
+        "link": "Ссылка",
+        "title": "Название",
+        "stream_title_placeholder": "Название стрима",
+        "live_badge": "LIVE",
+        "mode_live": "Прямой",
+        "mode_tv": "TV"
+    },
+    "demo_network_limiter": {
+        "network_limit": "Сетевой лимит (Мбит/с)",
+        "unlimited": "Без ограничений",
+        "unlimited_short": "Без лимита",
+        "title": "Ограничитель сети для демок",
+        "description": "Настройте ограничение скорости сети для загрузки файлов демок",
+        "updated": "Ограничитель сети обновлен"
     }
 }
