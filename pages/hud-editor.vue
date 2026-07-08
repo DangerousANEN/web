@@ -29,6 +29,8 @@ import {
   Swords,
   Bomb,
   Crosshair,
+  Coins,
+  Mic,
 } from "lucide-vue-next";
 import type { ApolloQueryResult } from "@apollo/client";
 
@@ -47,10 +49,13 @@ interface HudLayout {
 const CATEGORIES = [
   { key: "game", label: "Game" },
   { key: "operator", label: "Operator" },
+  { key: "freeze", label: "Freeze" },
+  { key: "transition", label: "Transition" },
   { key: "intermission", label: "Intermission" },
   { key: "casters", label: "Casters" },
   { key: "brackets", label: "Brackets" },
   { key: "veto", label: "Veto" },
+  { key: "grenade-cam", label: "Grenade Cam" },
   { key: "custom", label: "Custom" },
 ];
 
@@ -61,6 +66,9 @@ const BLOCK_TYPES = [
   { type: "kill-feed", label: "Kill Feed", icon: Crosshair },
   { type: "bomb-timer", label: "Bomb Timer", icon: Bomb },
   { type: "round-info", label: "Round Info", icon: Clock },
+  { type: "map-name", label: "Map Name", icon: ImageIcon },
+  { type: "economy", label: "Economy", icon: Coins },
+  { type: "casters", label: "Casters", icon: Mic },
   { type: "custom-text", label: "Custom Text", icon: Type },
   { type: "custom-image", label: "Custom Image", icon: ImageIcon },
 ];
@@ -118,6 +126,15 @@ const blocks = ref<BlockConfig[]>([]);
 const selectedBlockId = ref<string | null>(null);
 const draggingBlockId = ref<string | null>(null);
 const dragOffset = ref({ x: 0, y: 0 });
+const resizingBlockId = ref<string | null>(null);
+const resizeStart = ref({ x: 0, y: 0, w: 0, h: 0 });
+const resizeHandle = ref<string | null>(null);
+
+// Context menu state
+const contextMenuVisible = ref(false);
+const contextMenuX = ref(0);
+const contextMenuY = ref(0);
+const contextMenuBlockId = ref<string | null>(null);
 
 const selectedBlock = computed(() =>
   blocks.value.find((b) => b.id === selectedBlockId.value) ?? null,
@@ -263,6 +280,9 @@ function addBlock(type: string) {
     "kill-feed": { width: 300, height: 200 },
     "bomb-timer": { width: 200, height: 60 },
     "round-info": { width: 250, height: 50 },
+    "map-name": { width: 200, height: 40 },
+    "economy": { width: 250, height: 60 },
+    "casters": { width: 350, height: 50 },
     "custom-text": { width: 200, height: 40 },
     "custom-image": { width: 200, height: 150 },
   };
@@ -309,6 +329,10 @@ function onBlockMouseDown(e: MouseEvent, block: BlockConfig) {
 }
 
 function onCanvasMouseMove(e: MouseEvent) {
+  if (resizingBlockId.value) {
+    onResizeMove(e);
+    return;
+  }
   if (!draggingBlockId.value) return;
   const canvas = document.getElementById("hud-canvas");
   if (!canvas) return;
@@ -328,6 +352,86 @@ function onCanvasMouseMove(e: MouseEvent) {
 
 function onCanvasMouseUp() {
   draggingBlockId.value = null;
+  resizingBlockId.value = null;
+  resizeHandle.value = null;
+}
+
+// ---- Resize ----
+function onResizeStart(e: MouseEvent, block: BlockConfig, handle: string) {
+  e.stopPropagation();
+  e.preventDefault();
+  resizingBlockId.value = block.id;
+  resizeHandle.value = handle;
+  resizeStart.value = { x: e.clientX, y: e.clientY, w: block.width, h: block.height };
+}
+
+function onResizeMove(e: MouseEvent) {
+  if (!resizingBlockId.value || !resizeHandle.value) return;
+  const canvas = document.getElementById("hud-canvas");
+  if (!canvas) return;
+  const canvasRect = canvas.getBoundingClientRect();
+  const scaleX = 1920 / canvasRect.width;
+  const scaleY = 1080 / canvasRect.height;
+
+  const block = blocks.value.find((b) => b.id === resizingBlockId.value);
+  if (!block) return;
+
+  const dx = (e.clientX - resizeStart.value.x) * scaleX;
+  const dy = (e.clientY - resizeStart.value.y) * scaleY;
+  const minW = 40;
+  const minH = 30;
+
+  if (resizeHandle.value.includes("e")) {
+    block.width = Math.max(minW, resizeStart.value.w + dx);
+  }
+  if (resizeHandle.value.includes("s")) {
+    block.height = Math.max(minH, resizeStart.value.h + dy);
+  }
+  if (resizeHandle.value.includes("w")) {
+    const newW = Math.max(minW, resizeStart.value.w - dx);
+    block.x = block.x + (block.width - newW);
+    block.width = newW;
+  }
+  if (resizeHandle.value.includes("n")) {
+    const newH = Math.max(minH, resizeStart.value.h - dy);
+    block.y = block.y + (block.height - newH);
+    block.height = newH;
+  }
+}
+
+// ---- Context menu ----
+function onBlockContextMenu(e: MouseEvent, block: BlockConfig) {
+  e.preventDefault();
+  e.stopPropagation();
+  selectedBlockId.value = block.id;
+  contextMenuBlockId.value = block.id;
+  contextMenuX.value = e.clientX;
+  contextMenuY.value = e.clientY;
+  contextMenuVisible.value = true;
+}
+
+function closeContextMenu() {
+  contextMenuVisible.value = false;
+  contextMenuBlockId.value = null;
+}
+
+function duplicateBlock(id: string) {
+  const block = blocks.value.find((b) => b.id === id);
+  if (!block) return;
+  const newId = `block-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
+  blocks.value.push({
+    ...JSON.parse(JSON.stringify(block)),
+    id: newId,
+    x: block.x + 20,
+    y: block.y + 20,
+  });
+  selectedBlockId.value = newId;
+  closeContextMenu();
+}
+
+function onCanvasContextMenu(e: MouseEvent) {
+  // Only show context menu on empty canvas area (not on blocks)
+  e.preventDefault();
 }
 
 // ---- Save layout config ----
@@ -400,6 +504,12 @@ function blockPreviewContent(type: string): string {
       return "BOMB  32s";
     case "round-info":
       return "Round 24  —  LIVE";
+    case "map-name":
+      return "de_dust2";
+    case "economy":
+      return "CT  $4,200\nT  $8,650";
+    case "casters":
+      return "🎙 Caster 1 & Caster 2";
     case "custom-text":
       return "Custom Text";
     case "custom-image":
@@ -645,44 +755,82 @@ onMounted(() => {
               />
 
               <!-- Blocks -->
-              <div
-                v-for="block in blocks"
-                :key="block.id"
-                class="absolute transition-shadow cursor-move select-none overflow-hidden"
-                :class="{
-                  'ring-1 ring-[hsl(var(--tac-amber))] shadow-[0_0_0_1px_hsl(var(--tac-amber)/0.3)]':
-                    selectedBlockId === block.id,
-                  'ring-1 ring-white/10': selectedBlockId !== block.id,
-                }"
-                :style="{
-                  left: `${block.x}px`,
-                  top: `${block.y}px`,
-                  width: `${block.width}px`,
-                  height: `${block.height}px`,
-                  backgroundColor: block.style.backgroundColor || 'rgba(0,0,0,0.7)',
-                  color: block.style.color || '#fff',
-                  fontFamily: block.style.fontFamily || 'sans-serif',
-                  fontSize: block.style.fontSize || '14px',
-                  fontWeight: block.style.fontWeight || '400',
-                  border: block.style.border || 'none',
-                  borderRadius: block.style.borderRadius || '0px',
-                  padding: block.style.padding || '8px',
-                  textAlign: (block.style.textAlign as any) || 'left',
-                  opacity: block.style.opacity ?? '1',
-                  whiteSpace: 'pre-line',
-                }"
-                @mousedown="onBlockMouseDown($event, block)"
-              >
                 <div
-                  v-if="block.type === 'custom-image'"
-                  class="w-full h-full flex items-center justify-center text-white/30 text-xs"
+                  v-for="block in blocks"
+                  :key="block.id"
+                  class="absolute transition-shadow cursor-move select-none overflow-hidden"
+                  :class="{
+                    'ring-1 ring-[hsl(var(--tac-amber))] shadow-[0_0_0_1px_hsl(var(--tac-amber)/0.3)]':
+                      selectedBlockId === block.id,
+                    'ring-1 ring-white/10': selectedBlockId !== block.id,
+                  }"
+                  :style="{
+                    left: `${block.x}px`,
+                    top: `${block.y}px`,
+                    width: `${block.width}px`,
+                    height: `${block.height}px`,
+                    backgroundColor: block.style.backgroundColor || 'rgba(0,0,0,0.7)',
+                    color: block.style.color || '#fff',
+                    fontFamily: block.style.fontFamily || 'sans-serif',
+                    fontSize: block.style.fontSize || '14px',
+                    fontWeight: block.style.fontWeight || '400',
+                    border: block.style.border || 'none',
+                    borderRadius: block.style.borderRadius || '0px',
+                    padding: block.style.padding || '8px',
+                    textAlign: (block.style.textAlign as any) || 'left',
+                    opacity: block.style.opacity ?? '1',
+                    whiteSpace: 'pre-line',
+                  }"
+                  @mousedown="onBlockMouseDown($event, block)"
+                  @contextmenu="onBlockContextMenu($event, block)"
                 >
-                  [IMAGE]
+                  <div
+                    v-if="block.type === 'custom-image'"
+                    class="w-full h-full flex items-center justify-center text-white/30 text-xs"
+                  >
+                    [IMAGE]
+                  </div>
+                  <template v-else>
+                    {{ blockPreviewContent(block.type) }}
+                  </template>
+
+                  <!-- Resize handles (only on selected block) -->
+                  <template v-if="selectedBlockId === block.id">
+                    <div
+                      class="absolute -top-0.5 -left-0.5 w-2.5 h-2.5 bg-[hsl(var(--tac-amber))] border border-black cursor-nwse-resize z-10"
+                      @mousedown.stop="onResizeStart($event, block, 'nw')"
+                    />
+                    <div
+                      class="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 bg-[hsl(var(--tac-amber))] border border-black cursor-nesw-resize z-10"
+                      @mousedown.stop="onResizeStart($event, block, 'ne')"
+                    />
+                    <div
+                      class="absolute -bottom-0.5 -left-0.5 w-2.5 h-2.5 bg-[hsl(var(--tac-amber))] border border-black cursor-nesw-resize z-10"
+                      @mousedown.stop="onResizeStart($event, block, 'sw')"
+                    />
+                    <div
+                      class="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 bg-[hsl(var(--tac-amber))] border border-black cursor-nwse-resize z-10"
+                      @mousedown.stop="onResizeStart($event, block, 'se')"
+                    />
+                    <!-- Edge handles for midpoints -->
+                    <div
+                      class="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-0.5 w-2.5 h-1.5 bg-[hsl(var(--tac-amber))] border border-black cursor-ns-resize z-10"
+                      @mousedown.stop="onResizeStart($event, block, 'n')"
+                    />
+                    <div
+                      class="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-0.5 w-2.5 h-1.5 bg-[hsl(var(--tac-amber))] border border-black cursor-ns-resize z-10"
+                      @mousedown.stop="onResizeStart($event, block, 's')"
+                    />
+                    <div
+                      class="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-0.5 w-1.5 h-2.5 bg-[hsl(var(--tac-amber))] border border-black cursor-ew-resize z-10"
+                      @mousedown.stop="onResizeStart($event, block, 'w')"
+                    />
+                    <div
+                      class="absolute right-0 top-1/2 -translate-y-1/2 translate-x-0.5 w-1.5 h-2.5 bg-[hsl(var(--tac-amber))] border border-black cursor-ew-resize z-10"
+                      @mousedown.stop="onResizeStart($event, block, 'e')"
+                    />
+                  </template>
                 </div>
-                <template v-else>
-                  {{ blockPreviewContent(block.type) }}
-                </template>
-              </div>
             </div>
           </div>
         </div>
@@ -861,5 +1009,38 @@ onMounted(() => {
         </div>
       </aside>
     </div>
+
+    <!-- Context Menu -->
+    <Teleport to="body">
+      <div
+        v-if="contextMenuVisible"
+        class="fixed inset-0 z-50"
+        @click="closeContextMenu"
+        @contextmenu.prevent="closeContextMenu"
+      >
+        <div
+          class="fixed bg-card border border-border/60 rounded-md shadow-xl py-1 min-w-[160px] text-xs"
+          :style="{ left: `${contextMenuX}px`, top: `${contextMenuY}px` }"
+          @click.stop
+        >
+          <button
+            type="button"
+            class="w-full text-left px-3 py-1.5 hover:bg-muted/50 flex items-center gap-2"
+            @click="contextMenuBlockId && duplicateBlock(contextMenuBlockId)"
+          >
+            <Copy class="size-3" />
+            Duplicate
+          </button>
+          <button
+            type="button"
+            class="w-full text-left px-3 py-1.5 hover:bg-destructive/10 text-destructive flex items-center gap-2"
+            @click="contextMenuBlockId && removeBlock(contextMenuBlockId); closeContextMenu()"
+          >
+            <Trash2 class="size-3" />
+            Delete
+          </button>
+        </div>
+      </div>
+    </Teleport>
   </div>
 </template>
