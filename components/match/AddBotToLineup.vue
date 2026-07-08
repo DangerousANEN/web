@@ -10,6 +10,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { toast } from "@/components/ui/toast";
+const { t } = useI18n();
 
 /**
  * AddBotToLineup — кнопка "Добавить бота" для тестовых матчей.
@@ -32,7 +33,7 @@ const emit = defineEmits<{
   (e: "changed"): void;
 }>();
 
-const BOT_STEAM_ID_START = 99000000000000000;
+const BOT_STEAM_ID_START = "99000000000000000";
 
 // Predefined bot names for variety
 const BOT_NAMES = [
@@ -72,7 +73,7 @@ function generateBotSteamId(): string {
   // Use botCount to offset the Steam ID
   const offset = (props.botCount ?? 0) + Math.floor(Math.random() * 1000);
   // Add random suffix for uniqueness across lineups
-  return String(BOT_STEAM_ID_START + offset + Date.now() % 100000);
+  return String(BigInt(BOT_STEAM_ID_START) + BigInt(offset) + BigInt(Date.now() % 100000));
 }
 
 async function addBot(name?: string) {
@@ -80,8 +81,8 @@ async function addBot(name?: string) {
   if (!botName) {
     toast({
       variant: "destructive",
-      title: "No bot names available",
-      description: "All predefined bot names are in use.",
+      title: t("match.no_bot_names"),
+      description: t("match.all_bot_names_used"),
     });
     return;
   }
@@ -100,7 +101,7 @@ async function addBot(name?: string) {
         insert_players_one: [
           {
             object: {
-              steam_id: BigInt(botSteamId),
+              steam_id: botSteamId,
               name: botName,
               avatar_url: null,
               country: "RU",
@@ -121,7 +122,7 @@ async function addBot(name?: string) {
         insert_match_lineup_players_one: [
           {
             object: {
-              steam_id: BigInt(botSteamId),
+              steam_id: botSteamId,
               match_lineup_id: props.lineup.id,
             },
           },
@@ -136,15 +137,15 @@ async function addBot(name?: string) {
     emit("changed");
 
     toast({
-      title: "Бот добавлен",
-      description: `${botName} добавлен в состав`,
+      title: t("match.bot_added"),
+      description: t("match.bot_added_desc", { name: botName }),
     });
   } catch (e: any) {
     console.error("[add-bot] failed", e);
     toast({
       variant: "destructive",
-      title: "Ошибка",
-      description: e?.message ?? "Не удалось добавить бота",
+      title: t("common.error"),
+      description: e?.message ?? t("match.bot_add_failed"),
     });
   }
 }
@@ -159,7 +160,7 @@ async function addBot(name?: string) {
         class="gap-1.5 text-xs"
       >
         <Bot class="size-3.5" />
-        {{ $t("match.add_bot") || "Добавить бота" }}
+        {{ $t("match.add_bot") }}
       </Button>
     </PopoverTrigger>
     <PopoverContent class="w-64 p-3" align="start">
@@ -167,7 +168,7 @@ async function addBot(name?: string) {
         <div class="flex items-center gap-2">
           <Bot class="size-4 text-muted-foreground" />
           <h4 class="text-xs font-semibold uppercase tracking-wider">
-            {{ $t("match.add_bot") || "Добавить бота" }}
+            {{ $t("match.add_bot") }}
           </h4>
         </div>
 
@@ -188,7 +189,7 @@ async function addBot(name?: string) {
         <div class="flex gap-2">
           <Input
             v-model="customName"
-            :placeholder="$t('match.bot_name') || 'Имя бота'"
+            :placeholder="$t('match.bot_name')"
             class="h-7 text-xs"
             @keydown.enter="addBot()"
           />
@@ -203,10 +204,7 @@ async function addBot(name?: string) {
         </div>
 
         <div class="text-[10px] text-muted-foreground">
-          {{
-            $t("match.bot_disclaimer") ||
-            "Боты — тестовые игроки для проверки overlay/HUD"
-          }}
+          {{ $t("match.bot_disclaimer") }}
         </div>
       </div>
     </PopoverContent>

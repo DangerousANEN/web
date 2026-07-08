@@ -3,8 +3,10 @@
  * Standalone Veto Overlay
  * Full-screen veto display for OBS browser source.
  * Shows animated map veto process: bans (red), picks (green), decider (gold).
- * Connects to match GraphQL subscription for real-time veto state.
+ * Connects to match GraphQL query for real-time veto state.
  */
+definePageMeta({ layout: false });
+
 import { gql, useQuery } from "#imports";
 
 const route = useRoute();
@@ -29,8 +31,8 @@ const MAPS = [
 
 interface VetoStep {
   action: "ban" | "pick" | "decider";
-  map: string;
-  team: string | null;
+  mapName: string;
+  teamName: string | null;
   order: number;
 }
 
@@ -38,17 +40,42 @@ const MATCH_VETO_QUERY = gql`
   query MatchVeto($matchId: uuid!) {
     matches_by_pk(id: $matchId) {
       id
-      map_veto {
+      lineup_1 {
+        name
+        team { name avatar_url }
+      }
+      lineup_2 {
+        name
+        team { name avatar_url }
+      }
+      map_veto_picks(order_by: [{ map_id: asc }]) {
         id
-        veto_steps {
-          action
-          map
-          team
-          order
+        type
+        side
+        map {
+          name
+        }
+        match_lineup {
+          name
+          team {
+            name
+          }
         }
       }
-      team1 { name logo_url }
-      team2 { name logo_url }
+      match_maps {
+        id
+        order
+        type
+        map {
+          name
+        }
+        lineup {
+          name
+          team {
+            name
+          }
+        }
+      }
     }
   }
 `;
@@ -58,15 +85,40 @@ const { result, loading } = useQuery(MATCH_VETO_QUERY, () => ({
 }));
 
 const match = computed(() => result.value?.matches_by_pk ?? null);
+
+// Build veto steps from map_veto_picks (the actual Hasura relation)
 const vetoSteps = computed<VetoStep[]>(() => {
-  const steps = match.value?.map_veto?.veto_steps;
-  if (!steps) return [];
-  return [...steps].sort((a: any, b: any) => a.order - b.order);
+  const picks = match.value?.map_veto_picks;
+  if (!picks || picks.length === 0) {
+    // Fallback: use match_maps data (some matches use match_maps instead)
+    const maps = match.value?.match_maps;
+    if (!maps) return [];
+    return maps
+      .filter((m: any) => m.type && m.type !== "default")
+      .map((m: any, i: number) => ({
+        action: m.type === "pick" ? "pick" : m.type === "ban" ? "ban" : "decider",
+        mapName: m.map?.name || "unknown",
+        teamName: m.lineup?.team?.name || m.lineup?.name || null,
+        order: m.order ?? i + 1,
+      }))
+      .sort((a: any, b: any) => a.order - b.order);
+  }
+  return picks
+    .map((p: any, i: number) => ({
+      action: p.type === "pick" ? "pick" : p.type === "ban" ? "ban" : "decider",
+      mapName: p.map?.name || "unknown",
+      teamName: p.match_lineup?.team?.name || p.match_lineup?.name || null,
+      order: i + 1,
+    }))
+    .sort((a: any, b: any) => a.order - b.order);
 });
 
-const bannedMaps = computed(() => vetoSteps.value.filter(s => s.action === "ban").map(s => s.map));
-const pickedMaps = computed(() => vetoSteps.value.filter(s => s.action === "pick").map(s => s.map));
-const deciderMap = computed(() => vetoSteps.value.find(s => s.action === "decider")?.map);
+const team1Name = computed(() => match.value?.lineup_1?.team?.name || match.value?.lineup_1?.name || "Team 1");
+const team2Name = computed(() => match.value?.lineup_2?.team?.name || match.value?.lineup_2?.name || "Team 2");
+
+const bannedMaps = computed(() => vetoSteps.value.filter(s => s.action === "ban").map(s => s.mapName));
+const pickedMaps = computed(() => vetoSteps.value.filter(s => s.action === "pick").map(s => s.mapName));
+const deciderMap = computed(() => vetoSteps.value.find(s => s.action === "decider")?.mapName);
 
 const remainingMaps = computed(() =>
   MAPS.filter(m => !bannedMaps.value.includes(m) && !pickedMaps.value.includes(m) && m !== deciderMap.value)
@@ -100,7 +152,7 @@ function actionIcon(action: string) {
           MAP VETO
         </h1>
         <div v-if="match" class="mt-4 text-2xl font-semibold" style="color: #aaa">
-          {{ match.team1?.name || "Team 1" }} <span style="color: #555">vs</span> {{ match.team2?.name || "Team 2" }}
+          {{ team1Name }} <span style="color: #555">vs</span> {{ team2Name }}
         </div>
       </div>
     </div>
@@ -176,14 +228,14 @@ function actionIcon(action: string) {
 
           <!-- Team logo that picked/banned -->
           <div
-            v-if="vetoSteps.find(s => s.map === map && s.team)"
+            v-if="vetoSteps.find(s => s.mapName === map && s.teamName)"
             class="absolute bottom-2 left-2 text-xs px-2 py-1 rounded backdrop-blur-sm"
             :style="{
               backgroundColor: 'rgba(0,0,0,0.5)',
-              color: actionColor(vetoSteps.find(s => s.map === map)?.action || ''),
+              color: actionColor(vetoSteps.find(s => s.mapName === map)?.action || ''),
             }"
           >
-            {{ vetoSteps.find(s => s.map === map)?.team }}
+            {{ vetoSteps.find(s => s.mapName === map)?.teamName }}
           </div>
         </div>
       </div>
@@ -212,10 +264,10 @@ function actionIcon(action: string) {
               {{ actionLabel(step.action) }}
             </span>
             <span class="text-lg font-semibold text-white">
-              {{ step.map.replace("de_", "").toUpperCase() }}
+              {{ step.mapName.replace("de_", "").toUpperCase() }}
             </span>
           </div>
-          <span v-if="step.team" class="text-sm text-gray-400 ml-2">{{ step.team }}</span>
+          <span v-if="step.teamName" class="text-sm text-gray-400 ml-2">{{ step.teamName }}</span>
         </div>
       </div>
     </div>

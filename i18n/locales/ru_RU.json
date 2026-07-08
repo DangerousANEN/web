@@ -1625,7 +1625,17 @@
       "team_payments": "Платежи команд",
       "status_none": "Не требуется",
       "status_pending": "Ожидает",
-      "status_paid": "Оплачено"
+      "status_paid": "Оплачено",
+      "individual_players": "Индивидуальные игроки",
+      "teams": "Команды",
+      "status": "Статус",
+      "players": "Игроки",
+      "approve": "Одобрить",
+      "reject": "Отклонить",
+      "revert": "Вернуть",
+      "updated": "Статус платежа обновлён",
+      "update_failed": "Не удалось обновить статус",
+      "none": "Нет ожидающих или оплаченных заявок."
     }
   },
   "team": {
@@ -2118,7 +2128,12 @@
     "custom_css": "Свой CSS",
     "add_bot": "Добавить бота",
     "bot_name": "Имя бота",
-    "bot_disclaimer": "Боты — тестовые игроки для проверки overlay/HUD"
+    "bot_disclaimer": "Боты — тестовые игроки для проверки overlay/HUD",
+    "no_bot_names": "Нет доступных имён ботов",
+    "all_bot_names_used": "Все предустановленные имена ботов заняты.",
+    "bot_added": "Бот добавлен",
+    "bot_added_desc": "{name} добавлен в состав",
+    "bot_add_failed": "Не удалось добавить бота"
   },
   "ui": {
     "tooltips": {

@@ -1625,7 +1625,17 @@
       "team_payments": "Team Payments",
       "status_none": "Not required",
       "status_pending": "Pending",
-      "status_paid": "Paid"
+      "status_paid": "Paid",
+      "individual_players": "Individual Players",
+      "teams": "Teams",
+      "status": "Status",
+      "players": "Players",
+      "approve": "Approve",
+      "reject": "Reject",
+      "revert": "Revert",
+      "updated": "Payment status updated",
+      "update_failed": "Failed to update status",
+      "none": "No pending or paid applications found."
     }
   },
   "team": {
@@ -2118,7 +2128,12 @@
     "custom_css": "Custom CSS",
     "add_bot": "Add Bot",
     "bot_name": "Bot name",
-    "bot_disclaimer": "Bots are test players for checking overlay/HUD"
+    "bot_disclaimer": "Bots are test players for checking overlay/HUD",
+    "no_bot_names": "No bot names available",
+    "all_bot_names_used": "All predefined bot names are in use.",
+    "bot_added": "Bot added",
+    "bot_added_desc": "{name} added to lineup",
+    "bot_add_failed": "Failed to add bot"
   },
   "ui": {
     "tooltips": {

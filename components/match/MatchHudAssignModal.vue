@@ -316,29 +316,39 @@ async function upsertSlot(
   layoutId: string | null,
   displayOrder: number,
 ) {
-  const { useApolloClient } = await import("@vue/apollo-composable");
-  const { client } = useApolloClient();
-  const { generateMutation } = await import("~/graphql/graphqlGen");
-  await client.mutate({
-    mutation: generateMutation({
-      upsertMatchOverlayHud: [
-        {
-          match_id: props.matchId,
-          slot_key: slotKey,
-          label,
-          hud_id: hudId,
-          layout_id: layoutId,
-          display_order: displayOrder,
-        },
-        {
-          id: true,
-          slot_key: true,
-          label: true,
-          display_order: true,
-        },
-      ],
-    }),
-  });
+  try {
+    const { useApolloClient } = await import("@vue/apollo-composable");
+    const { client } = useApolloClient();
+    const { generateMutation } = await import("~/graphql/graphqlGen");
+    await client.mutate({
+      mutation: generateMutation({
+        upsertMatchOverlayHud: [
+          {
+            match_id: props.matchId,
+            slot_key: slotKey,
+            label,
+            hud_id: hudId,
+            layout_id: layoutId,
+            display_order: displayOrder,
+          },
+          {
+            id: true,
+            slot_key: true,
+            label: true,
+            display_order: true,
+          },
+        ],
+      }),
+    });
+  } catch (e: any) {
+    console.error("[hud-assign] upsertSlot failed", e);
+    toast({
+      variant: "destructive",
+      title: "Failed to save slot",
+      description: e?.message ?? String(e),
+    });
+    throw e;
+  }
 }
 
 // --- drag-n-drop reorder ---
