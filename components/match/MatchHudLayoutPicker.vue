@@ -272,7 +272,7 @@ onMounted(load);
         </template>
       </SelectContent>
     </Select>
-    <span v-else class="text-sm">
+    <span class="text-sm">
       {{ activeName ?? "Default" }}
     </span>
     <Loader2
