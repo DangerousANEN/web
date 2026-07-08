@@ -1724,7 +1724,24 @@
     "hud_placeholder": "HUD",
     "hud_default": "По умолчанию (встроенный)",
     "layout_game": "Игровой вид (поверх матча)",
-    "layout_operator": "Операторский вид (между раундов)"
+    "layout_operator": "Операторский вид (между раундов)",
+    "round_recap": {
+      "title": "Обзор раунда",
+      "best_moment": "Лучший момент раунда",
+      "auto_clip_queued": "Клип в очереди",
+      "auto_clip_ready": "Клип готов",
+      "auto_clip_failed": "Ошибка клипа",
+      "ace": "ЭЙС",
+      "quadra": "КВАДРУПЛА",
+      "triple": "ТРИПЛА",
+      "multi_kill": "{kills} УБИЙСТВ",
+      "round_number": "Раунд {round}",
+      "cinematic_cam": "Кинематик-камера",
+      "cinematic_cam_active": "Кинематик-камера активна {duration}с",
+      "cinematic_cam_failed": "Ошибка кинематик-камеры",
+      "trigger_cinematic": "Запустить пролётку",
+      "auto_replay_enabled": "Авто-повтор включён"
+    }
   },
   "match": {
     "team_stats_heading": "Статистика {name}",

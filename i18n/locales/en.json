@@ -1724,7 +1724,24 @@
     "hud_placeholder": "HUD",
     "hud_default": "Default (built-in)",
     "layout_game": "Game view (over the match)",
-    "layout_operator": "Operator view (between rounds)"
+    "layout_operator": "Operator view (between rounds)",
+    "round_recap": {
+      "title": "Round Recap",
+      "best_moment": "Best moment of the round",
+      "auto_clip_queued": "Auto-clip queued",
+      "auto_clip_ready": "Clip ready",
+      "auto_clip_failed": "Clip failed",
+      "ace": "ACE",
+      "quadra": "QUADRA KILL",
+      "triple": "TRIPLE KILL",
+      "multi_kill": "{kills} KILLS",
+      "round_number": "Round {round}",
+      "cinematic_cam": "Cinematic Cam",
+      "cinematic_cam_active": "Cinematic cam active for {duration}s",
+      "cinematic_cam_failed": "Cinematic cam failed",
+      "trigger_cinematic": "Trigger Fly-Through",
+      "auto_replay_enabled": "Auto-replay enabled"
+    }
   },
   "match": {
     "team_stats_heading": "{name} Stats",
