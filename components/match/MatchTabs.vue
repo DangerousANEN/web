@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { ref } from "vue";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import { Card, CardContent, CardHeader } from "~/components/ui/card";
 import LineupOverview from "~/components/match/LineupOverview.vue";
@@ -34,11 +35,15 @@ import { e_match_types_enum } from "~/generated/zeus";
 import MatchForm from "~/components/match/MatchForm.vue";
 import MatchLiveStreams from "~/components/match/MatchLiveStreams.vue";
 import OverlayBrowserSources from "~/components/match/OverlayBrowserSources.vue";
+import MatchHudAssignModal from "~/components/match/MatchHudAssignModal.vue";
 import PlayerInvites from "~/components/match/PlayerInvites.vue";
 import cleanMapName from "~/utilities/cleanMapName";
+import { LayoutGrid } from "lucide-vue-next";
 
 const commander = new EventEmitter();
 provide("commander", commander);
+
+const hudAssignOpen = ref(false);
 </script>
 
 <template>
@@ -523,6 +528,21 @@ provide("commander", commander);
       <OverlayBrowserSources
         :match-id="match.id"
         :can-edit="match.is_organizer"
+      />
+      <div v-if="match.is_organizer" class="flex justify-end">
+        <Button
+          variant="outline"
+          size="sm"
+          @click="hudAssignOpen = true"
+        >
+          <LayoutGrid class="size-4 mr-2" />
+          {{ $t("match.hud_assign_title") || "HUD Assignment" }}
+        </Button>
+      </div>
+      <MatchHudAssignModal
+        v-model:open="hudAssignOpen"
+        :match-id="match.id"
+        @changed="() => { /* refresh overlay state */ }"
       />
     </TabsContent>
   </Tabs>

@@ -51,6 +51,12 @@ const SENTINEL_DEFAULT = "__default__";
 const SUGGESTED_KEYS: { key: string; label: string }[] = [
   { key: "game", label: "Game view" },
   { key: "operator", label: "Operator view" },
+  { key: "veto", label: "Veto (pick/ban maps)" },
+  { key: "intermission", label: "Intermission (halftime)" },
+  { key: "freeze", label: "Freeze time (buy round)" },
+  { key: "transition", label: "Round transition stinger" },
+  { key: "casters", label: "Casters cam" },
+  { key: "brackets", label: "Brackets / standings" },
 ];
 
 const webDomain = computed(() => {
@@ -103,6 +109,26 @@ const BUILT_IN = computed(() => [
     key: "operator",
     label: "Operator HUD",
     url: `${webDomain.value}/overlay/hud/${props.matchId}?layout=operator`,
+  },
+  {
+    key: "veto",
+    label: "Veto overlay",
+    url: `${webDomain.value}/overlay/hud/${props.matchId}?layout=veto`,
+  },
+  {
+    key: "freeze",
+    label: "Freeze time HUD",
+    url: `${webDomain.value}/overlay/hud/${props.matchId}?layout=freeze`,
+  },
+  {
+    key: "transition",
+    label: "Round transition",
+    url: `${webDomain.value}/overlay/hud/${props.matchId}?layout=transition`,
+  },
+  {
+    key: "veto-standalone",
+    label: "Veto (standalone page)",
+    url: `${webDomain.value}/overlay/veto/${props.matchId}`,
   },
   {
     key: "stream-deck",

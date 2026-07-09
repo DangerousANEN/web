@@ -86,15 +86,18 @@ export default defineNuxtConfig({
 
   i18n: {
     strategy: "no_prefix",
-    bundle: {
-      optimizeTranslationDirective: false,
-    },
+    // v9: detectBrowserLanguage only accepts useCookie / cookieKey /
+    // redirectOn / alwaysRedirect / fallbackLocale. A nested
+    // `defaultLocale` here is silently ignored and caused the module
+    // to fall back to the top-level defaultLocale ("en"), which left
+    // browser-detected "ru" users seeing raw key paths for any keys
+    // the en locale didn't have yet (or that hadn't lazy-loaded in
+    // time during hydration).
     detectBrowserLanguage: {
       useCookie: true,
       cookieKey: "i18n_redirected",
       redirectOn: "root",
       fallbackLocale: "ru",
-    defaultLocale: "ru",
     },
     locales: [
       { code: "en", name: "English", file: "en.json", flag: "🇬🇧" },
@@ -130,8 +133,15 @@ export default defineNuxtConfig({
         flag: "🇨🇳",
       }, // Traditional Chinese
     ],
-    lazy: true,
-    defaultLocale: "en",
+    // Eager-load all locale files. With `lazy: true` on @nuxtjs/i18n v9,
+    // SSR renders key-paths (`layouts.app_nav.navigation.watch`) before
+    // the locale chunk hydrates, leaving raw dot-paths visible until the
+    // client-side JS finishes loading — and OBS Browser Sources (which
+    // have a minimal Chromium) sometimes never finished hydrating at
+    // all. Eager loading bundles all locales into the server build, so
+    // the very first SSR render has the keys resolved.
+    lazy: false,
+    defaultLocale: "ru",
   },
 
   runtimeConfig: {

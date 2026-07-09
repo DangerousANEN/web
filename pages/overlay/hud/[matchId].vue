@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, onMounted, onBeforeUnmount } from "vue";
+import { ref, computed, watch, onMounted, onBeforeUnmount } from "vue";
 import { useRoute } from "vue-router";
 
 // OBS Browser Source HUD overlay. Two built-in layouts:
@@ -35,12 +35,17 @@ const matchId = computed(() => String(route.params.matchId));
 
 // Direct ?layout= takes precedence so URLs that operators already
 // pasted into OBS keep working unchanged.
-const explicitLayout = computed(() => {
+const explicitLayout = computed<
+  "game" | "operator" | "veto" | "freeze" | "transition" | null
+>(() => {
   const v = route.query.layout
     ? String(route.query.layout).toLowerCase()
     : null;
   if (v === "operator") return "operator";
   if (v === "game") return "game";
+  if (v === "veto") return "veto";
+  if (v === "freeze") return "freeze";
+  if (v === "transition") return "transition";
   return null;
 });
 
@@ -52,10 +57,20 @@ const slotKey = computed(() => {
 // Defer initialisation of `state` so it's already in the file when
 // `layout` reads from it. The layout resolution prefers an explicit
 // ?layout=… , then the slot's known mapping, then default to game.
-function layoutForSlot(key: string | null): "game" | "operator" {
+const SLOT_LAYOUT_MAP: Record<string, "game" | "operator" | "veto" | "freeze" | "transition"> = {
+  operator: "operator",
+  veto: "veto",
+  freeze: "freeze",
+  freeze_time: "freeze",
+  freezetime: "freeze",
+  transition: "transition",
+  intermission: "transition",
+};
+function layoutForSlot(
+  key: string | null,
+): "game" | "operator" | "veto" | "freeze" | "transition" {
   if (!key) return "game";
-  if (key === "operator") return "operator";
-  return "game";
+  return SLOT_LAYOUT_MAP[key] ?? "game";
 }
 // `?debug=1` paints a faint border around the canvas + dumps the raw
 // state so operators can verify the data is flowing without having to
@@ -117,8 +132,16 @@ interface OverlayState {
       type?: string | null;
       raw_hud_overlay?: boolean | null;
     } | null;
-    lineup_1?: { name?: string | null } | null;
-    lineup_2?: { name?: string | null } | null;
+    lineup_1?: {
+      id?: string;
+      name?: string | null;
+      team?: { name?: string | null; logo_url?: string | null } | null;
+    } | null;
+    lineup_2?: {
+      id?: string;
+      name?: string | null;
+      team?: { name?: string | null; logo_url?: string | null } | null;
+    } | null;
     match_maps?: Array<{
       id: string;
       order: number | null;
@@ -126,6 +149,15 @@ interface OverlayState {
       map?: { name?: string | null } | null;
       lineup_1_score?: number | null;
       lineup_2_score?: number | null;
+    }>;
+    veto_picks?: Array<{
+      id: string;
+      order: number | null;
+      type: string;
+      map?: { name?: string | null; image_url?: string | null } | null;
+      lineup?: {
+        team?: { name?: string | null; logo_url?: string | null } | null;
+      } | null;
     }>;
   } | null;
   overlay_huds?: OverlayHud[];
@@ -157,7 +189,7 @@ let pollTimer: ReturnType<typeof setInterval> | null = null;
 // → game). If the slot exists but resolves to a custom HUD pack,
 // we'll surface that here in a future iteration; for now the slot's
 // HUD pack is metadata only.
-const layout = computed<"game" | "operator">(() => {
+const layout = computed<"game" | "operator" | "veto" | "freeze" | "transition">(() => {
   if (explicitLayout.value) return explicitLayout.value;
   return layoutForSlot(slotKey.value);
 });
@@ -296,6 +328,52 @@ const bombCountdownSeconds = computed(() => {
   const c = state.value?.gsi?.bomb_countdown_s;
   if (typeof c !== "number") return null;
   return Math.max(0, c);
+});
+
+// ─── Veto layout state ─────────────────────────────────────────
+// Pulled from /overlay/state/:matchId.match.veto_picks + team info.
+const vetoPicks = computed(() => state.value?.match?.veto_picks ?? []);
+const team1Name = computed(
+  () => state.value?.match?.lineup_1?.team?.name ??
+    state.value?.match?.lineup_1?.name ??
+    "Team 1",
+);
+const team2Name = computed(
+  () => state.value?.match?.lineup_2?.team?.name ??
+    state.value?.match?.lineup_2?.name ??
+    "Team 2",
+);
+const team1Logo = computed(
+  () => state.value?.match?.lineup_1?.team?.logo_url ?? null,
+);
+const team2Logo = computed(
+  () => state.value?.match?.lineup_2?.team?.logo_url ?? null,
+);
+const vetoActive = computed(
+  () => state.value?.match?.status === "Veto",
+);
+
+// ─── Round transition stinger state ────────────────────────────
+// Tracks last-seen `phase`. When phase changes from live → over,
+// or freezetime → live, the transition layout shows a brief stinger.
+const lastPhase = ref<string | null>(null);
+const transitionTrigger = ref(0);
+const TRANSITION_DURATION_MS = 2500;
+watch(
+  () => state.value?.gsi?.phase,
+  (next) => {
+    if (next && lastPhase.value && next !== lastPhase.value) {
+      transitionTrigger.value = Date.now();
+    }
+    lastPhase.value = next;
+  },
+);
+const showTransition = computed(() => {
+  if (layout.value !== "transition") return false;
+  if (!transitionTrigger.value) return false;
+  return (
+    Date.now() - transitionTrigger.value < TRANSITION_DURATION_MS
+  );
 });
 
 function formatSeconds(s: number | null): string {
@@ -519,6 +597,177 @@ function grenadeIcons(p: SpecPlayerExt): string[] {
           </ul>
         </div>
       </section>
+    </template>
+
+    <!-- ─────────────────────── VETO-VIEW ───────────────────────── -->
+    <template v-else-if="layout === 'veto'">
+      <div class="veto-overlay" :class="{ 'veto-active': vetoActive }">
+        <div class="veto-header">
+          <div class="veto-team veto-team-1">
+            <img
+              v-if="team1Logo"
+              :src="team1Logo"
+              class="veto-team-logo"
+              alt=""
+            />
+            <span class="veto-team-name">{{ team1Name }}</span>
+          </div>
+          <div class="veto-vs">VETO</div>
+          <div class="veto-team veto-team-2">
+            <span class="veto-team-name">{{ team2Name }}</span>
+            <img
+              v-if="team2Logo"
+              :src="team2Logo"
+              class="veto-team-logo"
+              alt=""
+            />
+          </div>
+        </div>
+
+        <div class="veto-grid">
+          <div
+            v-for="pick in vetoPicks"
+            :key="pick.id"
+            class="veto-card"
+            :class="{
+              'veto-pick': pick.type === 'pick',
+              'veto-ban': pick.type === 'ban',
+            }"
+          >
+            <div class="veto-card-order">#{{ pick.order }}</div>
+            <div class="veto-card-type">
+              {{ pick.type === "pick" ? "PICK" : "BAN" }}
+            </div>
+            <div class="veto-card-map">{{ pick.map?.name ?? "—" }}</div>
+            <div class="veto-card-team">
+              {{ pick.lineup?.team?.name ?? "" }}
+            </div>
+          </div>
+          <div
+            v-if="!vetoPicks.length"
+            class="veto-empty"
+          >
+            {{ vetoActive ? "Waiting for veto to start…" : "Veto phase" }}
+          </div>
+        </div>
+      </div>
+    </template>
+
+    <!-- ─────────────────────── FREEZE-TIME-VIEW ──────────────────── -->
+    <template v-else-if="layout === 'freeze'">
+      <div
+        v-if="state?.gsi?.phase === 'freezetime'"
+        class="freeze-overlay"
+      >
+        <header class="freeze-header">
+          <div class="freeze-team freeze-team-ct">
+            <span class="freeze-team-name">{{ ctTeamName }}</span>
+            <span class="freeze-team-score">{{ ctScore }}</span>
+          </div>
+          <div class="freeze-round-box">
+            <span class="freeze-round-label">
+              {{ roundNumber !== null ? `Round ${roundNumber}` : "Freeze" }}
+            </span>
+            <span v-if="phaseSecondsLeft !== null" class="freeze-countdown">
+              {{ formatSeconds(phaseSecondsLeft) }}
+            </span>
+          </div>
+          <div class="freeze-team freeze-team-t">
+            <span class="freeze-team-score">{{ tScore }}</span>
+            <span class="freeze-team-name">{{ tTeamName }}</span>
+          </div>
+        </header>
+        <section class="freeze-economy">
+          <div class="freeze-eco-side freeze-eco-ct">
+            <div class="freeze-eco-total">
+              Bank: {{ formatMoney(teamEconomyTotal(ctSlots)) }} · Equip:
+              {{ formatMoney(teamEquipTotal(ctSlots)) }}
+            </div>
+            <div
+              v-for="p in ctSlots"
+              :key="p.steam_id"
+              class="freeze-eco-player"
+              :class="{ dead: !p.alive }"
+            >
+              <span class="freeze-pname">{{ p.name ?? p.steam_id }}</span>
+              <span class="freeze-pmoney">{{ formatMoney(p.money) }}</span>
+              <span class="freeze-pweapon">{{ primaryWeapon(p) }}</span>
+            </div>
+          </div>
+          <div class="freeze-eco-side freeze-eco-t">
+            <div class="freeze-eco-total">
+              Bank: {{ formatMoney(teamEconomyTotal(tSlots)) }} · Equip:
+              {{ formatMoney(teamEquipTotal(tSlots)) }}
+            </div>
+            <div
+              v-for="p in tSlots"
+              :key="p.steam_id"
+              class="freeze-eco-player"
+              :class="{ dead: !p.alive }"
+            >
+              <span class="freeze-pname">{{ p.name ?? p.steam_id }}</span>
+              <span class="freeze-pmoney">{{ formatMoney(p.money) }}</span>
+              <span class="freeze-pweapon">{{ primaryWeapon(p) }}</span>
+            </div>
+          </div>
+        </section>
+      </div>
+      <!-- When not in freeze phase, show a minimal scoreboard -->
+      <header v-else class="game-scoreboard">
+        <div class="team team-ct">
+          <span class="team-name">{{ ctTeamName }}</span>
+          <span class="team-score">{{ ctScore }}</span>
+        </div>
+        <div class="round-divider">
+          <span class="round-no">
+            {{ roundNumber !== null ? `R${roundNumber}` : "—" }}
+          </span>
+          <span v-if="phaseLabel" class="phase-label">{{ phaseLabel }}</span>
+        </div>
+        <div class="team team-t">
+          <span class="team-score">{{ tScore }}</span>
+          <span class="team-name">{{ tTeamName }}</span>
+        </div>
+      </header>
+    </template>
+
+    <!-- ─────────────────────── TRANSITION OVERLAY ──────────── -->
+    <template v-else-if="layout === 'transition'">
+      <Transition name="stinger">
+        <div
+          v-if="showTransition"
+          class="transition-stinger"
+          :key="transitionTrigger"
+        >
+          <div class="transition-content">
+            <div class="transition-phase">{{ phaseLabel ?? "transition" }}</div>
+            <div class="transition-teams">
+              <span>{{ ctTeamName }}</span>
+              <span class="transition-score">{{ ctScore }}</span>
+              <span class="transition-dash">–</span>
+              <span class="transition-score">{{ tScore }}</span>
+              <span>{{ tTeamName }}</span>
+            </div>
+          </div>
+        </div>
+      </Transition>
+      <!-- Always-visible minimal scoreboard during transition -->
+      <header class="game-scoreboard">
+        <div class="team team-ct">
+          <span class="team-name">{{ ctTeamName }}</span>
+          <span class="team-score">{{ ctScore }}</span>
+        </div>
+        <div class="round-divider">
+          <span class="round-no">
+            {{ roundNumber !== null ? `R${roundNumber}` : "—" }}
+          </span>
+          <span v-if="phaseLabel" class="phase-label">{{ phaseLabel }}</span>
+        </div>
+        <div class="team team-t">
+          <span class="team-score">{{ tScore }}</span>
+          <span class="team-name">{{ tTeamName }}</span>
+        </div>
+      </header>
     </template>
 
     <div v-if="debug" class="debug-pre">
@@ -840,5 +1089,258 @@ function grenadeIcons(p: SpecPlayerExt): string[] {
   max-height: 12rem;
   overflow: auto;
   padding: 0.4rem;
+}
+
+/* ─────────────────── VETO-VIEW ─────────────────── */
+.veto-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  padding: 4rem 6rem;
+  background: rgba(0, 0, 0, 0.78);
+  pointer-events: none;
+}
+.veto-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3rem;
+  width: 100%;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.15);
+  padding-bottom: 1.5rem;
+}
+.veto-team {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+.veto-team-logo {
+  width: 48px;
+  height: 48px;
+  border-radius: 4px;
+  object-fit: contain;
+}
+.veto-team-name {
+  font-size: 1.6rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+}
+.veto-vs {
+  font-size: 1.4rem;
+  font-weight: 800;
+  letter-spacing: 0.3em;
+  color: rgba(255, 255, 255, 0.6);
+}
+.veto-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
+  width: 100%;
+  max-width: 1000px;
+}
+.veto-card {
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  padding: 1rem;
+  text-align: center;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+.veto-card.veto-pick {
+  border-color: rgba(34, 197, 94, 0.7);
+  background: rgba(34, 197, 94, 0.08);
+}
+.veto-card.veto-ban {
+  border-color: rgba(239, 68, 68, 0.7);
+  background: rgba(239, 68, 68, 0.08);
+}
+.veto-card-order {
+  font-size: 0.7rem;
+  color: rgba(255, 255, 255, 0.5);
+  letter-spacing: 0.1em;
+}
+.veto-card-type {
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.15em;
+}
+.veto-pick .veto-card-type {
+  color: rgb(74, 222, 128);
+}
+.veto-ban .veto-card-type {
+  color: rgb(248, 113, 113);
+}
+.veto-card-map {
+  font-size: 1.15rem;
+  font-weight: 600;
+  margin-top: 0.25rem;
+}
+.veto-card-team {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.6);
+}
+.veto-empty {
+  grid-column: 1 / -1;
+  text-align: center;
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.5);
+  padding: 2rem;
+}
+.veto-active .veto-vs {
+  color: rgba(255, 255, 255, 0.9);
+  animation: veto-pulse 2s ease-in-out infinite;
+}
+@keyframes veto-pulse {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
+}
+
+/* ─────────────────── FREEZE-TIME-VIEW ─────────────────── */
+.freeze-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 2rem 3rem;
+  background: rgba(0, 0, 0, 0.65);
+}
+.freeze-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+}
+.freeze-team {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 1.4rem;
+  font-weight: 700;
+}
+.freeze-team-name { letter-spacing: 0.04em; }
+.freeze-team-score {
+  font-size: 2rem;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+.freeze-round-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.15rem;
+}
+.freeze-round-label {
+  font-size: 0.9rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.7);
+}
+.freeze-countdown {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: rgb(250, 204, 21);
+  font-variant-numeric: tabular-nums;
+}
+.freeze-economy {
+  display: flex;
+  justify-content: space-between;
+  gap: 3rem;
+}
+.freeze-eco-side {
+  flex: 1;
+  max-width: 45%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+.freeze-eco-total {
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 0.5rem 0.75rem;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  margin-bottom: 0.5rem;
+}
+.freeze-eco-ct .freeze-eco-total { border-left: 3px solid rgb(96, 165, 250); }
+.freeze-eco-t .freeze-eco-total { border-left: 3px solid rgb(248, 113, 113); }
+.freeze-eco-player {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  gap: 0.5rem;
+  font-size: 0.8rem;
+  padding: 0.2rem 0.4rem;
+  align-items: center;
+}
+.freeze-eco-player.dead { opacity: 0.4; }
+.freeze-pname {
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.freeze-pmoney {
+  color: rgb(74, 222, 128);
+  font-variant-numeric: tabular-nums;
+}
+.freeze-pweapon {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.75rem;
+}
+
+/* ─────────────────── TRANSITION-VIEW ─────────────────── */
+.transition-stinger {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.85);
+  z-index: 5;
+}
+.transition-content {
+  text-align: center;
+  padding: 2rem 4rem;
+}
+.transition-phase {
+  font-size: 2.4rem;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+}
+.transition-teams {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-size: 1.5rem;
+  font-weight: 600;
+  justify-content: center;
+}
+.transition-score {
+  font-size: 2rem;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+.transition-dash {
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 1.5rem;
+}
+.stinger-enter-active,
+.stinger-leave-active {
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+.stinger-enter-from,
+.stinger-leave-to {
+  opacity: 0;
+  transform: scale(1.05);
 }
 </style>

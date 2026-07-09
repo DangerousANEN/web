@@ -16,6 +16,7 @@ import {
   DialogClose,
 } from "~/components/ui/dialog";
 import AssignPlayerToLineup from "~/components/match/AssignPlayerToLineup.vue";
+import AddBotToLineup from "~/components/match/AddBotToLineup.vue";
 import { e_lobby_access_enum, e_match_status_enum } from "~/generated/zeus";
 import PlayerDisplay from "../PlayerDisplay.vue";
 import { PencilIcon } from "lucide-vue-next";
@@ -205,6 +206,13 @@ import {
                   :exclude="excludePlayers"
                   :match-id="match.id"
                 ></AssignPlayerToLineup>
+                <AddBotToLineup
+                  :lineup="lineup"
+                  :match-id="match.id"
+                  :exclude="excludePlayers"
+                  :bot-count="lineup.lineup_players?.length || 0"
+                  @changed="$emit('joined')"
+                />
               </template>
               <template v-if="canShowJoinForm">
                 <JoinLineupForm

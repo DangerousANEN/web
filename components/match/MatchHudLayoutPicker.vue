@@ -7,17 +7,33 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Label } from "@/components/ui/label";
 import { Loader2 } from "lucide-vue-next";
 import { toast } from "@/components/ui/toast";
 import { useApolloClient } from "@vue/apollo-composable";
 import { generateQuery, generateMutation } from "~/graphql/graphqlGen";
+import { order_by } from "~/generated/zeus";
 import type { ApolloQueryResult } from "@apollo/client";
 
-const props = defineProps<{
-  matchId: string;
-  matchOptionsId: string;
-  canEdit: boolean;
-}>();
+// Per-slot overlay layout picker. A wrapper around the `match_overlay_huds`
+// table keyed by (match_options_id, slot_key). Allows the match organizer
+// to bind a `hud_layouts` row to a named OBS scene slot — e.g. `game`,
+// `operator`, `veto`, `intermission`, `casters`, etc. Each slot renders as
+// a separate overlay URL (`/overlay/hud/<matchId>?slot=<key>`), so OBS
+// Browser Sources compose different HUDs per scene.
+
+const props = withDefaults(
+  defineProps<{
+    matchId: string;
+    matchOptionsId: string;
+    canEdit: boolean;
+    /** Which slot_key this picker binds. Defaults to "game" (back-compat). */
+    slotKey?: string;
+    /** Optional label shown next to the picker (e.g. "Operator HUD"). */
+    label?: string;
+  }>(),
+  { slotKey: "game", label: "" },
+);
 
 const SENTINEL_NONE = "__none__";
 
@@ -47,6 +63,24 @@ const layouts = ref<HudLayout[]>([]);
 const selected = ref<string>(SENTINEL_NONE);
 const activeName = ref<string | null>(null);
 
+// Filter layouts by slot's category when slot-key maps to a known category.
+const SLOT_CATEGORY_MAP: Record<string, string> = {
+  game: "game",
+  operator: "operator",
+  veto: "veto",
+  intermission: "intermission",
+  casters: "casters",
+  brackets: "brackets",
+};
+
+const filteredLayouts = computed(() => {
+  const cat = SLOT_CATEGORY_MAP[props.slotKey];
+  if (!cat) return layouts.value;
+  return layouts.value.filter(
+    (l) => l.category === cat || l.category === "custom",
+  );
+});
+
 async function load() {
   loading.value = true;
   try {
@@ -54,8 +88,14 @@ async function load() {
       apolloClient.query({
         query: generateQuery({
           hud_layouts: [
-            { order_by: [{ name: "asc" as const }] },
-            { id: true, name: true, slug: true, category: true, is_public: true },
+            { order_by: [{ name: order_by.asc }] },
+            {
+              id: true,
+              name: true,
+              slug: true,
+              category: true,
+              is_public: true,
+            },
           ],
         }),
         fetchPolicy: "network-only",
@@ -66,7 +106,7 @@ async function load() {
             {
               where: {
                 match_options_id: { _eq: props.matchOptionsId },
-                slot_key: { _eq: "game" },
+                slot_key: { _eq: props.slotKey },
               },
               limit: 1,
             },
@@ -81,9 +121,7 @@ async function load() {
         fetchPolicy: "network-only",
       }) as Promise<ApolloQueryResult<{ match_overlay_huds: OverlayHud[] }>>,
     ]);
-
     layouts.value = layoutsRes.data.hud_layouts ?? [];
-
     const overlay = overlayRes.data.match_overlay_huds?.[0];
     if (overlay?.layout_id) {
       selected.value = overlay.layout_id;
@@ -94,9 +132,9 @@ async function load() {
     }
   } catch (e: any) {
     toast({
+      variant: "destructive",
       title: "Failed to load HUD layouts",
       description: e?.message ?? String(e),
-      variant: "destructive",
     });
   } finally {
     loading.value = false;
@@ -116,7 +154,7 @@ async function save(value: string) {
             {
               object: {
                 match_options_id: props.matchOptionsId,
-                slot_key: "game",
+                slot_key: props.slotKey,
                 layout_id: layoutId,
               },
               on_conflict: {
@@ -128,6 +166,8 @@ async function save(value: string) {
           ],
         }),
       });
+      activeName.value =
+        layouts.value.find((l) => l.id === layoutId)?.name ?? null;
     } else {
       // Clear layout_id by updating the row
       const existing = await apolloClient.query({
@@ -136,7 +176,7 @@ async function save(value: string) {
             {
               where: {
                 match_options_id: { _eq: props.matchOptionsId },
-                slot_key: { _eq: "game" },
+                slot_key: { _eq: props.slotKey },
               },
               limit: 1,
             },
@@ -159,15 +199,16 @@ async function save(value: string) {
           }),
         });
       }
+      activeName.value = null;
     }
-    toast({ title: "HUD layout updated" });
-    await load();
   } catch (e: any) {
     toast({
-      title: "Failed to update HUD layout",
-      description: e?.message ?? String(e),
       variant: "destructive",
+      title: "Failed to save HUD layout",
+      description: e?.message ?? String(e),
     });
+    // Revert selection on failure
+    selected.value = SENTINEL_NONE;
   } finally {
     saving.value = false;
   }
@@ -177,28 +218,62 @@ watch(selected, (next) => {
   if (!loading.value) void save(next);
 });
 
+// Re-load when slotKey changes (e.g. parent switches tab)
+watch(
+  () => props.slotKey,
+  () => void load(),
+);
+
 onMounted(load);
 </script>
 
 <template>
   <div class="flex items-center gap-2 flex-wrap">
-    <span class="text-xs uppercase tracking-wider text-muted-foreground">
-      Overlay Layout
-    </span>
-    <Select v-if="canEdit" v-model="selected" :disabled="loading || saving">
-      <SelectTrigger class="w-56 h-8">
-        <SelectValue placeholder="Loading…" />
+    <Label
+      v-if="label"
+      class="text-xs text-muted-foreground font-medium"
+    >
+      {{ label }}
+    </Label>
+    <Select v-model="selected" :disabled="!canEdit || loading || saving">
+      <SelectTrigger class="h-8 w-auto min-w-[160px] text-xs">
+        <SelectValue :placeholder="loading ? 'Loading...' : 'Default built-in'" />
       </SelectTrigger>
       <SelectContent>
         <SelectItem :value="SENTINEL_NONE">
-          Default (built-in)
+          Default built-in ({{ slotKey }})
         </SelectItem>
-        <SelectItem v-for="layout in layouts" :key="layout.id" :value="layout.id">
+        <SelectItem
+          v-for="layout in filteredLayouts"
+          :key="layout.id"
+          :value="layout.id"
+        >
           {{ layout.name }}
+          <span class="text-muted-foreground ml-1 text-[10px]">
+            ({{ layout.category }})
+          </span>
         </SelectItem>
+        <!-- Show other-category layouts too, dimmed -->
+        <template v-if="filteredLayouts.length !== layouts.length">
+          <div class="px-2 py-1 text-[10px] uppercase tracking-wider text-muted-foreground">
+            Other layouts
+          </div>
+          <SelectItem
+            v-for="layout in layouts.filter(
+              (l) => !filteredLayouts.includes(l)
+            )"
+            :key="layout.id"
+            :value="layout.id"
+          >
+            {{ layout.name }}
+            <span class="text-muted-foreground ml-1 text-[10px]">
+              ({{ layout.category }})
+            </span>
+          </SelectItem>
+        </template>
       </SelectContent>
     </Select>
-    <span v-else class="text-sm">
+    <span class="text-sm">
       {{ activeName ?? "Default" }}
     </span>
     <Loader2
