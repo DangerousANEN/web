@@ -12,6 +12,7 @@ import { Loader2 } from "lucide-vue-next";
 import { toast } from "@/components/ui/toast";
 import { useApolloClient } from "@vue/apollo-composable";
 import { generateQuery, generateMutation } from "~/graphql/graphqlGen";
+import { order_by } from "~/generated/zeus";
 import type { ApolloQueryResult } from "@apollo/client";
 
 // Per-slot overlay layout picker. A wrapper around the `match_overlay_huds`
@@ -87,7 +88,7 @@ async function load() {
       apolloClient.query({
         query: generateQuery({
           hud_layouts: [
-            { order_by: [{ name: "asc" as const }] },
+            { order_by: [{ name: order_by.asc }] },
             {
               id: true,
               name: true,

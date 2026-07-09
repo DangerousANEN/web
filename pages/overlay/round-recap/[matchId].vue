@@ -2,6 +2,7 @@
 import { ref, computed, onMounted, onUnmounted, watch } from "vue";
 import { useQuery, useSubscription } from "@vue/apollo-composable";
 import { generateQuery, generateSubscription } from "~/graphql/graphqlGen";
+import { order_by } from "~/generated/zeus";
 
 definePageMeta({ layout: false });
 
@@ -31,7 +32,7 @@ const QUERY = generateQuery({
         match_id: { _eq: matchId.value },
         auto_clip_status: { _is_null: false },
       },
-      order_by: [{ round_number: "desc" }],
+      order_by: [{ round_number: order_by.desc }],
       limit: 5,
     },
     {
@@ -58,7 +59,7 @@ const SUB = generateSubscription({
         auto_clip_status: { _is_null: false },
       },
       limit: 1,
-      order_by: [{ round_number: "desc" }],
+      order_by: [{ round_number: order_by.desc }],
     },
     {
       id: true,
